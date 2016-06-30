@@ -1,0 +1,10 @@
+.category {
+    display:inline-block;
+    float:right;
+    width:25px;
+    height:25px;
+}
+
+h1 {
+    color: green;
+}

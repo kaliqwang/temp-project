@@ -1,0 +1,194 @@
+{% extends "main/base_form.html" %}
+
+{% block title %}Create Category{% endblock %}
+
+{% block header %}Create Category{% endblock %}
+
+{% block form %}
+
+  <form id="category-form" action="{% url 'category_create' %}" method="post">{% csrf_token %}
+
+    <div class="row">
+      <div class="col-sm-4">
+
+      </div>
+    </div>
+
+    <br />
+    <br />
+
+    <datalist id="datalist-color-choices">
+      <option>#f2f3f4</option>
+      <option>#222222</option>
+      <option>#f3c300</option>
+      <option>#875692</option>
+      <option>#f38400</option>
+      <option>#a1caf1</option>
+      <option>#be0032</option>
+      <option>#c2b280</option>
+      <option>#848482</option>
+      <option>#008856</option>
+      <option>#e68fac</option>
+      <option>#0067a5</option>
+      <option>#f99379</option>
+      <option>#604e97</option>
+      <option>#f6a600</option>
+      <option>#b3446c</option>
+      <option>#dcd300</option>
+      <option>#882d17</option>
+      <option>#8db600</option>
+      <option>#654522</option>
+      <option>#e25822</option>
+      <option>#2b3d26</option>
+    </datalist>
+
+    <div class="row">
+      <div class="col-sm-4 col-sm-offset-4">
+        <div class="form-group categories">
+
+          {% for c in categories %}
+
+          <div class="input-group-wrapper">
+            <input type="hidden" name="category-{{ forloop.counter0 }}" value="{{ c.pk }}"/>
+            <div class="input-group">
+              <input required type="text" class="form-control" maxlength="50" name="category-{{ forloop.counter0 }}" value="{{ c.name }}" placeholder="Category Name"/>
+              <span class="input-group-btn">
+                <input required type="color" class="form-control btn btn-default" list="datalist-color-choices" maxlength="7" name="category-{{ forloop.counter0 }}" value="{{ c.color }}" style="width: 100px; border-bottom-right-radius: 4px; border-top-right-radius: 4px;"/>
+              </span>
+            </div>
+            <br />
+          </div>
+
+          {% endfor %}
+
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <button class="btn btn-default" id="add-category" tabindex="-1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+      </div>
+    </div>
+
+  </form>
+
+    <div class="row text-center">
+      <div class="col-md-2 col-md-offset-4">
+        <a class="btn btn-lg btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> Back</a>
+      </div>
+      <div class="col-md-2">
+        <button type="button" id="submit-form" class="btn btn-lg btn-default" role="button"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Publish</button>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block other %}
+
+<script>
+  $(document).ready(function() {
+
+    var colors=[
+        '#f2f3f4', '#222222',
+        '#f3c300', '#875692',
+        '#f38400', '#a1caf1',
+        '#be0032', '#c2b280',
+        '#848482', '#008856',
+        '#e68fac', '#0067a5',
+        '#f99379', '#604e97',
+        '#f6a600', '#b3446c',
+        '#dcd300', '#882d17',
+        '#8db600', '#654522',
+        '#e25822', '#2b3d26'
+    ];
+
+    function removeColor(c) {
+        $("#datalist-color-choices").children('option:contains("' + c + '")').remove();
+        colors.splice(colors.indexOf(c), 1);
+    }
+
+    function addColor(c) {
+        $("#datalist-color-choices").append('<option>' + c + '</option>');
+        colors.push(c);
+    }
+
+    $("input[type='color']").each(function(){
+        var color = $(this).val();
+        $(this).data('old', color);
+        removeColor(color);
+    });
+
+    var count = {{ categories.count }};
+    var i = count;
+
+    $("#add-category").click(function(e){e.preventDefault();
+        if(count < 20){
+            var color = colors[Math.floor(Math.random() * colors.length)];
+            var el = $(
+            '<div class="input-group-wrapper"><input type="hidden" name="category-' + i + '" value="new"/>' +
+            '<div class="input-group">' +
+              '<span class="input-group-btn">' +
+                '<button type="button" class="btn btn-default remove_field" tabindex="-1"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>' +
+              '</span>' +
+              '<input required type="text" class="form-control" maxlength="50" name="category-' + i + '" placeholder="Category Name"/>' +
+              '<span class="input-group-btn">' +
+                '<input required type="color" class="form-control" list="datalist-color-choices" maxlength="7" name="category-' + i + '" value="' + color + '" style="width: 100px; border-bottom-right-radius: 4px; border-top-right-radius: 4px;"/>' +
+              '</span>' +
+            '</div><br />' +
+            '</div>'
+            )
+            $(".categories").append(el);
+            $("input[value='" + color + "']").data('old', color);
+            removeColor(color);
+            count++;
+            i++;
+        }
+    });
+
+    $(".categories").on("click",".remove_field", function(e){e.preventDefault();
+        var color = $(this).parent().siblings('span.input-group-btn').find("input[type='color']").val();
+        addColor(color);
+        $(this).closest('.input-group-wrapper').remove();
+        count--;
+    });
+
+    $(".categories").on("change","input[type='color']", function(e){e.preventDefault();
+        var old_color = $(this).data('old');
+        var new_color = $(this).val();
+        addColor(old_color);
+        removeColor(new_color);
+        $(this).data('old', new_color);
+    });
+
+    $("#submit-form").click(function(e){e.preventDefault();
+        var success = true;
+
+        if(!$("#category-form")[0].checkValidity()) {
+            $("input[type='text']").each(function() {
+                if($(this).val().trim() == ""){
+                    $(this).parent().addClass('has-error');
+                    success = false;
+                } else {
+                    $(this).parent().removeClass('has-error');
+                }
+            });
+        } else {
+            var uniqueValues = [];
+            $("input[type='text']").each(function() {
+                if (uniqueValues.indexOf($(this).val().trim()) != -1) {
+                    $(this).parent().addClass('has-error');
+                    success = false;
+                } else {
+                    $(this).parent().removeClass('has-error');
+                    uniqueValues.push($(this).val().trim());
+                }
+            });
+        }
+
+        if(success){
+            $("#category-form").submit();
+        }
+    });
+
+  });
+</script>
+
+{% endblock %}

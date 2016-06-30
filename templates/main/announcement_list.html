@@ -1,0 +1,204 @@
+{% extends "main/base.html" %}
+
+{% block extrahead %}
+
+<style>
+
+    .category {
+        float:right;
+        width:8px;
+        height:70px;
+    }
+    .announcement-content {
+        padding-top: 10px;
+    }
+    .announcement-author {
+        float: right;
+        padding-top: 0px;
+    }
+    .announcement-date {
+    }
+    .announcement-wrapper {
+        /*background-color: #f5f5f5;*/
+        border: 20px solid #f5f5f5;
+        padding: 0px 0px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+    }
+    .announcement-container {
+        padding: 16px 0px;
+        padding-right: 32px;
+    }
+    .announcement-wrapper .edit {
+        display:none;
+    }
+    .announcement-wrapper.edit .edit {
+        display:initial;
+    }
+    .announcement-wrapper.edit .noedit {
+        display:none;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+    <div id="announcement-list">
+    {% for announcement in announcements %}
+        <div class="row announcement-wrapper" id="{{ announcement.pk }}">
+            <div class="col-xs-1">
+                <!-- {% if announcement.category %}
+                    <div class="category" style="background-color:{{ announcement.category.color }}"></div>
+                {% endif %} -->
+            </div>
+
+            <div class="col-xs-10 announcement-container">
+                <div class="noedit title">
+                    <h2>{{ announcement.title }}</h2>
+                </div>
+                <div class="edit title">
+                    <input required class="form-control" type="text" placeholder="Title..." name="title" value="{{ announcement.title }}">
+                </div>
+
+                <hr />
+
+                <div class="noedit content">
+                    {{ announcement.content }}
+                </div>
+                <div class="edit content">
+                    <textarea required class="form-control" id="id_content" name="content" placeholder="Content..." rows="6">{{ announcement.content }}</textarea>
+                </div>
+
+                {% if announcement.image_files.count > 0 or annnouncement.image_links.count > 0 %}
+                    <br />
+                {% endif %}
+
+                <div class="row">
+                  {% for image in announcement.image_files.all %}
+                    <div class="col-xs-6 col-md-4">
+                      <a href="{{ image.image_file.url }}" class="thumbnail">
+                        <img src="{{ image.image_file.url }}">
+                      </a>
+                    </div>
+                  {% endfor %}
+
+                  {% for image in announcement.image_links.all %}
+                    <div class="col-xs-6 col-md-4">
+                      <a href="{{ image.image_link }}" class="thumbnail">
+                        <img src="{{ image.image_link }}">
+                      </a>
+                    </div>
+                  {% endfor %}
+                </div>
+
+                {% if announcement.youtube_videos.count > 0 %}
+                    <br />
+                {% endif %}
+
+                <div class="youtube-videos">
+                    {% for video in announcement.youtube_videos.all %}
+                        <div class="">
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.youtube_video }}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <br />
+
+                <div class="signature">
+                    <i>Posted on {{ announcement.date_created }} by {{ announcement.author }}</i>
+                </div>
+
+                <hr />
+
+                <div class="categories">
+                    {% for category in categories %}
+                        <span class="label" style="background-color:{{ category.color }}; font-weight:normal">{{ category }}</span>
+                    {% endfor %}
+                </div>
+
+                <br />
+
+                <!-- <span class="label" style="background-color:{{ announcement.category.color }}; font-weight:normal">{{ announcement.category }}</span> -->
+
+                <!-- <div class="noedit announcement-buttons">
+                    <button class="edit-announcement">Edit</button>
+                    <button class="remove-announcement">Remove</button>
+                </div>
+                <div class="edit announcement-buttons">
+                    <button class="cancel-announcement">Cancel</button>
+                    <button class="save-announcement">Save</button>
+                </div> -->
+            </div>
+
+            <div class="col-xs-1">
+            </div>
+        </div>
+        <br>
+    {% empty %}
+        <h4>No announcements yet.</h4>
+        <br />
+        <br />
+    {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block other %}
+
+<script>
+    $(document).ready(function() {
+
+        // using jQuery
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+        $('#announcement-list').on('click', '.remove-announcement', function(e) {
+            e.preventDefault();
+            var $announcement = $(this).closest('.announcement-wrapper');
+
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/announcements/' + $announcement.attr('id'),
+                success: function() {
+                    $announcement.remove();
+                }
+            });
+        });
+        $('#announcement-list').on('click', '.edit-announcement', function(e) {
+            e.preventDefault();
+            var $announcement = $(this).closest('.announcement-wrapper');
+            $announcement.addClass("edit");
+        });
+    });
+</script>
+
+{% endblock %}

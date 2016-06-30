@@ -1,0 +1,146 @@
+<!--Accordion Media Selector-->
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Add Images (File)
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-sm-11">
+            <div class="multiple-image-file form-group">
+              <div class="input-group">
+                <input type="file" class="form-control" name="image-file[]" accept="image/*">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-1">
+            <button class="btn btn-default add-image-file"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Add Images (Link)
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-sm-11">
+            <div class="multiple-image-url form-group">
+              <div class="input-group">
+                <input type="url" class="form-control" name="image-url[]" placeholder="https://images.google.com/">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-1">
+            <button class="btn btn-default add-image-url"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Add Videos (YouTube)
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-sm-11">
+            <div class="multiple-youtube-video form-group">
+              <div class="input-group">
+                <span class="input-group-addon">https://www.youtube.com/watch?v=</span>
+                <input type="text" class="form-control" name="youtube-video[]" maxlength="11">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-1">
+            <button class="btn btn-default add-youtube-video"><span class="glyphicon glyphicon-plus" aria-hidden="true"></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+    $(document).ready(function() {
+
+      var x = 1;
+      $(".add-image-file").click(function(e){
+        e.preventDefault();
+        if(x < 6){
+          x++;
+          $(".multiple-image-file").append('<div class="input-group"><input type="file" class="form-control" name="image-file[]" accept="image/*"><span class="input-group-btn"><button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></span></div>');
+        }
+      });
+
+      $(".multiple-image-file").on("click",".remove_field", function(e){
+        e.preventDefault(); $(this).closest('div.input-group').remove(); x--;
+      })
+
+      var y = 1;
+      $(".add-image-url").click(function(e){
+        e.preventDefault();
+        if(y < 6){
+          y++;
+          $(".multiple-image-url").append('<div class="input-group"><input type="url" class="form-control" name="image-url[]" placeholder="https://images.google.com/"><span class="input-group-btn"><button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></span></div>');
+        }
+      });
+
+      $(".multiple-image-url").on("click",".remove_field", function(e){
+        e.preventDefault(); $(this).closest('div.input-group').remove(); y--;
+      })
+
+      var z = 1;
+      $(".add-youtube-video").click(function(e){
+        e.preventDefault();
+        if(z < 6){
+          z++;
+          $(".multiple-youtube-video").append('<div class="input-group"><span class="input-group-addon">https://www.youtube.com/watch?v=</span><input type="text" class="form-control" name="youtube-video[]" maxlength="11"><span class="input-group-btn"><button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></span></div>');
+        }
+      });
+
+      $(".multiple-youtube-video").on("click",".remove_field", function(e){
+        e.preventDefault();
+        $(this).closest('div.input-group').remove();
+        z--;
+      })
+
+    });
+  </script>

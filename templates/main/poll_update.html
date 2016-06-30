@@ -1,0 +1,12 @@
+{% extends "main/base_form.html" %}
+
+{% block title %}Update Poll{% endblock %}
+
+{% block header %}Update Poll{% endblock %}
+
+{% block form %}
+  <form action="{% url 'poll_update' object.pk %}" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update" />
+  </form>
+{% endblock %}

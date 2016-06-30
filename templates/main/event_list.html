@@ -1,0 +1,13 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+    {% for event in object_list %}
+        <li>{{ event }}</li>
+    {% empty %}
+        <h4>No events yet.</h4>
+        <br />
+        <br />
+    {% endfor %}
+
+{% endblock %}

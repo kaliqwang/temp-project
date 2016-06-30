@@ -1,0 +1,179 @@
+{% extends "main/base_form.html" %}
+
+{% block title %}Create Announcement{% endblock %}
+
+{% block header %}Create Announcement{% endblock %}
+
+{% block form %}
+
+    <template id="image-file-template">
+        <div class="input-group">
+          <input required type="file" class="form-control media-input" name="image-file[]" accept="image/*">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+          </span>
+        </div>
+    </template>
+
+    <template id="image-link-template">
+        <div class="input-group">
+          <input required type="url" class="form-control media-input" name="image-link[]" placeholder="https://images.google.com/">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+          </span>
+        </div>
+    </template>
+
+    <template id="youtube-video-template">
+        <div class="input-group">
+          <span class="input-group-addon">https://www.youtube.com/watch?v=</span>
+          <input required type="text" class="form-control media-input" name="youtube-video[]" maxlength="11">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+          </span>
+        </div>
+    </template>
+
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <form id="announcement-form" action="{% url 'announcement_create' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+
+              <div class="{% if form.subject.errors %}has-error{% endif %}">
+                {{ form.title }}
+              </div>
+
+              <br />
+
+              <div class="{% if form.content.errors %}has-error{% endif %}">
+                {{ form.content }}
+              </div>
+
+              <br />
+
+              <div class="input-group {% if form.category.errors %}has-error{% endif %}">
+                <span class="input-group-addon">Category:</span>
+                {{ form.category }}
+              </div>
+
+              <br />
+
+              <div class="text-right">
+                <button class="btn btn-default" id="add-image-file">
+                  <span class="glyphicon glyphicon-open"></span>
+                  <!-- <b>+</b>&nbsp; -->
+                </button>
+                <button class="btn btn-default" id="add-image-link">
+                  <span class="glyphicon glyphicon-paperclip"></span>
+                  <!-- <b>+</b>&nbsp; -->
+                </button>
+                <button class="btn btn-default" id="add-youtube-video">
+                  <span class="glyphicon glyphicon-play"></span>
+                  <!-- <img src="/static/main/youtube-player.gif" height="32px" style="vertical-align: text-top"> -->
+                  <!-- <b>+</b>&nbsp; -->
+                </button>
+              </div>
+
+              <br />
+
+              <div id="media-inputs">
+                <div class="form-group" id="multiple-image-files">
+                </div>
+                <div class="form-group" id="multiple-image-links">
+                </div>
+                <div class="form-group" id="multiple-videos">
+                </div>
+              </div>
+
+
+            </form>
+
+            <br />
+
+            <div class="row text-center">
+              <div class="col-sm-4 col-sm-offset-2">
+                <a class="btn btn-lg btn-default" href="{% url 'index' %}">
+                  <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Cancel
+                </a>
+              </div>
+              <div class="col-sm-4">
+                <button type="button" id="submit-form" class="btn btn-lg btn-default" role="button">
+                  <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Publish
+                </button>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block other %}
+  <script>
+    $(document).ready(function() {
+
+      var x = 0;
+      var imageFileField = $('#image-file-template').html()
+      $("#add-image-file").click(function(e){
+        e.preventDefault();
+        if(x < 5){
+          x++;
+          $("#multiple-image-files").append(imageFileField);
+        }
+      });
+      $("#multiple-image-files").on("click",".remove_field", function(e){
+        e.preventDefault();
+        $(this).closest('div.input-group').remove(); x--;
+      });
+
+      var y = 0;
+      var imageLinkField = $('#image-link-template').html()
+      $("#add-image-link").click(function(e){
+        e.preventDefault();
+        if(y < 5){
+          y++;
+          $("#multiple-image-links").append(imageLinkField);
+        }
+      });
+      $("#multiple-image-links").on("click",".remove_field", function(e){
+        e.preventDefault();
+        $(this).closest('div.input-group').remove(); y--;
+      });
+
+      var z = 0;
+      var youtubeVideoField = $('#youtube-video-template').html()
+      $("#add-youtube-video").click(function(e){
+        e.preventDefault();
+        if(z < 5){
+          z++;
+          $("#multiple-videos").append(youtubeVideoField);
+        }
+      });
+      $("#multiple-videos").on("click",".remove_field", function(e){
+        e.preventDefault();
+        $(this).closest('div.input-group').remove();
+        z--;
+      });
+
+      $("#submit-form").click(function(e){e.preventDefault();
+          var success = true;
+          var $inputs = $("input.form-control, textarea.form-control");
+          if(!$("#announcement-form")[0].checkValidity()) {
+              $inputs.each(function() {
+                  if($(this).val().length == 0){
+                      $(this).parent().addClass('has-error');
+                      $(this).siblings().children().css('border-color', '#a94442');
+                      success = false;
+                  } else {
+                      $(this).parent().removeClass('has-error');
+                      $(this).siblings().children().css('border-color', '#ccc');
+                  }
+              });
+          }
+          if(success){
+              $("#announcement-form").submit();
+          }
+      });
+
+    });
+  </script>
+{% endblock%}

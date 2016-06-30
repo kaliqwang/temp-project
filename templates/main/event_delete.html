@@ -1,0 +1,12 @@
+{% extends "main/base_form.html" %}
+
+{% block title %}Delete Event{% endblock %}
+
+{% block header %}Delete Event{% endblock %}
+
+{% block form %}
+  <form action="{% url 'event_delete' object.pk %}" method="post">{% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <input type="submit" value="Confirm" />
+  </form>
+{% endblock %}

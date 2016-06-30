@@ -1,0 +1,13 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+    {% for poll in object_list %}
+        <li>{{ poll }}</li>
+    {% empty %}
+        <h4>No polls yet.</h4>
+        <br />
+        <br />
+    {% endfor %}
+
+{% endblock %}

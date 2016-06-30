@@ -1,0 +1,12 @@
+{% extends "main/base_form.html" %}
+
+{% block title %}Delete Poll{% endblock %}
+
+{% block header %}Delete Poll{% endblock %}
+
+{% block form %}
+  <form action="{% url 'poll_delete' object.pk %}" method="post">{% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <input type="submit" value="Confirm" />
+  </form>
+{% endblock %}
