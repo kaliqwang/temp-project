@@ -66,6 +66,7 @@
                 <div class="noedit content">
                     {{ announcement.content }}
                 </div>
+                <!--there should not be id -->
                 <div class="edit content">
                     <textarea required class="form-control" id="id_content" name="content" placeholder="Content..." rows="6">{{ announcement.content }}</textarea>
                 </div>
@@ -122,14 +123,14 @@
 
                 <!-- <span class="label" style="background-color:{{ announcement.category.color }}; font-weight:normal">{{ announcement.category }}</span> -->
 
-                <!-- <div class="noedit announcement-buttons">
+                <div class="noedit announcement-buttons">
                     <button class="edit-announcement">Edit</button>
                     <button class="remove-announcement">Remove</button>
                 </div>
                 <div class="edit announcement-buttons">
                     <button class="cancel-announcement">Cancel</button>
                     <button class="save-announcement">Save</button>
-                </div> -->
+                </div>
             </div>
 
             <div class="col-xs-1">
@@ -197,6 +198,31 @@
             e.preventDefault();
             var $announcement = $(this).closest('.announcement-wrapper');
             $announcement.addClass("edit");
+        });
+        $('#announcement-list').on('click', '.cancel-announcement', function(e) {
+            e.preventDefault();
+            var $announcement = $(this).closest('.announcement-wrapper');
+            $announcement.removeClass("edit");
+        });
+        $('#announcement-list').on('click', '.save-announcement', function(e) {
+            e.preventDefault();
+            var $announcement = $(this).closest('.announcement-wrapper');
+            var $title =$announcement.find('input.title').val();
+            var $content = $announcement.find('textarea.content').val();
+
+            $.ajax({
+                type: 'PUT'
+                url: '/api/announcements/' + $announcement.attr('id'),
+                success: function(newAnnouncement) {
+                    //These two lines may be deletable
+                    $announcement.find('h2.title').html($title);
+                    $announcement.find('div.content').html($content);
+                    $announcement.removeClass('edit');
+                },
+                error: function() {
+                    alert('Error updating announcement.');
+                }
+            });
         });
     });
 </script>
