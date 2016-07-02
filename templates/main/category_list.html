@@ -1,10 +1,10 @@
-{% extends "main/base_form.html" %}
+{% extends "main/base.html" %}
 
 {% block title %}Create Category{% endblock %}
 
-{% block header %}Create Category{% endblock %}
+{% block header %}<h1 class="page-header">Create Category</h1>{% endblock %}
 
-{% block form %}
+{% block content %}
 
   <form id="category-form" action="{% url 'category-list' %}" method="post">{% csrf_token %}
 

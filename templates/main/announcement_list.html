@@ -55,7 +55,7 @@
 
             <div class="col-xs-10 announcement-container">
                 <div class="noedit title">
-                    <h2>{{ announcement.title }}</h2>
+                    <h2><a href="#">{{ announcement.title }}</a></h2>
                 </div>
                 <div class="edit title">
                     <input required class="form-control" type="text" placeholder="Title..." name="title" value="{{ announcement.title }}">
@@ -79,7 +79,7 @@
                   {% for image in announcement.image_files.all %}
                     <div class="col-xs-6 col-md-4">
                       <a href="{{ image.image_file.url }}" class="thumbnail">
-                        <img src="{{ image.image_file.url }}">
+                        <img class="img-responsive img-hover" src="{{ image.image_file.url }}">
                       </a>
                     </div>
                   {% endfor %}
@@ -87,7 +87,7 @@
                   {% for image in announcement.image_links.all %}
                     <div class="col-xs-6 col-md-4">
                       <a href="{{ image.image_link }}" class="thumbnail">
-                        <img src="{{ image.image_link }}">
+                        <img class="img-responsive img-hover" src="{{ image.image_link }}">
                       </a>
                     </div>
                   {% endfor %}
@@ -108,7 +108,7 @@
                 <br />
 
                 <div class="signature">
-                    <i>Posted on {{ announcement.date_created }} by {{ announcement.author }}</i>
+                    <i><i class="fa fa-clock-o"></i> Posted on {{ announcement.date_created }} by {{ announcement.author }}</i>
                 </div>
 
                 <hr />
@@ -143,6 +143,16 @@
         <br />
     {% endfor %}
     </div>
+
+    <!-- Pager -->
+    <ul class="pager">
+        <li class="next">
+            <a href="#">Newer &rarr;</a>
+        </li>
+        <li class="previous">
+            <a href="#">&larr; Older</a>
+        </li>
+    </ul>
 
 {% endblock %}
 

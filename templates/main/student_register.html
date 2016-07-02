@@ -1,12 +1,10 @@
-{% extends "main/base_form.html" %}
+{% extends "main/base.html" %}
 
-{% block title %}Registration{% endblock %}
+{% block title %}Student Registration{% endblock %}
 
-{% block header %}Registration{% endblock %}
+{% block header %}<h1 class="page-header">Student Registration</h1>{% endblock %}
 
-
-
-{% block form %}
+{% block content %}
   <form id="register-form" action="{% url 'student-register' %}" method="post">{% csrf_token %}
     {{ userForm.as_p }}
     {{ studentProfileForm.as_p }}
