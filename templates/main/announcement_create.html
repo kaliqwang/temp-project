@@ -7,101 +7,102 @@
 {% block form %}
 
     <template id="image-file-template">
-        <div class="input-group">
-          <input required type="file" class="form-control media-input" name="image-file[]" accept="image/*">
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-          </span>
-        </div>
+      <div class="input-group">
+        <input required type="file" class="form-control media-input" name="image-file[]" accept="image/*">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        </span>
+      </div>
     </template>
 
     <template id="image-link-template">
-        <div class="input-group">
-          <input required type="url" class="form-control media-input" name="image-link[]" placeholder="https://images.google.com/">
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-          </span>
-        </div>
+      <div class="input-group">
+        <input required type="url" class="form-control media-input" name="image-link[]" placeholder="https://images.google.com/">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        </span>
+      </div>
     </template>
 
     <template id="youtube-video-template">
-        <div class="input-group">
-          <span class="input-group-addon">https://www.youtube.com/watch?v=</span>
-          <input required type="text" class="form-control media-input" name="youtube-video[]" maxlength="11">
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-          </span>
-        </div>
+      <div class="input-group">
+        <span class="input-group-addon">https://www.youtube.com/watch?v=</span>
+        <input required type="text" class="form-control media-input" name="youtube-video[]" maxlength="11">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        </span>
+      </div>
     </template>
 
     <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
-            <form id="announcement-form" action="{% url 'announcement_create' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+      <div class="col-sm-6 col-sm-offset-3">
+        <form id="announcement-form" action="{% url 'announcement-create' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
 
-              <div class="{% if form.subject.errors %}has-error{% endif %}">
-                {{ form.title }}
-              </div>
+          <div class="{% if form.subject.errors %}has-error{% endif %}">
+            {{ form.title }}
+          </div>
 
-              <br />
+          <br />
 
-              <div class="{% if form.content.errors %}has-error{% endif %}">
-                {{ form.content }}
-              </div>
+          <div class="{% if form.content.errors %}has-error{% endif %}">
+            {{ form.content }}
+          </div>
 
-              <br />
+          <br />
 
-              <div class="input-group {% if form.category.errors %}has-error{% endif %}">
-                <span class="input-group-addon">Category:</span>
-                {{ form.category }}
-              </div>
+          <div class="input-group {% if form.category.errors %}has-error{% endif %}">
+            <span class="input-group-addon">Category:</span>
+            {{ form.category }}
+          </div>
 
-              <br />
+          <br />
 
-              <div class="text-right">
-                <button class="btn btn-default" id="add-image-file">
-                  <span class="glyphicon glyphicon-open"></span>
-                  <!-- <b>+</b>&nbsp; -->
-                </button>
-                <button class="btn btn-default" id="add-image-link">
-                  <span class="glyphicon glyphicon-paperclip"></span>
-                  <!-- <b>+</b>&nbsp; -->
-                </button>
-                <button class="btn btn-default" id="add-youtube-video">
-                  <span class="glyphicon glyphicon-play"></span>
-                  <!-- <img src="/static/main/youtube-player.gif" height="32px" style="vertical-align: text-top"> -->
-                  <!-- <b>+</b>&nbsp; -->
-                </button>
-              </div>
+          <div class="text-right">
+            <button class="btn btn-default" id="add-image-file">
+              <span class="glyphicon glyphicon-open"></span>
+              <!-- <b>+</b>&nbsp; -->
+            </button>
+            <button class="btn btn-default" id="add-image-link">
+              <span class="glyphicon glyphicon-paperclip"></span>
+              <!-- <b>+</b>&nbsp; -->
+            </button>
+            <button class="btn btn-default" id="add-youtube-video">
+              <span class="glyphicon glyphicon-play"></span>
+              <!-- <img src="/static/main/youtube-player.gif" height="32px" style="vertical-align: text-top"> -->
+              <!-- <b>+</b>&nbsp; -->
+            </button>
+          </div>
 
-              <br />
+          <br />
 
-              <div id="media-inputs">
-                <div class="form-group" id="multiple-image-files">
-                </div>
-                <div class="form-group" id="multiple-image-links">
-                </div>
-                <div class="form-group" id="multiple-videos">
-                </div>
-              </div>
-
-
-            </form>
-
-            <br />
-
-            <div class="row text-center">
-              <div class="col-sm-4 col-sm-offset-2">
-                <a class="btn btn-lg btn-default" href="{% url 'index' %}">
-                  <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Cancel
-                </a>
-              </div>
-              <div class="col-sm-4">
-                <button type="button" id="submit-form" class="btn btn-lg btn-default" role="button">
-                  <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Publish
-                </button>
-              </div>
+          <div id="media-inputs">
+            <div class="form-group" id="multiple-image-files">
             </div>
+            <div class="form-group" id="multiple-image-links">
+            </div>
+            <div class="form-group" id="multiple-videos">
+            </div>
+          </div>
+
+
+        </form>
+
+        <br />
+
+        <div class="row text-center">
+          <div class="col-sm-4 col-sm-offset-2">
+            <a class="btn btn-lg btn-default" href="{% url 'index' %}">
+              <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Cancel
+            </a>
+          </div>
+          <div class="col-sm-4">
+            <button type="button" id="submit-form" class="btn btn-lg btn-default" role="button">
+              <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Publish
+            </button>
+          </div>
         </div>
+
+      </div>
     </div>
 
 

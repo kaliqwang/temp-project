@@ -24,26 +24,35 @@ from forms import *
 
 from django.utils import timezone
 
-import urllib2
-import json
+def index(request):
+    return render(request, 'main/index.html')
+
+
+
+
+
+
 
 def announcement_list(request):
     announcements = Announcement.objects.all()
     categories = Category.objects.all()
     return render(request, 'main/announcement_list.html', {'announcements': announcements, 'categories': categories})
 
-class EventData(APIView):
+def announcement_detail(request, pk):
+    announcement = Announcement.objects.get(pk=pk)
+    return render(request, 'main/announcement_detail.html', {'announcement': announcement})
 
-    def get(self, request):
-        events = Event.objects.all()
-        serializer = EventSerializer(events, many=True)
-        return Response(serializer.data)
+@staff_member_required()
+def pin_announcement(request, pk):
+    a = Announcement.objects.get(pk=pk)
+    a.pin()
+    return redirect('announcement-list')
 
-    def post(self):
-        pass
-
-def index(request):
-    return render(request, 'main/index.html')
+@staff_member_required()
+def unpin_announcement(request, pk):
+    a = Announcement.objects.get(pk=pk)
+    a.unpin()
+    return redirect('announcement-list')
 
 @staff_member_required()
 def announcement_create(request):
@@ -52,6 +61,31 @@ def announcement_create(request):
         a = form.save(commit=False)
         a.author = request.user
         a.save()
+
+        image_files = request.FILES
+        image_links = request.POST.getlist('image-link[]')
+        youtube_videos = request.POST.getlist('youtube-video[]')
+
+        for image_file in request.FILES.getlist('image-file[]'):
+            f = ImageFile(image_file=image_file, announcement=a)
+            f.save()
+        for image_link in image_links:
+            link = ImageLink(image_link=image_link, announcement=a)
+            link.save()
+        for youtube_video in youtube_videos:
+            video = YoutubeVideo(youtube_video=youtube_video, announcement=a)
+            video.save()
+
+        return redirect('announcement-list')
+    return render(request, 'main/announcement_create.html', {'form': form})
+
+@staff_member_required()
+def announcement_update(request, pk):
+    # restrict access to either the original author or a superuser admin
+    announcement = Announcement.objects.get(pk=pk)
+    form = AnnouncementForm(request.POST or None, instance=announcement)
+    if form.is_valid():
+        a = form.save()
 
         image_files = request.FILES
         image_links = request.POST.getlist('image-link[]')
@@ -69,22 +103,81 @@ def announcement_create(request):
             video = YoutubeVideo(youtube_video=youtube_video, announcement=a)
             video.save()
 
-        return redirect('announcements')
-    else:
-        print(form.errors)
-    return render(request, 'main/announcement_create.html', {'form': form})
+        return redirect('announcement-list')
+    return render(request, 'main/announcement_update.html', {'form': form, 'announcement': announcement})
 
 @staff_member_required()
-def pin_announcement(request, pk):
-    a = Announcement.objects.get(pk=pk)
-    a.pin()
-    return redirect('announcements')
+def announcement_delete(request, pk):
+    # restrict access to either the original author or a superuser admin
+    announcement = Announcement.objects.get(pk=pk)
+    announcement.delete()
+    return redirect('announcement-list')
+
+
+
+
+
+
+def event_list(request):
+    events = Event.objects.all()
+    categories = Category.objects.all()
+    return render(request, 'main/event_list.html', {'events': events, 'categories': categories})
+
+def event_detail(request, pk):
+    event = Event.objects.get(pk=pk)
+    return render(request, 'main/event_detail.html', {'event': event})
 
 @staff_member_required()
-def unpin_announcement(request, pk):
-    a = Announcement.objects.get(pk=pk)
-    a.unpin()
-    return redirect('announcements')
+def event_create(request):
+    form = EventForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('event-list')
+    return render(request, 'main/event_create.html', {'form': form})
+
+@staff_member_required()
+def event_update(request, pk):
+    # restrict access to either the original author or a superuser admin
+    event = Event.objects.get(pk=pk)
+    form = EventForm(request.POST or None, instance=Event.objects.get(pk=pk))
+    if form.is_valid():
+        form.save()
+        #TODO: Give a confirmation message at the top of form ("successfully updated") instead of redirecting immediately? Same for events, announcements, etc.?
+        return redirect('event-list')
+    return render(request, 'main/event_update.html', {'form': form, 'event': event})
+
+@staff_member_required()
+def event_delete(request, pk):
+    # restrict access to either the original author or a superuser admin
+    event = Event.objects.get(pk=pk)
+    event.delete()
+    return redirect('event-list')
+
+
+
+
+
+
+def poll_list(request):
+    polls = Poll.objects.all()
+    categories = Category.objects.all()
+    return render(request, 'main/poll_list.html', {'polls': polls, 'categories': categories})
+
+def poll_detail(request, pk):
+    poll = Poll.objects.get(pk=pk)
+    return render(request, 'main/poll_detail.html', {'poll': poll})
+
+@staff_member_required()
+def pin_poll(request, pk):
+    p = Poll.objects.get(pk=pk)
+    p.pin()
+    return redirect('poll-list')
+
+@staff_member_required()
+def unpin_poll(request, pk):
+    p = Poll.objects.get(pk=pk)
+    p.unpin()
+    return redirect('poll-list')
 
 @staff_member_required()
 def poll_create(request):
@@ -95,36 +188,46 @@ def poll_create(request):
         p.save()
         choices = request.POST.getlist('choice[]')
         for choice in choices:
-            if choice != "":
-                c = Choice(poll=p, subject=choice)
-                c.save()
-        return redirect('polls')
+            c = Choice(subject=choice, poll=p)
+            c.save()
+        return redirect('poll-list')
     return render(request, 'main/poll_create.html', {'form': form})
 
 @staff_member_required()
-def pin_poll(request, pk):
-    a = Poll.objects.get(pk=pk)
-    a.pin()
-    return redirect('polls')
-
-@staff_member_required()
-def unpin_poll(request, pk):
-    a = Poll.objects.get(pk=pk)
-    a.unpin()
-    return redirect('polls')
-
-@staff_member_required()
-def event_create(request):
-    form = EventForm(request.POST or None)
+def poll_update(request, pk):
+    # restrict access to either the original author or a superuser admin
+    poll = Poll.objects.get(pk=pk)
+    form = PollForm(request.POST or None, instance=poll)
     if form.is_valid():
-        e = form.save()
-        return redirect('events')
-    else:
-        print(form.errors)
-    return render(request, 'main/event_create.html', {'form': form})
+        p = form.save()
+
+        old_choices = p.choices.all()
+        for choice in old_choices:
+            choice.delete()
+
+        new_choices = request.POST.getlist('choice[]')
+        for choice in new_choices:
+            c = Choice(subject=choice, poll=p)
+            c.save()
+
+        #TODO: Give a confirmation message at the top of form ("successfully updated") instead of redirecting immediately? Same for events, announcements, etc.?
+        return redirect('poll-list')
+    return render(request, 'main/poll_update.html', {'form': form, 'poll': poll})
 
 @staff_member_required()
-def category_create(request):
+def poll_delete(request, pk):
+    # restrict access to either the original author or a superuser admin
+    poll = Poll.objects.get(pk=pk)
+    poll.delete()
+    return redirect('poll-list')
+
+
+
+
+
+
+@staff_member_required()
+def category_list(request):
     if request.method == 'POST':
         categories = request.POST.lists()
         for k,c in categories:
@@ -139,56 +242,9 @@ def category_create(request):
                     new_c.name = name
                     new_c.color = color
                 new_c.save()
-        return redirect('category_create')
+        return redirect('category-list')
     categories = Category.objects.all()
-    return render(request, 'main/category_create.html', {'categories': categories})
-
-@method_decorator(staff_member_required, name='dispatch')
-class AnnouncementUpdate(UpdateView):
-    model = Announcement
-    fields = '__all__'
-    template_name_suffix = '_update'
-    success_url = reverse_lazy('index')
-
-@method_decorator(staff_member_required, name='dispatch')
-class AnnouncementDelete(DeleteView):
-    model = Announcement
-    template_name_suffix = '_delete'
-    success_url = reverse_lazy('index')
-
-
-class EventList(ListView):
-    model = Event
-
-@method_decorator(staff_member_required, name='dispatch')
-class EventUpdate(UpdateView):
-    model = Event
-    fields = '__all__'
-    template_name_suffix = '_update'
-    success_url = reverse_lazy('index')
-
-@method_decorator(staff_member_required, name='dispatch')
-class EventDelete(DeleteView):
-    model = Event
-    template_name_suffix = '_delete'
-    success_url = reverse_lazy('index')
-
-
-class PollList(ListView):
-    model = Poll
-
-@method_decorator(staff_member_required, name='dispatch')
-class PollUpdate(UpdateView):
-    model = Poll
-    fields = '__all__'
-    template_name_suffix = '_update'
-    success_url = reverse_lazy('index')
-
-@method_decorator(staff_member_required, name='dispatch')
-class PollDelete(DeleteView):
-    model = Poll
-    template_name_suffix = '_delete'
-    success_url = reverse_lazy('index')
+    return render(request, 'main/category_list.html', {'categories': categories})
 
 def student_register(request):
     if request.method == 'POST':
@@ -211,7 +267,7 @@ def student_register(request):
             pass
     else:
         userForm = UserForm()
-        studentProfileForm = studentProfileForm()
+        studentProfileForm = StudentProfileForm()
     return render(request, 'main/student_register.html', {'userForm': userForm, 'studentProfileForm': studentProfileForm})
 
 def login(request):

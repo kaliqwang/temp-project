@@ -9,10 +9,10 @@
 {% block header %}Create Event{% endblock %}
 
 {% block form %}
-  <form id="event-form" action="{% url 'event_create' %}" method="post">{% csrf_token %}
 
-    <div class="row">
-      <div class="col-sm-4 col-sm-offset-2">
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <form id="event-form" action="{% url 'event-create' %}" method="post">{% csrf_token %}
 
         <div class="input-group {% if form.name.errors %}has-error{% endif %}">
           <span class="input-group-addon">Name:</span>
@@ -29,52 +29,54 @@
           {{ form.category }}
         </div>
 
+        <br/>
+
+        <div class="row event-time">
+            <div class="col-sm-6">
+                <div class="{% if form.date_start.errors %}has-error{% endif %}">
+                  {{ form.date_start.label_tag }}
+                  {{ form.date_start }}
+                </div>
+                <div class="{% if form.time_start.errors %}has-error{% endif %}">
+                  {{ form.time_start }}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="{% if form.date_end.errors %}has-error{% endif %}">
+                  {{ form.date_end.label_tag }}
+                  {{ form.date_end }}
+                </div>
+                <div class="{% if form.time_end.errors %}has-error{% endif %}">
+                  {{ form.time_end }}
+                </div>
+            </div>
+        </div>
+
+        <br/>
+        <br/>
+
+        <div class="event-details">
+          {{ form.details }}
+        </div>
+
+      </form>
+
+      <br />
+      <br />
+
+      <div class="row text-center">
+        <div class="col-sm-4 col-sm-offset-2">
+          <a class="btn btn-lg btn-default" href="{% url 'index' %}">
+            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Cancel
+          </a>
+        </div>
+        <div class="col-sm-4">
+          <button type="button" id="submit-form" class="btn btn-lg btn-default" role="button">
+            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Publish
+          </button>
+        </div>
       </div>
-      <div class="col-sm-2">
 
-        <div class="{% if form.date_start.errors %}has-error{% endif %}">
-          {{ form.date_start.label_tag }}
-          {{ form.date_start }}
-        </div>
-        <div class="{% if form.time_start.errors %}has-error{% endif %}">
-          {{ form.time_start }}
-        </div>
-
-      </div>
-      <div class="col-sm-2">
-
-        <div class="{% if form.date_end.errors %}has-error{% endif %}">
-          {{ form.date_end.label_tag }}
-          {{ form.date_end }}
-        </div>
-        <div class="{% if form.time_end.errors %}has-error{% endif %}">
-          {{ form.time_end }}
-        </div>
-
-      </div>
-    </div>
-
-    <br />
-    <br />
-
-    <div class="row">
-      {{ form.details }}
-    </div>
-
-  </form>
-
-  <br />
-  <br />
-
-  <div class="row text-center">
-    <div class="col-sm-2 col-sm-offset-3">
-      <a class="btn btn-lg btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Cancel</a>
-    </div>
-    <div class="col-sm-2">
-      <button type="button" id="preview" class="btn btn-lg btn-default" role="button"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> Preview</button>
-    </div>
-    <div class="col-sm-2">
-      <button type="button" id="submit-form" class="btn btn-lg btn-default" role="button"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Publish</button>
     </div>
   </div>
 

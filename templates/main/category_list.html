@@ -6,7 +6,7 @@
 
 {% block form %}
 
-  <form id="category-form" action="{% url 'category_create' %}" method="post">{% csrf_token %}
+  <form id="category-form" action="{% url 'category-list' %}" method="post">{% csrf_token %}
 
     <div class="row">
       <div class="col-sm-4">
