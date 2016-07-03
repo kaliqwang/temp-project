@@ -37,7 +37,7 @@
     </template>
 
     <div class="row">
-      <div class="col-sm-6 col-sm-offset-3">
+      <div class="col-sm-8 col-sm-offset-2">
         <form id="announcement-form" action="{% url 'announcement-create' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
 
           <div class="{% if form.subject.errors %}has-error{% endif %}">

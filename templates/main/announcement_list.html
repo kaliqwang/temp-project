@@ -8,114 +8,116 @@
 
 {% block content %}
 
-    <div id="announcement-list">
-      {% for announcement in announcements %}
-        <div class="row announcement-wrapper" id="{{ announcement.pk }}">
-            <div class="col-xs-1">
-            </div>
+  <div id="announcement-list">
+    {% for announcement in announcements %}
+    <div class="announcement-wrapper" id="{{ announcement.pk }}">
+      <div class="row">
+          <div class="col-xs-1">
+          </div>
 
-            <div class="col-xs-10 announcement-container">
-                <div class="title noedit">
-                    <a href="{{ announcement.pk }}"><h2>{{ announcement.title }}</h2></a>
-                </div>
-                <div class="title edit">
-                    <input required class="form-control" type="text" placeholder="Title..." name="title" value="{{ announcement.title }}">
-                </div>
+          <div class="col-xs-10 announcement-container">
+              <div class="title noedit">
+                  <a href="{{ announcement.pk }}"><h2>{{ announcement.title }}</h2></a>
+              </div>
+              <div class="title edit">
+                  <input required class="form-control" type="text" placeholder="Title..." name="title" value="{{ announcement.title }}">
+              </div>
 
-                <hr />
+              <hr />
 
-                <div class="content noedit">
-                  {{ announcement.content }}
-                </div>
+              <div class="content noedit">
+                {{ announcement.content }}
+              </div>
 
-                <div class="content edit ">
-                  <textarea required class="form-control" name="content" placeholder="Content..." rows="6">{{ announcement.content }}</textarea>
-                </div>
+              <div class="content edit ">
+                <textarea required class="form-control" name="content" placeholder="Content..." rows="6">{{ announcement.content }}</textarea>
+              </div>
 
-                {% if announcement.image_files.count > 0 or announcement.image_links.count > 0 %}
-                  <br />
-                {% endif %}
+              {% if announcement.image_files.count > 0 or announcement.image_links.count > 0 %}
+                <br />
+              {% endif %}
 
-                <div class="row">
-                  {% for image in announcement.image_files.all %}
-                    <div class="col-xs-6 col-md-4">
-                      <a href="{{ image.image_file.url }}" class="thumbnail">
-                        <img class="img-responsive img-hover" src="{{ image.image_file.url }}">
-                      </a>
-                    </div>
-                  {% endfor %}
-
-                  {% for image in announcement.image_links.all %}
-                    <div class="col-xs-6 col-md-4">
-                      <a href="{{ image.image_link }}" class="thumbnail">
-                        <img class="img-responsive img-hover" src="{{ image.image_link }}">
-                      </a>
-                    </div>
-                  {% endfor %}
-                </div>
-
-                {% if announcement.youtube_videos.count > 0 %}
-                  <br />
-                {% endif %}
-
-                {% for video in announcement.youtube_videos.all %}
-                  <div class="video-wrapper">
-                      <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.youtube_video }}" frameborder="0" allowfullscreen></iframe>
+              <div class="row">
+                {% for image in announcement.image_files.all %}
+                  <div class="col-xs-6 col-md-4">
+                    <a href="{{ image.image_file.url }}" class="thumbnail">
+                      <img class="img-responsive img-hover" src="{{ image.image_file.url }}">
+                    </a>
                   </div>
                 {% endfor %}
 
-                <hr />
-
-                <div class="signature">
-                    <i><i class="fa fa-clock-o"></i> Posted by {{ announcement.author }} on {{ announcement.date_created }}</i> |
-                    Tags: <span class="label" style="background-color:{{ announcement.category.color }}; font-weight:normal">{{ announcement.category }}</span>
-                </div>
-
-                <hr />
-
-                <div class="noedit announcement-buttons">
-                    <button class="edit-announcement">Edit</button>
-                    <button class="remove-announcement">Remove</button>
-                </div>
-                <div class="edit announcement-buttons">
-                    <button class="cancel-announcement">Cancel</button>
-                    <button class="save-announcement">Save</button>
-                </div>
-            </div>
-
-            <div class="col-xs-1">
-              <!-- {% if announcement.category %}
-                  <div class="category" style="background-color:{{ announcement.category.color }}"></div>
-              {% endif %} -->
-            </div>
-
-            <div class="ajax">
-              <div class="author">{{ announcement.author.pk }}</div>
-              <div class="category">{{ announcement.category.pk }}</div>
-              <div class="date_created">{{ announcement.date_created }}</div>
-              <br />
-              <div class="image_links">
                 {% for image in announcement.image_links.all %}
-                <div class="{{image.pk}}">{{ image.pk }}</div>
+                  <div class="col-xs-6 col-md-4">
+                    <a href="{{ image.image_link }}" class="thumbnail">
+                      <img class="img-responsive img-hover" src="{{ image.image_link }}">
+                    </a>
+                  </div>
                 {% endfor %}
               </div>
-              <div class="rank">{{ announcement.rank }}</div>
-            </div>
-        </div>
-      {% empty %}
-        <h4>- No announcements yet. -</h4>
-      {% endfor %}
-    </div>
 
-    <!-- Pager -->
-    <ul class="pager">
-        <li class="next">
-            <a href="#">Newer &rarr;</a>
-        </li>
-        <li class="previous">
-            <a href="#">&larr; Older</a>
-        </li>
-    </ul>
+              {% if announcement.youtube_videos.count > 0 %}
+                <br />
+              {% endif %}
+
+              {% for video in announcement.youtube_videos.all %}
+                <div class="video-wrapper">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.youtube_video }}" frameborder="0" allowfullscreen></iframe>
+                </div>
+              {% endfor %}
+
+              <hr />
+
+              <div class="signature">
+                  <i><i class="fa fa-clock-o"></i> Posted by {{ announcement.author }} on {{ announcement.date_created }}</i> |
+                  Tags: <span class="label" style="background-color:{{ announcement.category.color }}; font-weight:normal">{{ announcement.category }}</span>
+              </div>
+
+              <hr />
+
+              <div class="noedit announcement-buttons">
+                  <button class="edit-announcement">Edit</button>
+                  <button class="remove-announcement">Remove</button>
+              </div>
+              <div class="edit announcement-buttons">
+                  <button class="cancel-announcement">Cancel</button>
+                  <button class="save-announcement">Save</button>
+              </div>
+          </div>
+
+          <div class="col-xs-1">
+            <!-- {% if announcement.category %}
+                <div class="category" style="background-color:{{ announcement.category.color }}"></div>
+            {% endif %} -->
+          </div>
+
+          <div class="ajax">
+            <div class="author">{{ announcement.author.pk }}</div>
+            <div class="category">{{ announcement.category.pk }}</div>
+            <div class="date_created">{{ announcement.date_created }}</div>
+            <br />
+            <div class="image_links">
+              {% for image in announcement.image_links.all %}
+              <div class="{{image.pk}}">{{ image.pk }}</div>
+              {% endfor %}
+            </div>
+            <div class="rank">{{ announcement.rank }}</div>
+          </div>
+      </div>
+    </div>
+    {% empty %}
+      <h4>- No announcements yet. -</h4>
+    {% endfor %}
+  </div>
+
+  <!-- Pager -->
+  <ul class="pager">
+      <li class="next">
+          <a href="#">Newer &rarr;</a>
+      </li>
+      <li class="previous">
+          <a href="#">&larr; Older</a>
+      </li>
+  </ul>
 
 {% endblock %}
 
