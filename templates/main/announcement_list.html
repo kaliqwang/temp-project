@@ -38,6 +38,25 @@
     .announcement-wrapper.edit .noedit {
         display:none;
     }
+
+    .ajax {
+        display:none;
+    }
+
+    .video-wrapper {
+      	position: relative;
+      	padding-bottom: 56.25%; /* 16:9 */
+      	padding-top: 25px;
+      	height: 0;
+    }
+    .video-wrapper iframe {
+      	position: absolute;
+      	top: 0;
+      	left: 0;
+      	width: 100%;
+      	height: 100%;
+    }
+
 </style>
 
 {% endblock %}
@@ -54,11 +73,31 @@
             </div>
 
             <div class="col-xs-10 announcement-container">
+                <div class="ajax">
+                    <span class="author">{{ announcement.author.pk }}</span>
+                    <span class="category">{{ announcement.category.pk }}</span>
+                    <span class="date_created">{{ announcement.date_created }}</span>
+                    <br />
+                    <div class="image_links">
+                      {% for image in announcement.image_links.all %}
+                      <span class="{{image.pk}}">{{ image.pk }}</span>
+                      {% endfor %}
+                    </div>
+                    <!--{% for image in announcement.image_files.all %}
+                    <span class="image_files">
+                        {{ image.pk }}</span>
+                    {% endfor %}
+
+                    {% for video in announcement.youtube_videos.all %}
+                    <span class="youtube_videos">{{ video.pk }}</span>
+                    {% endfor %}-->
+                    <span class="rank">{{ announcement.rank }}</span>
+                </div>
                 <div class="noedit title">
-                    <h2><a href="#">{{ announcement.title }}</a></h2>
+                    <h2 class="title"><a href="#">{{ announcement.title }}</a></h2>
                 </div>
                 <div class="edit title">
-                    <input required class="form-control" type="text" placeholder="Title..." name="title" value="{{ announcement.title }}">
+                    <input required class="form-control title" type="text" placeholder="Title..." name="title" value="{{ announcement.title }}">
                 </div>
 
                 <hr />
@@ -66,12 +105,12 @@
                 <div class="noedit content">
                     {{ announcement.content }}
                 </div>
-                <!--there should not be id -->
+
                 <div class="edit content">
-                    <textarea required class="form-control" id="id_content" name="content" placeholder="Content..." rows="6">{{ announcement.content }}</textarea>
+                    <textarea required class="form-control content" name="content" placeholder="Content..." rows="6">{{ announcement.content }}</textarea>
                 </div>
 
-                {% if announcement.image_files.count > 0 or annnouncement.image_links.count > 0 %}
+                {% if announcement.image_files.count > 0 or announcement.image_links.count > 0 %}
                     <br />
                 {% endif %}
 
@@ -99,7 +138,7 @@
 
                 <div class="youtube-videos">
                     {% for video in announcement.youtube_videos.all %}
-                        <div class="">
+                        <div class="video-wrapper">
                             <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.youtube_video }}" frameborder="0" allowfullscreen></iframe>
                         </div>
                     {% endfor %}
@@ -108,7 +147,7 @@
                 <br />
 
                 <div class="signature">
-                    <i><i class="fa fa-clock-o"></i> Posted on {{ announcement.date_created }} by {{ announcement.author }}</i>
+                    <i><i class="fa fa-clock-o"></i> Posted by {{ announcement.author }} on {{ announcement.date_created }}</i>
                 </div>
 
                 <hr />
@@ -217,17 +256,36 @@
         $('#announcement-list').on('click', '.save-announcement', function(e) {
             e.preventDefault();
             var $announcement = $(this).closest('.announcement-wrapper');
-            var $title =$announcement.find('input.title').val();
-            var $content = $announcement.find('textarea.content').val();
+
+            var ilarray = [];
+            $($announcement.find('div.image_links')).children().each(function() {
+                ilarray.push((this).className);
+            });
+
+            var announcement = {
+                author: $announcement.find('span.author').html(),
+                title: $announcement.find('input.title').val(),
+                category: $announcement.find('span.category').html(),
+                date_created: $announcement.find('span.date_created').html(),
+                content: $announcement.find('textarea.content').val(),
+                /*image_files: $announcement.find('span.image_files').html(),
+                image_links: $announcement.find('div.image_links').children(),
+                youtube_videos: $announcement.find('span.youtube_videos').html(),*/
+                rank: 0,
+                image_files: [],
+                image_links: [],
+                youtube_videos: [],
+            };
 
             $.ajax({
-                type: 'PUT'
+                type: 'PUT',
                 url: '/api/announcements/' + $announcement.attr('id'),
+                data: announcement,
                 success: function(newAnnouncement) {
-                    //These two lines may be deletable
-                    $announcement.find('h2.title').html($title);
-                    $announcement.find('div.content').html($content);
-                    $announcement.removeClass('edit');
+                  $announcement.find('h2.title').html($announcement.find('input.title').val());
+                  //Textarea does not show again because of this line
+                  $announcement.find('div.content').html($announcement.find('textarea.content').val());
+                  $announcement.removeClass('edit');
                 },
                 error: function() {
                     alert('Error updating announcement.');
