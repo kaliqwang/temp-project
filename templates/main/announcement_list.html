@@ -1,117 +1,39 @@
 {% extends "main/base.html" %}
 
+{% load static from staticfiles %}
+
 {% block extrahead %}
-
-<style>
-
-    .category {
-        float:right;
-        width:8px;
-        height:70px;
-    }
-    .announcement-content {
-        padding-top: 10px;
-    }
-    .announcement-author {
-        float: right;
-        padding-top: 0px;
-    }
-    .announcement-date {
-    }
-    .announcement-wrapper {
-        /*background-color: #f5f5f5;*/
-        border: 20px solid #f5f5f5;
-        padding: 0px 0px;
-        margin-right: 20px;
-        margin-bottom: 20px;
-    }
-    .announcement-container {
-        padding: 16px 0px;
-        padding-right: 32px;
-    }
-    .announcement-wrapper .edit {
-        display:none;
-    }
-    .announcement-wrapper.edit .edit {
-        display:initial;
-    }
-    .announcement-wrapper.edit .noedit {
-        display:none;
-    }
-
-    .ajax {
-        display:none;
-    }
-
-    .video-wrapper {
-      	position: relative;
-      	padding-bottom: 56.25%; /* 16:9 */
-      	padding-top: 25px;
-      	height: 0;
-    }
-    .video-wrapper iframe {
-      	position: absolute;
-      	top: 0;
-      	left: 0;
-      	width: 100%;
-      	height: 100%;
-    }
-
-</style>
-
+  <link href="{% static 'main/css/announcement_list.css'%}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 
     <div id="announcement-list">
-    {% for announcement in announcements %}
+      {% for announcement in announcements %}
         <div class="row announcement-wrapper" id="{{ announcement.pk }}">
             <div class="col-xs-1">
-                <!-- {% if announcement.category %}
-                    <div class="category" style="background-color:{{ announcement.category.color }}"></div>
-                {% endif %} -->
             </div>
 
             <div class="col-xs-10 announcement-container">
-                <div class="ajax">
-                    <span class="author">{{ announcement.author.pk }}</span>
-                    <span class="category">{{ announcement.category.pk }}</span>
-                    <span class="date_created">{{ announcement.date_created }}</span>
-                    <br />
-                    <div class="image_links">
-                      {% for image in announcement.image_links.all %}
-                      <span class="{{image.pk}}">{{ image.pk }}</span>
-                      {% endfor %}
-                    </div>
-                    <!--{% for image in announcement.image_files.all %}
-                    <span class="image_files">
-                        {{ image.pk }}</span>
-                    {% endfor %}
-
-                    {% for video in announcement.youtube_videos.all %}
-                    <span class="youtube_videos">{{ video.pk }}</span>
-                    {% endfor %}-->
-                    <span class="rank">{{ announcement.rank }}</span>
+                <div class="title noedit">
+                    <a href="{{ announcement.pk }}"><h2>{{ announcement.title }}</h2></a>
                 </div>
-                <div class="noedit title">
-                    <h2 class="title"><a href="#">{{ announcement.title }}</a></h2>
-                </div>
-                <div class="edit title">
-                    <input required class="form-control title" type="text" placeholder="Title..." name="title" value="{{ announcement.title }}">
+                <div class="title edit">
+                    <input required class="form-control" type="text" placeholder="Title..." name="title" value="{{ announcement.title }}">
                 </div>
 
                 <hr />
 
-                <div class="noedit content">
-                    {{ announcement.content }}
+                <div class="content noedit">
+                  {{ announcement.content }}
                 </div>
 
-                <div class="edit content">
-                    <textarea required class="form-control content" name="content" placeholder="Content..." rows="6">{{ announcement.content }}</textarea>
+                <div class="content edit ">
+                  <textarea required class="form-control" name="content" placeholder="Content..." rows="6">{{ announcement.content }}</textarea>
                 </div>
 
                 {% if announcement.image_files.count > 0 or announcement.image_links.count > 0 %}
-                    <br />
+                  <br />
                 {% endif %}
 
                 <div class="row">
@@ -133,34 +55,23 @@
                 </div>
 
                 {% if announcement.youtube_videos.count > 0 %}
-                    <br />
+                  <br />
                 {% endif %}
 
-                <div class="youtube-videos">
-                    {% for video in announcement.youtube_videos.all %}
-                        <div class="video-wrapper">
-                            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.youtube_video }}" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                    {% endfor %}
-                </div>
-
-                <br />
-
-                <div class="signature">
-                    <i><i class="fa fa-clock-o"></i> Posted by {{ announcement.author }} on {{ announcement.date_created }}</i>
-                </div>
+                {% for video in announcement.youtube_videos.all %}
+                  <div class="video-wrapper">
+                      <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.youtube_video }}" frameborder="0" allowfullscreen></iframe>
+                  </div>
+                {% endfor %}
 
                 <hr />
 
-                <div class="categories">
-                    {% for category in categories %}
-                        <span class="label" style="background-color:{{ category.color }}; font-weight:normal">{{ category }}</span>
-                    {% endfor %}
+                <div class="signature">
+                    <i><i class="fa fa-clock-o"></i> Posted by {{ announcement.author }} on {{ announcement.date_created }}</i> |
+                    Tags: <span class="label" style="background-color:{{ announcement.category.color }}; font-weight:normal">{{ announcement.category }}</span>
                 </div>
 
-                <br />
-
-                <!-- <span class="label" style="background-color:{{ announcement.category.color }}; font-weight:normal">{{ announcement.category }}</span> -->
+                <hr />
 
                 <div class="noedit announcement-buttons">
                     <button class="edit-announcement">Edit</button>
@@ -173,14 +84,27 @@
             </div>
 
             <div class="col-xs-1">
+              <!-- {% if announcement.category %}
+                  <div class="category" style="background-color:{{ announcement.category.color }}"></div>
+              {% endif %} -->
+            </div>
+
+            <div class="ajax">
+              <div class="author">{{ announcement.author.pk }}</div>
+              <div class="category">{{ announcement.category.pk }}</div>
+              <div class="date_created">{{ announcement.date_created }}</div>
+              <br />
+              <div class="image_links">
+                {% for image in announcement.image_links.all %}
+                <div class="{{image.pk}}">{{ image.pk }}</div>
+                {% endfor %}
+              </div>
+              <div class="rank">{{ announcement.rank }}</div>
             </div>
         </div>
-        <br>
-    {% empty %}
-        <h4>No announcements yet.</h4>
-        <br />
-        <br />
-    {% endfor %}
+      {% empty %}
+        <h4>- No announcements yet. -</h4>
+      {% endfor %}
     </div>
 
     <!-- Pager -->
@@ -196,103 +120,5 @@
 {% endblock %}
 
 {% block other %}
-
-<script>
-    $(document).ready(function() {
-
-        // using jQuery
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie != '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        var csrftoken = getCookie('csrftoken');
-
-        function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
-
-        $('#announcement-list').on('click', '.remove-announcement', function(e) {
-            e.preventDefault();
-            var $announcement = $(this).closest('.announcement-wrapper');
-
-            $.ajax({
-                type: 'DELETE',
-                url: '/api/announcements/' + $announcement.attr('id'),
-                success: function() {
-                    $announcement.remove();
-                }
-            });
-        });
-        $('#announcement-list').on('click', '.edit-announcement', function(e) {
-            e.preventDefault();
-            var $announcement = $(this).closest('.announcement-wrapper');
-            $announcement.addClass("edit");
-        });
-        $('#announcement-list').on('click', '.cancel-announcement', function(e) {
-            e.preventDefault();
-            var $announcement = $(this).closest('.announcement-wrapper');
-            $announcement.removeClass("edit");
-        });
-        $('#announcement-list').on('click', '.save-announcement', function(e) {
-            e.preventDefault();
-            var $announcement = $(this).closest('.announcement-wrapper');
-
-            var ilarray = [];
-            $($announcement.find('div.image_links')).children().each(function() {
-                ilarray.push((this).className);
-            });
-
-            var announcement = {
-                author: $announcement.find('span.author').html(),
-                title: $announcement.find('input.title').val(),
-                category: $announcement.find('span.category').html(),
-                date_created: $announcement.find('span.date_created').html(),
-                content: $announcement.find('textarea.content').val(),
-                /*image_files: $announcement.find('span.image_files').html(),
-                image_links: $announcement.find('div.image_links').children(),
-                youtube_videos: $announcement.find('span.youtube_videos').html(),*/
-                rank: 0,
-                image_files: [],
-                image_links: [],
-                youtube_videos: [],
-            };
-
-            $.ajax({
-                type: 'PUT',
-                url: '/api/announcements/' + $announcement.attr('id'),
-                data: announcement,
-                success: function(newAnnouncement) {
-                  $announcement.find('h2.title').html($announcement.find('input.title').val());
-                  //Textarea does not show again because of this line
-                  $announcement.find('div.content').html($announcement.find('textarea.content').val());
-                  $announcement.removeClass('edit');
-                },
-                error: function() {
-                    alert('Error updating announcement.');
-                }
-            });
-        });
-    });
-</script>
-
+  <script src="{% static 'main/js/announcement_list.js' %}"></script>
 {% endblock %}

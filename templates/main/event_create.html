@@ -1,5 +1,7 @@
 {% extends "main/base.html" %}
 
+{% load static from staticfiles %}
+
 {% block title %}Create Event{% endblock %}
 
 {% block extrahead %}
@@ -82,17 +84,6 @@
 
 {% endblock %}
 
-
 {% block other %}
-  <script>
-    $(document).ready(function() {
-      $("#preview").click(function(e){e.preventDefault();
-          tinymce.get('{{ form.details.auto_id }}').execCommand('mcePreview');
-      });
-
-      $("#submit-form").click(function(e){e.preventDefault();
-          $("#event-form").submit()
-      });
-    });
-  </script>
+  <script src="{% static 'main/js/event_create.js' %}"></script>
 {% endblock%}

@@ -18,7 +18,7 @@ class AnnouncementForm(forms.ModelForm):
 
 class EventForm(forms.ModelForm):
     category = forms.ModelChoiceField(required=False, queryset=Category.objects.all(), empty_label='General (default)', widget=forms.Select(attrs={'class': 'form-control'}))
-    details = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Details', 'rows': '6'}))
+    details = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Event Details (Optional)', 'rows': '6'}))
 
     class Meta:
         model = Event
