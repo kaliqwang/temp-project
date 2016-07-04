@@ -72,6 +72,7 @@ $(document).ready(function() {
     $('#announcement-list').on('click', '.save-announcement', function(e) {
         e.preventDefault();
         var $announcement = $(this).closest('.announcement-wrapper');
+
         var announcement = {
             author: $announcement.find('.author').text(),
             title: $announcement.find('.title > input').val(),

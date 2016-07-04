@@ -1,7 +1,7 @@
-/*.category {
-    width:20px;
-    height:50px;
-}*/
+.category {
+    width:10px;
+    height:70px;
+}
 
 .announcement-wrapper {
     /*background-color: #f5f5f5;*/
@@ -9,6 +9,7 @@
     padding: 16px 0px;
     margin-right: 20px;
     margin-bottom: 20px;
+    word-wrap:break-word;
 }
 
 .announcement-wrapper .edit {
@@ -23,12 +24,22 @@
 .ajax {
     display:none;
 }
+
 .remove-media {
+    display:none;
     position: absolute;
-    top: 0;
-    right: 10px;
+    top: -10px;
+    right: -3px;
     width:20px;
     height:20px;
+}
+
+.announcement-wrapper.edit .mmedia:hover img.remove-media {
+    display:block;
+}
+.video-wrapper img {
+    right: -20px;
+
 }
 .video-wrapper {
     position: relative;
