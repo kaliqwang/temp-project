@@ -39,17 +39,19 @@
 
               <div class="row">
                 {% for image in announcement.image_files.all %}
-                  <div class="col-xs-6 col-md-4">
+                  <div id="{{image.pk}}" class="col-xs-6 col-md-4 mmedia" data-id="image_files">
                     <a href="{{ image.image_file.url }}" class="thumbnail">
                       <img class="img-responsive img-hover" src="{{ image.image_file.url }}">
+                      <img src="https://cdn3.iconfinder.com/data/icons/line/36/cancel-512.png" class="remove-media edit">
                     </a>
                   </div>
                 {% endfor %}
 
                 {% for image in announcement.image_links.all %}
-                  <div class="col-xs-6 col-md-4">
+                  <div id="{{ image.pk }}" class="col-xs-6 col-md-4 mmedia" data-id="image_links">
                     <a href="{{ image.image_link }}" class="thumbnail">
                       <img class="img-responsive img-hover" src="{{ image.image_link }}">
+                      <img src="https://cdn3.iconfinder.com/data/icons/line/36/cancel-512.png" class="remove-media edit">
                     </a>
                   </div>
                 {% endfor %}
@@ -60,8 +62,9 @@
               {% endif %}
 
               {% for video in announcement.youtube_videos.all %}
-                <div class="video-wrapper">
+                <div id="{{ video.pk }}" class="video-wrapper mmedia" data-id="youtube_videos">
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.youtube_video }}" frameborder="0" allowfullscreen></iframe>
+                    <img src="https://cdn3.iconfinder.com/data/icons/line/36/cancel-512.png" class="remove-media edit">
                 </div>
               {% endfor %}
 

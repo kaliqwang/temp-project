@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    var mediaArray = [];
     // using jQuery
     function getCookie(name) {
         var cookieValue = null;
@@ -52,7 +52,23 @@ $(document).ready(function() {
         e.preventDefault();
         var $announcement = $(this).closest('.announcement-wrapper');
         $announcement.removeClass("edit");
+        mediaArray.forEach(function(media) {
+            media.fadeIn();
+        });
+        mediaArray = [];
     });
+
+    //Put media into array when x button is clicked. If save-announcement pressed, for each object in array, call ajax function.
+
+    $('#announcement-list').on('click', '.remove-media', function(e) {
+        e.preventDefault();
+        var $media = $(this).closest('.mmedia');
+        mediaArray.push($media);
+        //mediaArray.push($media.attr('data-id') + '/' + $media.attr('id'));
+        $media.fadeOut()
+
+    });
+    //error when category is null
     $('#announcement-list').on('click', '.save-announcement', function(e) {
         e.preventDefault();
         var $announcement = $(this).closest('.announcement-wrapper');
@@ -80,6 +96,16 @@ $(document).ready(function() {
             error: function() {
                 alert('Error updating announcement.');
             }
+        });
+
+       mediaArray.forEach(function(media) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/' + media.attr('data-id') + '/' + media.attr('id'),
+                error: function() {
+                    alert('Error deleting media.');
+                }
+            });
         });
     });
 });

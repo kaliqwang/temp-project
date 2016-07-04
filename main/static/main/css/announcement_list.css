@@ -23,6 +23,13 @@
 .ajax {
     display:none;
 }
+.remove-media {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    width:20px;
+    height:20px;
+}
 .video-wrapper {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 */
