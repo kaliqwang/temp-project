@@ -24,14 +24,14 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ('name', 'category', 'location', 'date_start', 'time_start', 'date_end', 'time_end', 'category', 'details')
         dateOptions = {
-            'format': 'mm - dd - yy',
+            # 'format': 'mm - dd - yy',
             'autoclose': False,
             'showMeridian': True,
             'clearBtn': False,
             'startDate': '01/01/16',
         }
         timeOptions = {
-            'format': 'HH:ii P',
+            # 'format': 'HH:ii P',
             'autoclose': False,
             'showMeridian': True,
             'clearBtn': False,
