@@ -43,31 +43,38 @@ $(document).ready(function() {
             }
         });
     });
+    //set data-status of all mmedia to 0 meaning they can be selected
     $('#announcement-list').on('click', '.edit-announcement', function(e) {
         e.preventDefault();
         var $announcement = $(this).closest('.announcement-wrapper');
+        var $images = $announcement.find('.images');
         $announcement.addClass("edit");
+        $images.children().attr('data-status', 0);
     });
+    //set data-status of all mmedia to 3 meaning they can no longer be selected
     $('#announcement-list').on('click', '.cancel-announcement', function(e) {
         e.preventDefault();
         var $announcement = $(this).closest('.announcement-wrapper');
+        var $images = $announcement.find('.images');
         $announcement.removeClass("edit");
-        mediaArray.forEach(function(media) {
+        $images.children().removeClass('selected');
+        $images.children().attr('data-status', 3);
+        /*mediaArray.forEach(function(media) {
             media.fadeIn();
         });
-        mediaArray = [];
+        mediaArray = [];*/
     });
 
     //Put media into array when x button is clicked. If save-announcement pressed, for each object in array, call ajax function.
 
-    $('#announcement-list').on('click', '.remove-media', function(e) {
+    /*$('#announcement-list').on('click', '.remove-media', function(e) {
         e.preventDefault();
         var $media = $(this).closest('.mmedia');
         mediaArray.push($media);
         //mediaArray.push($media.attr('data-id') + '/' + $media.attr('id'));
-        $media.fadeOut()
+        $media.fadeOut();
 
-    });
+    });*/
     //error when category is null
     $('#announcement-list').on('click', '.save-announcement', function(e) {
         e.preventDefault();
@@ -90,16 +97,16 @@ $(document).ready(function() {
             url: '/api/announcements/' + $announcement.attr('id'),
             data: announcement,
             success: function(newAnnouncement) {
-              $announcement.find('.title > a > h2').text(newAnnouncement.title);
-              $announcement.find('.content.noedit').text(newAnnouncement.content);
-              $announcement.removeClass('edit');
+                $announcement.find('.title > a > h2').text(newAnnouncement.title);
+                $announcement.find('.content.noedit').text(newAnnouncement.content);
+                $announcement.removeClass('edit');
             },
             error: function() {
                 alert('Error updating announcement.');
             }
         });
 
-       mediaArray.forEach(function(media) {
+        mediaArray.forEach(function(media) {
             $.ajax({
                 type: 'DELETE',
                 url: '/api/' + media.attr('data-id') + '/' + media.attr('id'),
@@ -108,5 +115,24 @@ $(document).ready(function() {
                 }
             });
         });
+    });
+    $('#announcement-list').on('click', '.mmedia', function(e) {
+        e.preventDefault();
+        var $message = $(this).find('span.remove');
+
+        if ($(this).attr('data-status') == 0) {
+            //$(this).css("border-color", "#99e6ff");
+            $(this).attr('data-status', 1);
+            $(this).addClass('selected');
+            $message.html('Restore');
+
+        } else if ($(this).attr('data-status') == 1) {
+            $(this).removeClass('selected');
+            $(this).attr('data-status', 0);
+            $message.html('Remove');
+
+        }
+
+
     });
 });
