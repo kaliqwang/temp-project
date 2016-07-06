@@ -97,11 +97,11 @@ class YoutubeVideoSerializer(serializers.HyperlinkedModelSerializer):
 
 class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
 
-    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
-    image_files = serializers.PrimaryKeyRelatedField(many=True, queryset=ImageFile.objects.all())
-    image_links = serializers.PrimaryKeyRelatedField(many=True, queryset=ImageLink.objects.all())
-    youtube_videos = serializers.PrimaryKeyRelatedField(many=True, queryset=YoutubeVideo.objects.all())
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), allow_null=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), allow_null=True)
+    image_files = serializers.PrimaryKeyRelatedField(many=True, queryset=ImageFile.objects.all(), allow_null=True)
+    image_links = serializers.PrimaryKeyRelatedField(many=True, queryset=ImageLink.objects.all(), allow_null=True)
+    youtube_videos = serializers.PrimaryKeyRelatedField(many=True, queryset=YoutubeVideo.objects.all(), allow_null=True)
 
     class Meta:
         model = Announcement
@@ -111,7 +111,7 @@ class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):
 
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), allow_null=True)
 
     class Meta:
         model = Event
@@ -121,8 +121,8 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
 
 class PollSerializer(serializers.HyperlinkedModelSerializer):
 
-    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), allow_null=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), allow_null=True)
 
     class Meta:
         model = Poll
@@ -133,7 +133,7 @@ class PollSerializer(serializers.HyperlinkedModelSerializer):
 class ChoiceSerializer(serializers.HyperlinkedModelSerializer):
 
     poll = serializers.PrimaryKeyRelatedField(queryset=Poll.objects.all())
-    chosen_by = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    chosen_by = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), allow_null=True)
 
     class Meta:
         model = Choice

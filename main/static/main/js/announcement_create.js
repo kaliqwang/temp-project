@@ -28,20 +28,20 @@ $(document).ready(function() {
     $(this).closest('div.input-group').remove(); y--;
   });
 
-  var z = 0;
-  var youtubeVideoField = $('#youtube-video-template').html()
-  $("#add-youtube-video").click(function(e){
-    e.preventDefault();
-    if(z < 5){
-      z++;
-      $("#multiple-videos").append(youtubeVideoField);
-    }
-  });
-  $("#multiple-videos").on("click",".remove_field", function(e){
-    e.preventDefault();
-    $(this).closest('div.input-group').remove();
-    z--;
-  });
+  // var z = 0;
+  // var youtubeVideoField = $('#youtube-video-template').html()
+  // $("#add-youtube-video").click(function(e){
+  //   e.preventDefault();
+  //   if(z < 5){
+  //     z++;
+  //     $("#multiple-videos").append(youtubeVideoField);
+  //   }
+  // });
+  // $("#multiple-videos").on("click",".remove_field", function(e){
+  //   e.preventDefault();
+  //   $(this).closest('div.input-group').remove();
+  //   z--;
+  // });
 
   $("#submit-form").click(function(e){e.preventDefault();
       var success = true;
@@ -62,5 +62,19 @@ $(document).ready(function() {
           $("#announcement-form").submit();
       }
   });
+
+  $("#add-youtube-video").click(function(e){
+    e.preventDefault();
+    if(z < 5){
+      z++;
+      $("#multiple-videos").append(youtubeVideoField);
+    }
+  });
+  $("#multiple-videos").on("click",".remove_field", function(e){
+    e.preventDefault();
+    $(this).closest('div.input-group').remove();
+    z--;
+  });
+
 
 });
