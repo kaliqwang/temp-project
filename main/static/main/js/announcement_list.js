@@ -59,10 +59,7 @@ $(document).ready(function() {
         $announcement.removeClass("edit");
         $images.children().removeClass('selected');
         $images.children().attr('data-status', 3);
-        /*mediaArray.forEach(function(media) {
-            media.fadeIn();
-        });
-        mediaArray = [];*/
+        mediaArray = [];
     });
 
     //Put media into array when x button is clicked. If save-announcement pressed, for each object in array, call ajax function.
@@ -75,6 +72,7 @@ $(document).ready(function() {
         $media.fadeOut();
 
     });*/
+
     //error when category is null
     $('#announcement-list').on('click', '.save-announcement', function(e) {
         e.preventDefault();
@@ -110,6 +108,9 @@ $(document).ready(function() {
             $.ajax({
                 type: 'DELETE',
                 url: '/api/' + media.attr('data-id') + '/' + media.attr('id'),
+                success: function() {
+                    media.fadeOut();
+                },
                 error: function() {
                     alert('Error deleting media.');
                 }
@@ -121,14 +122,15 @@ $(document).ready(function() {
         var $message = $(this).find('span.remove');
 
         if ($(this).attr('data-status') == 0) {
-            //$(this).css("border-color", "#99e6ff");
             $(this).attr('data-status', 1);
             $(this).addClass('selected');
+            mediaArray.push($(this));
             $message.html('Restore');
 
         } else if ($(this).attr('data-status') == 1) {
             $(this).removeClass('selected');
             $(this).attr('data-status', 0);
+            mediaArray.splice(mediaArray.indexOf($(this), 1));
             $message.html('Remove');
 
         }

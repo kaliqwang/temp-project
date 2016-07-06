@@ -64,7 +64,7 @@
 }
 .selected img {
   opacity:.2;
-  
+
 }
 .selected .thumbnail {
   border: 1px solid #2e78ba;
@@ -84,5 +84,5 @@
 
 .announcement-wrapper.edit .thumbnail:hover span.remove {
   display: block;
-  color:#74a9d8;
+  color:#2e78ba;
 }
