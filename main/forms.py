@@ -38,10 +38,10 @@ class EventForm(forms.ModelForm):
             'startDate': '01/01/16',
         }
         widgets = {
-            'date_start': DateWidget(attrs={'id': 'date-start', 'placeholder': 'TBA (default)'}, bootstrap_version=3, options=dateOptions),
-            'time_start': TimeWidget(attrs={'id': 'time-start', 'placeholder': 'TBA (default)'}, bootstrap_version=3, options=timeOptions),
-            'date_end': DateWidget(attrs={'id': 'date-end', 'placeholder': 'TBA (default)'}, bootstrap_version=3, options=dateOptions),
-            'time_end': TimeWidget(attrs={'id': 'time-end', 'placeholder': 'TBA (default)'}, bootstrap_version=3, options=timeOptions),
+            'date_start': DateWidget(attrs={'id': 'date-start', 'placeholder': 'TBA (default)'}, usel10n = True, bootstrap_version=3, options=dateOptions),
+            'time_start': TimeWidget(attrs={'id': 'time-start', 'placeholder': 'TBA (default)'}, usel10n = True, bootstrap_version=3, options=timeOptions),
+            'date_end': DateWidget(attrs={'id': 'date-end', 'placeholder': 'TBA (default)'}, usel10n = True, bootstrap_version=3, options=dateOptions),
+            'time_end': TimeWidget(attrs={'id': 'time-end', 'placeholder': 'TBA (default)'}, usel10n = True, bootstrap_version=3, options=timeOptions),
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Centennial Graduation Ceremony'}),
             'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'TBA (default)'}),
         }
