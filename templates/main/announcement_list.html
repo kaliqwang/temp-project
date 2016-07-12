@@ -101,11 +101,6 @@
             <div class="category">{{ announcement.category.pk }}</div>
             <div class="date_created">{{ announcement.date_created }}</div>
             <br />
-            <div class="image_links">
-              {% for image in announcement.image_links.all %}
-              <div class="{{image.pk}}">{{ image.pk }}</div>
-              {% endfor %}
-            </div>
             <div class="rank">{{ announcement.rank }}</div>
           </div>
       </div>

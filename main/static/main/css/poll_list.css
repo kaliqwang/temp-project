@@ -1,0 +1,22 @@
+label {
+    margin-left: 10px;
+}
+.poll-wrapper .edit {
+    display:none;
+}
+.poll-wrapper.edit .edit {
+    display:initial;
+}
+.poll-wrapper.edit .noedit {
+    display:none;
+}
+.ajax {
+    display:none;
+}
+
+.remove {
+  display: none;
+  position: absolute;
+  width: 100%;
+  top: 40%
+}

@@ -84,7 +84,7 @@ $(document).ready(function() {
             category: $announcement.find('.category').text(),
             date_created: $announcement.find('.date_created').text(),
             content: $announcement.find('.content > textarea').val(),
-            rank: 0,
+            rank: $announcement.find('.rank').text(),
             image_files: [],
             image_links: [],
             youtube_videos: [],

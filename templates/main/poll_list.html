@@ -1,11 +1,85 @@
 {% extends "main/base.html" %}
-
+{% load static from staticfiles %}
+ {% block extrahead %}
+    <link href="{% static 'main/css/poll_list.css'%}" rel="stylesheet">
+ {% endblock %}
 {% block content %}
 
-    {% for poll in polls %}
-        <li>{{ poll }}</li>
-    {% empty %}
-        <h4>No polls yet.</h4>
+<div id="poll-list">
+    <h1>Ongoing Polls</h1> {% for poll in open_polls %}
+
+    <div class="poll-wrapper" id="{{ poll.pk }}">
+        <div class="row">
+            <div class="col-xs-10 poll-container">
+                <div class="content noedit">
+                    <a href="{{ poll.pk }}"><h2>{{ poll.content }}</h2></a>
+                </div>
+                <div class="content edit">
+                    <input required class="form-control" type="text" placeholder="Question..." name="question" value="{{ poll.content}}">
+                </div>
+                {% for choice in poll.choices.all %}
+                <input id="{{ choice.content }}{{ choice.pk }}" class="choice" type="radio" value="{{ choice.content }}">
+                <label for "{{ choice.content }}{{ choice.pk }}">{{ choice.content }}</label>
+                <br />
+                {% endfor %}
+                <div class="noedit poll-buttons">
+                    <button class="edit-poll">Edit</button>
+                    <button class="remove-poll">Remove</button>
+                </div>
+                <div class="edit poll-buttons">
+                    <button class="cancel-poll">Cancel</button>
+                    <button class="save-poll">Save</button>
+                </div>
+                <hr />
+
+                <!--    <div class="signature">
+                <i><i class="fa fa-clock-o"></i> Posted by {{ poll.author }} on {{ poll.date_created }}</i> |
+                Tags: <span class="label" style="background-color:{{ poll.category.color }}; font-weight:normal">{{ poll.category }}</span>
+            </div>
+
+            <hr />-->
+            </div>
+        </div>
+        <div class="ajax">
+          <div class="author">{{ poll.author.pk }}</div>
+          <div class="category">{{ poll.category.pk }}</div>
+          <div class="date_created">{{ poll.date_created }}</div>
+        
+          <div class="rank">{{ poll.rank }}</div>
+          <div class="is_open">{{ poll.is_open }}</div>
+        </div>
+    </div>
+
     {% endfor %}
 
+    <h1>Past Polls</h1>
+    {% for poll in closed_polls %}
+    <div class="poll-wrapper" id="{{ poll.pk }}">
+        <div class="row">
+            <div class="col-xs-10 poll-container">
+                <div class="content noedit">
+                    <a href="{{ poll.pk }}"><h2>{{ poll.content }}</h2></a>
+                </div>
+
+                {% for choice in poll.choices.all %}
+                <label>{{ choice.content }} | {{choice.chosen_by.count}}</label>
+                <br /> {% endfor %}
+
+                <hr />
+
+                <!--    <div class="signature">
+                    <i><i class="fa fa-clock-o"></i> Posted by {{ poll.author }} on {{ poll.date_created }}</i> |
+                    Tags: <span class="label" style="background-color:{{ poll.category.color }}; font-weight:normal">{{ poll.category }}</span>
+                </div>
+
+            <hr />-->
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %} {% block other %}
+<script src="{% static 'main/js/poll_list.js' %}"></script>
 {% endblock %}

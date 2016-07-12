@@ -159,9 +159,10 @@ def event_delete(request, pk):
 
 
 def poll_list(request):
-    polls = Poll.objects.all()
+    open_polls = Poll.objects.filter(is_open = True)
+    closed_polls = Poll.objects.filter(is_open = False)
     categories = Category.objects.all()
-    return render(request, 'main/poll_list.html', {'polls': polls, 'categories': categories})
+    return render(request, 'main/poll_list.html', {'open_polls': open_polls, 'closed_polls' : closed_polls, 'categories': categories})
 
 def poll_detail(request, pk):
     poll = Poll.objects.get(pk=pk)
@@ -188,7 +189,7 @@ def poll_create(request):
         p.save()
         choices = request.POST.getlist('choice[]')
         for choice in choices:
-            c = Choice(subject=choice, poll=p)
+            c = Choice(content=choice, poll=p)
             c.save()
         return redirect('poll-list')
     return render(request, 'main/poll_create.html', {'form': form})
@@ -207,7 +208,7 @@ def poll_update(request, pk):
 
         new_choices = request.POST.getlist('choice[]')
         for choice in new_choices:
-            c = Choice(subject=choice, poll=p)
+            c = Choice(content=choice, poll=p)
             c.save()
 
         #TODO: Give a confirmation message at the top of form ("successfully updated") instead of redirecting immediately? Same for events, announcements, etc.?
