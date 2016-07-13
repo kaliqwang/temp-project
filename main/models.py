@@ -44,8 +44,11 @@ grade_levels = (
     (SENIOR, 'Senior'),
 )
 
-student_id_regex = RegexValidator(
+student_id_validator = RegexValidator(
     regex=r'^\d{10}$', message='Please enter a valid student ID')
+
+phone_validator = RegexValidator(
+    regex=r'^\d{10}$', message="Must be a 10 digit phone number")
 
 class GetOrNoneManager(models.Manager):
 
@@ -124,12 +127,25 @@ class Schedule(models.Model):
 
     #TODO: validate overlapping classes by period
 
+class ParentProfile(models.Model):
+    user = models.OneToOneField(User, related_name='parent_profile')
+    mobile = models.CharField("Phone Number", unique=True, validators=[
+                              phone_validator], max_length=10)
+
+    objects = GetOrNoneManager()
+
+    def __str__(self):
+        return self.user.get_full_name()
+
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, related_name='student_profile')
     student_id = models.CharField("Student ID", unique=True, validators=[
-                                  student_id_regex], max_length=10)
+                                  student_id_validator], max_length=10)
     grade_level = models.IntegerField("Grade Level", choices=grade_levels, default=FRESHMAN)
     schedule = models.OneToOneField(Schedule, related_name='student_profile', blank=True, null=True)
+
+    mobile = models.CharField("Phone Number", unique=True, validators=[
+                              phone_validator], max_length=10)
 
     objects = GetOrNoneManager()
 
@@ -140,6 +156,9 @@ class TeacherProfile(models.Model):
     user = models.OneToOneField(User, related_name='teacher_profile')
     room = models.CharField("Room Number", max_length=6, unique=True)
     schedule = models.OneToOneField(Schedule, related_name='teacher_profile', blank=True, null=True)
+
+    mobile = models.CharField("Phone Number", unique=True, validators=[
+                              phone_validator], max_length=10)
 
     objects = GetOrNoneManager()
 
@@ -258,12 +277,19 @@ class Poll(models.Model):
     author = models.ForeignKey(
         User, related_name="polls", on_delete=models.SET_NULL, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
+    date_close = models.DateTimeField(blank=True, null=True)
+    # TODO: send a signal which automatically fills in date_close whenever is_open is set to false? that way the admin just has to press a button "close poll" which sets is_open and date_close automatically
+    # date_close = models.DateField("Open Until", default=get_default_date(), blank=True, null=True, help_text="Optional - you can manually close a poll at any time.")
+    # have a scheduled script check for closed polls every day
 
     rank = models.IntegerField(default=0, blank=True)
     is_open = models.BooleanField('Open', default=True)
 
+    #TODO: restrict access to certain polls; allow admin to choose visibility in create form "parents only"/"students only" / "teachers" only etc.
+    voters = models.ManyToManyField(User, related_name="polls_submitted", blank=True)
+
     class Meta:
-        ordering = ('-is_open', 'date_created', 'rank')
+        ordering = ('-is_open', 'rank', 'date_close', 'date_created', )
 
     def __str__(self):
         return self.content
@@ -309,27 +335,9 @@ class Choice(models.Model):
         return self.content
 
 
-# date_close = models.DateField("Open Until", default=get_default_date(), blank=True, null=True, help_text="Optional - you can manually close a poll at any time.")
-# have a scheduled script check for closed polls every day
+class Vote(models.Model):
+    voter = models.ForeignKey(User, related_name='votes', on_delete=models.CASCADE)
+    choice = models.ForeignKey(Choice, related_name='votes', on_delete=models.CASCADE)
 
-# images_local = models.ManyToManyField('ImageLocal', related_name="announcements_attached")
-# images_online = models.ManyToManyField('ImageOnline', related_name="announcements_attached")
-# videos = models.ManyToManyField('Video', related_name="announcements_attached")
-#
-# class ImageLocal(models.Model):
-#     file = models.ImageField("Image File", upload_to="announcements/", blank=True, null=True)
-#
-#     def __str__(self):
-#         return self.file.name
-#
-# class ImageOnline(models.Model):
-#     url = models.URLField("Image URL", blank=True, null=True)
-#
-#     def __str__(self):
-#         return self.url
-#
-# class Video(models.Model):
-#     youtube_video_id = models.CharField("YouTube Video ID", validators=[youtube_regex], max_length=11, blank=True, null=True)
-#
-#     def __str__(self):
-#         return "https://www.youtube.com/watch?v=%s" % self.video_id
+    def __str__(self):
+        return "%s - %s" %(self.choice, self.voter)
