@@ -27,12 +27,6 @@ from django.utils import timezone
 def index(request):
     return render(request, 'main/index.html')
 
-
-
-
-
-
-
 def announcement_list(request):
     announcements = Announcement.objects.all()
     categories = Category.objects.all()
@@ -283,3 +277,26 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('index')
+
+
+
+
+def votes(request, choice_pk):
+    # check for None matching case?
+    vote = request.user.votes.filter(choice__pk=choice_pk)
+    return HttpResponse(vote.pk)
+
+# ajax request looks like this:
+#
+# var voteID; // To hold vote pk when returned
+#
+# $.ajax({
+#     type: 'GET',
+#     url: '/votes/' + choice.pk,
+#     success: function(data) {
+#         voteID = data;
+#     },
+#     error: function() {
+#         alert("no vote found");
+#     }
+# });
