@@ -49,13 +49,16 @@ $(document).ready(function() {
         e.preventDefault();
         var $poll = $(this).closest('.poll-wrapper');
         $poll.addClass("edit");
-
+        //$poll.find('.choice').children('.choice').attr('disabled', true);
+        //$poll.find('.choice').children('label').attr('contenteditable', true);
     });
     //set data-status of all mmedia to 3 meaning they can no longer be selected
     $('#poll-list').on('click', '.cancel-poll', function(e) {
         e.preventDefault();
         var $poll = $(this).closest('.poll-wrapper');
         $poll.removeClass("edit");
+        //$poll.find('.choice').children('.choice').attr('disabled', false);
+        //$poll.find('.choice').children('label').attr('contenteditable', false);
     });
 
     //Put media into array when x button is clicked. If save-poll pressed, for each object in array, call ajax function.
@@ -82,6 +85,7 @@ $(document).ready(function() {
             rank: $poll.find('.rank').text(),
             is_open: $poll.find('.is_open').text(),
         };
+
         $.ajax({
             type: 'PUT',
             url: '/api/polls/' + $poll.attr('id'),
@@ -92,6 +96,95 @@ $(document).ready(function() {
             },
             error: function() {
                 alert('Error updating poll.');
+            }
+        });
+
+    });
+    $('#poll-list').on('click', '.close-poll', function(e) {
+        e.preventDefault();
+
+        var $poll = $(this).closest('.poll-wrapper');
+        var poll = {
+            author: $poll.find('.author').text(),
+            category: $poll.find('.category').text(),
+            date_created: $poll.find('.date_created').text(),
+            content: $poll.find('.content > input').val(),
+            rank: $poll.find('.rank').text(),
+            is_open: false,
+        };
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/polls/' + $poll.attr('id'),
+            data: poll,
+            success: function(newpoll) {
+                alert('poll successfully closed');
+            },
+            error: function() {
+                alert('Error updating poll.');
+            }
+        });
+    });
+        $('#poll-list').on('click', '.reopen-poll', function(e) {
+            e.preventDefault();
+
+            var $poll = $(this).closest('.poll-wrapper');
+            var poll = {
+                author: $poll.find('.author').text(),
+                category: $poll.find('.category').text(),
+                date_created: $poll.find('.date_created').text(),
+                content: $poll.find('.content > a > h2').text(),
+                rank: $poll.find('.rank').text(),
+                is_open: true,
+            };
+
+            $.ajax({
+                type: 'PUT',
+                url: '/api/polls/' + $poll.attr('id'),
+                data: poll,
+                success: function(newpoll) {
+                    alert('poll successfully reopened');
+                },
+                error: function() {
+                    alert('Error updating poll.');
+                }
+            });
+
+    });
+
+    $('#poll-list').on('click', '.submit-poll', function(e) {
+        e.preventDefault();
+
+        var $poll = $(this).closest('.poll-wrapper');
+        var $poll_content = $poll.find('.content > input').val();
+        var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
+        var userString = $choice.siblings('.chosen_by').text().trim();
+        //return array with all previous user pks who selected and pk of current user
+        var userArray = userString.split(",");
+        console.log(userArray);
+        userArray.pop();
+        userArray.push($poll.parent().attr('data-user'));
+
+        for (pk in userArray) {
+            userArray[pk] = parseInt(userArray[pk], 10);
+        }
+
+        var choice = {
+            poll: $poll.attr('id'),
+            content: $choice.val(),
+            chosen_by: userArray,
+        };
+        console.log(userArray);
+        $.ajax({
+            type: 'PUT',
+            url: '/api/choices/' + $choice.attr('data-choice'),
+            data: choice,
+            traditional: true,
+            success: function(picked) {
+                console.log(picked.chosen_by);
+            },
+            error: function() {
+                alert("error submitting vote");
             }
         });
     });

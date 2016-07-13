@@ -5,8 +5,9 @@
  {% endblock %}
 {% block content %}
 
-<div id="poll-list">
-    <h1>Ongoing Polls</h1> {% for poll in open_polls %}
+<div id="poll-list" data-user="{{ user.pk }}">
+    <h1>Ongoing Polls</h1><hr />
+    {% for poll in open_polls %}
 
     <div class="poll-wrapper" id="{{ poll.pk }}">
         <div class="row">
@@ -17,14 +18,27 @@
                 <div class="content edit">
                     <input required class="form-control" type="text" placeholder="Question..." name="question" value="{{ poll.content}}">
                 </div>
+                <div class="edit"><br/></div>
                 {% for choice in poll.choices.all %}
-                <input id="{{ choice.content }}{{ choice.pk }}" class="choice" type="radio" value="{{ choice.content }}">
-                <label for "{{ choice.content }}{{ choice.pk }}">{{ choice.content }}</label>
-                <br />
+                <div class="choice">
+                    <input data-choice="{{ choice.pk }}" id="{{ choice.content }}{{ choice.pk }}" name="{{ poll.pk }}" class="noedit choice" type="radio" value="{{ choice.content }}">
+                    <label class="noedit" for "{{ choice.content }}{{ choice.pk }}">{{ choice.content }}</label>
+
+                    <input required class="edit form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
+                    <br />
+                    <div class="chosen_by ajax">
+                        {% for user in choice.chosen_by.all %}
+                        {{ user.pk }},
+                        {% endfor %}
+                    </div>
+                </div>
                 {% endfor %}
                 <div class="noedit poll-buttons">
+                    <button class="close-poll">Close</button>
                     <button class="edit-poll">Edit</button>
                     <button class="remove-poll">Remove</button>
+                    <button class="submit-poll">Submit</button>
+
                 </div>
                 <div class="edit poll-buttons">
                     <button class="cancel-poll">Cancel</button>
@@ -44,7 +58,6 @@
           <div class="author">{{ poll.author.pk }}</div>
           <div class="category">{{ poll.category.pk }}</div>
           <div class="date_created">{{ poll.date_created }}</div>
-        
           <div class="rank">{{ poll.rank }}</div>
           <div class="is_open">{{ poll.is_open }}</div>
         </div>
@@ -52,7 +65,7 @@
 
     {% endfor %}
 
-    <h1>Past Polls</h1>
+    <h1>Past Polls</h1><hr />
     {% for poll in closed_polls %}
     <div class="poll-wrapper" id="{{ poll.pk }}">
         <div class="row">
@@ -64,7 +77,8 @@
                 {% for choice in poll.choices.all %}
                 <label>{{ choice.content }} | {{choice.chosen_by.count}}</label>
                 <br /> {% endfor %}
-
+                <button class="reopen-poll">Reopen</button>
+                <button class="remove-poll">Remove</button>
                 <hr />
 
                 <!--    <div class="signature">
@@ -73,7 +87,15 @@
                 </div>
 
             <hr />-->
+
             </div>
+        </div>
+        <div class="ajax">
+          <div class="author">{{ poll.author.pk }}</div>
+          <div class="category">{{ poll.category.pk }}</div>
+          <div class="date_created">{{ poll.date_created }}</div>
+          <div class="rank">{{ poll.rank }}</div>
+          <div class="is_open">{{ poll.is_open }}</div>
         </div>
 
     </div>

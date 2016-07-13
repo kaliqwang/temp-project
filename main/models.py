@@ -263,7 +263,7 @@ class Poll(models.Model):
     is_open = models.BooleanField('Open', default=True)
 
     class Meta:
-        ordering = ('-is_open', 'rank')
+        ordering = ('-is_open', 'date_created', 'rank')
 
     def __str__(self):
         return self.content

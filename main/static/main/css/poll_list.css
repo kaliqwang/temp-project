@@ -1,6 +1,9 @@
 label {
     margin-left: 10px;
 }
+hr {
+    border-color: #b3b3b3;
+}
 .poll-wrapper .edit {
     display:none;
 }
