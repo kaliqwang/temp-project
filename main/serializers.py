@@ -127,7 +127,7 @@ class PollSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Poll
         fields = ('content', 'category', 'author',
-                  'date_created', 'is_open', 'rank')
+                  'date_created', 'date_closed', 'is_open', 'rank')
 
 
 class ChoiceSerializer(serializers.HyperlinkedModelSerializer):
@@ -138,3 +138,12 @@ class ChoiceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Choice
         fields = ('poll', 'content', 'chosen_by')
+
+class VoteSerializer(serializers.HyperlinkedModelSerializer):
+
+    voter = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    choice = serializers.PrimaryKeyRelatedField(queryset=Choice.objects.all())
+
+    class Meta:
+        model = Vote
+        fields = ('voter', 'choice')

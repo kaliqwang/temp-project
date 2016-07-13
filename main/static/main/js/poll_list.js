@@ -102,12 +102,14 @@ $(document).ready(function() {
     });
     $('#poll-list').on('click', '.close-poll', function(e) {
         e.preventDefault();
-
+        var currentDate = new Date();
+        console.log(currentDate);
         var $poll = $(this).closest('.poll-wrapper');
         var poll = {
             author: $poll.find('.author').text(),
             category: $poll.find('.category').text(),
             date_created: $poll.find('.date_created').text(),
+            date_closed: currentDate.toJSON(),
             content: $poll.find('.content > input').val(),
             rank: $poll.find('.rank').text(),
             is_open: false,
@@ -133,6 +135,7 @@ $(document).ready(function() {
                 author: $poll.find('.author').text(),
                 category: $poll.find('.category').text(),
                 date_created: $poll.find('.date_created').text(),
+                date_closed: null,
                 content: $poll.find('.content > a > h2').text(),
                 rank: $poll.find('.rank').text(),
                 is_open: true,
@@ -146,12 +149,34 @@ $(document).ready(function() {
                     alert('poll successfully reopened');
                 },
                 error: function() {
-                    alert('Error updating poll.');
+                    alert('Error reopening poll.');
                 }
             });
 
     });
-
+    // $('#poll-list').on('click', '.submit-poll', function(e) {
+    //     e.preventDefault();
+    //
+    //     var $poll = $(this).closest('.poll-wrapper');
+    //     var $poll_content = $poll.find('.content > input').val();
+    //     var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
+    //
+    //     var vote = {
+    //         voter: $poll.parent().attr('data-user'),
+    //         choice: $choice.val(),
+    //     }
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '/api/votes/' + $choice.attr('data-choice'),
+    //         data: vote,
+    //         success: function(picked) {
+    //             console.log(picked.chosen_by);
+    //         },
+    //         error: function() {
+    //             alert("error submitting vote");
+    //         }
+    //     });
+    // });
     $('#poll-list').on('click', '.submit-poll', function(e) {
         e.preventDefault();
 
@@ -161,7 +186,7 @@ $(document).ready(function() {
         var userString = $choice.siblings('.chosen_by').text().trim();
         //return array with all previous user pks who selected and pk of current user
         var userArray = userString.split(",");
-        console.log(userArray);
+
         userArray.pop();
         userArray.push($poll.parent().attr('data-user'));
 
@@ -174,7 +199,7 @@ $(document).ready(function() {
             content: $choice.val(),
             chosen_by: userArray,
         };
-        console.log(userArray);
+
         $.ajax({
             type: 'PUT',
             url: '/api/choices/' + $choice.attr('data-choice'),

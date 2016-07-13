@@ -145,7 +145,7 @@ class StudentProfile(models.Model):
     schedule = models.OneToOneField(Schedule, related_name='student_profile', blank=True, null=True)
 
     mobile = models.CharField("Phone Number", unique=True, validators=[
-                              phone_validator], max_length=10)
+                              phone_validator], max_length=10, default="secret :)")
 
     objects = GetOrNoneManager()
 
@@ -158,7 +158,7 @@ class TeacherProfile(models.Model):
     schedule = models.OneToOneField(Schedule, related_name='teacher_profile', blank=True, null=True)
 
     mobile = models.CharField("Phone Number", unique=True, validators=[
-                              phone_validator], max_length=10)
+                              phone_validator], max_length=10, default="secret :)")
 
     objects = GetOrNoneManager()
 
@@ -277,7 +277,7 @@ class Poll(models.Model):
     author = models.ForeignKey(
         User, related_name="polls", on_delete=models.SET_NULL, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    date_close = models.DateTimeField(blank=True, null=True)
+    date_closed = models.DateTimeField(blank=True, null=True)
     # TODO: send a signal which automatically fills in date_close whenever is_open is set to false? that way the admin just has to press a button "close poll" which sets is_open and date_close automatically
     # date_close = models.DateField("Open Until", default=get_default_date(), blank=True, null=True, help_text="Optional - you can manually close a poll at any time.")
     # have a scheduled script check for closed polls every day
@@ -289,7 +289,7 @@ class Poll(models.Model):
     voters = models.ManyToManyField(User, related_name="polls_submitted", blank=True)
 
     class Meta:
-        ordering = ('-is_open', 'rank', 'date_close', 'date_created', )
+        ordering = ('-is_open', 'rank', 'date_closed', 'date_created', )
 
     def __str__(self):
         return self.content

@@ -45,4 +45,6 @@ urlpatterns = [
     url(r'^choices/$', views_api.ChoiceViewSet.as_view({'get':'list', 'post':'create'}), name='choices'),
     url(r'^choices/(?P<pk>\d+)$', views_api.ChoiceViewSet.as_view({'get': 'retrieve', 'put':'update', 'delete':'destroy'}), name='choice'),
 
+    url(r'^votes/$', views_api.VoteViewSet.as_view({'get':'list', 'post':'create'}), name='votes'),
+    url(r'^votes/(?P<pk>\d+)$', views_api.VoteViewSet.as_view({'get': 'retrieve', 'put':'update', 'delete':'destroy'}), name='vote'),
 ]
