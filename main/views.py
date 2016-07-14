@@ -153,10 +153,17 @@ def event_delete(request, pk):
 
 
 def poll_list(request):
-    open_polls = Poll.objects.filter(is_open = True)
-    closed_polls = Poll.objects.filter(is_open = False)
     categories = Category.objects.all()
-    return render(request, 'main/poll_list.html', {'open_polls': open_polls, 'closed_polls' : closed_polls, 'categories': categories})
+
+    polls_voted_id_list = request.user.votes.values('poll_id')
+
+    open_polls = Poll.objects.filter(is_open=True)
+    closed_polls = Poll.objects.exclude(is_open=True)\
+
+    polls_voted = open_polls.filter(pk__in=polls_voted_id_list)
+    polls_unvoted = open_polls.exclude(pk__in=polls_voted_id_list)
+
+    return render(request, 'main/poll_list.html', {'polls_voted': polls_voted, 'polls_unvoted': polls_unvoted, 'closed_polls' : closed_polls, 'categories': categories})
 
 def poll_detail(request, pk):
     poll = Poll.objects.get(pk=pk)
@@ -280,10 +287,12 @@ def logout(request):
 
 
 
-# def votes(request, choice_pk):
-#     # check for None matching case?
-#     vote = request.user.votes.filter(choice__pk=choice_pk)
-#     return HttpResponse(choice_pk)
+def votes(request, choice_pk):
+    # check for None matching case?
+    vote = request.user.votes.filter(choice__pk=choice_pk)
+    return HttpResponse(vote.pk)
+
+
 def votes(request, poll_pk):
     # check for None matching case?
     #Find the poll using poll.pk
@@ -296,18 +305,3 @@ def votes(request, poll_pk):
         except:
            pass
     return HttpResponse(vote.pk)
-
-# ajax request looks like this:
-#
-# var voteID; // To hold vote pk when returned
-#
-# $.ajax({
-#     type: 'GET',
-#     url: '/votes/' + choice.pk,
-#     success: function(data) {
-#         voteID = data;
-#     },
-#     error: function() {
-#         alert("no vote found");
-#     }
-# });
