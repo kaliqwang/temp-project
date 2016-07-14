@@ -1,5 +1,91 @@
 
 $(document).ready(function() {
+    //These functions are for Users only
+    function checkVoted() {
+        $open_polls = $('#poll-list').children('.open');
+        $open_polls.each(function() {
+            $poll = $(this);
+            $.ajax({
+                type: 'GET',
+                url: '/votes/' + ($poll).attr('id'),
+                async: false,
+                success: function(data) {
+                    ($poll).find('.resubmit-poll').removeClass('hide');
+
+                },
+                error: function() {
+                    ($poll).find('.submit-poll').removeClass('hide');
+                }
+            });
+        });
+    }
+    checkVoted();
+    $('#poll-list').on('click', '.submit-poll', function(e) {
+        e.preventDefault();
+
+        var $poll = $(this).closest('.poll-wrapper');
+        var $poll_content = $poll.find('.content > input').val();
+        var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
+
+        var vote = {
+            voter: $poll.parent().attr('data-user'),
+            choice: $choice.attr('data-choice'),
+            poll: $poll.attr('id'),
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/api/votes/',
+            data: vote,
+            success: function() {
+                alert("vote successfully submitted!");
+                ($poll).find('.submit-poll').addClass('hide');
+                ($poll).find('.resubmit-poll').removeClass('hide');
+
+            },
+            error: function() {
+                alert("Please select a choice");
+            }
+        });
+    });
+    $('#poll-list').on('click', '.resubmit-poll', function(e) {
+        e.preventDefault();
+
+        var $poll = $(this).closest('.poll-wrapper');
+        var $poll_content = $poll.find('.content > input').val();
+        var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
+        var voteID;
+        var vote = {
+            voter: $poll.parent().attr('data-user'),
+            choice: $choice.attr('data-choice'),
+            poll: $poll.attr('id'),
+        }
+        //gets the id of vote previously submitted
+        $.ajax({
+            type: 'GET',
+            url: '/votes/' + $poll.attr('id'),
+            success: function(data) {
+                voteID = data;
+                $.ajax({
+                    //puts new choice of vote
+                    type: 'PUT',
+                    url: '/api/votes/' + voteID,
+                    data: vote,
+                    success: function() {
+                        alert("vote successfully resubmitted!");
+
+                    },
+                    error: function() {
+                        alert("Please select a choice");
+                    }
+                });
+            },
+            error: function() {
+                alert("no vote found");
+            }
+        });
+
+    });
+    //These functions are for Everyone
     //calculates and sets widths of progress bars
     function setWidths(poll) {
 
@@ -19,6 +105,14 @@ $(document).ready(function() {
         });
     }
     setProgressBars();
+    //A test to see how fast changing the text of header is
+    // function changeHead() {
+    //     $('#poll-list').find('h1').html('How fast does this change');
+    // }
+    // changeHead();
+
+
+
     // using jQuery
     function getCookie(name) {
         var cookieValue = null;
@@ -49,7 +143,7 @@ $(document).ready(function() {
             }
         }
     });
-
+    //These functions are for ADMINS only
     $('#poll-list').on('click', '.remove-poll', function(e) {
         e.preventDefault();
         var $poll = $(this).closest('.poll-wrapper');
@@ -159,102 +253,4 @@ $(document).ready(function() {
             });
 
     });
-    $('#poll-list').on('click', '.submit-poll', function(e) {
-        e.preventDefault();
-
-        var $poll = $(this).closest('.poll-wrapper');
-        var $poll_content = $poll.find('.content > input').val();
-        var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
-
-        var vote = {
-            voter: $poll.parent().attr('data-user'),
-            choice: $choice.attr('data-choice'),
-            poll: $poll.attr('id'),
-        }
-        $.ajax({
-            type: 'POST',
-            url: '/api/votes/',
-            data: vote,
-            success: function() {
-                alert("vote successfully submitted!");
-            },
-            error: function() {
-                alert("error submitting vote");
-            }
-        });
-    });
-    $('#poll-list').on('click', '.resubmit-poll', function(e) {
-        e.preventDefault();
-
-        var $poll = $(this).closest('.poll-wrapper');
-        var $poll_content = $poll.find('.content > input').val();
-        var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
-        var voteID;
-        var vote = {
-            voter: $poll.parent().attr('data-user'),
-            choice: $choice.attr('data-choice'),
-            poll: $poll.attr('id'),
-        }
-        //gets the id of vote previously submitted
-        $.ajax({
-            type: 'GET',
-            url: '/votes/' + $poll.attr('id'),
-            success: function(data) {
-                voteID = data;
-                $.ajax({
-                    //puts new choice of vote
-                    type: 'PUT',
-                    url: '/api/votes/' + voteID,
-                    data: vote,
-                    success: function() {
-                        alert("vote successfully resubmitted!");
-
-                    },
-                    error: function() {
-                        alert("error resubmitting vote");
-                    }
-                });
-            },
-            error: function() {
-                alert("no vote found");
-            }
-        });
-
-    });
-    // $('#poll-list').on('click', '.submit-poll', function(e) {
-    //     e.preventDefault();
-    //
-    //     var $poll = $(this).closest('.poll-wrapper');
-    //     var $poll_content = $poll.find('.content > input').val();
-    //     var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
-    //     var userString = $choice.siblings('.chosen_by').text().trim();
-    //     //return array with all previous user pks who selected and pk of current user
-    //     var userArray = userString.split(",");
-    //
-    //     userArray.pop();
-    //     userArray.push($poll.parent().attr('data-user'));
-    //
-    //     for (pk in userArray) {
-    //         userArray[pk] = parseInt(userArray[pk], 10);
-    //     }
-    //
-    //     var choice = {
-    //         poll: $poll.attr('id'),
-    //         content: $choice.val(),
-    //         chosen_by: userArray,
-    //     };
-    //
-    //     $.ajax({
-    //         type: 'PUT',
-    //         url: '/api/choices/' + $choice.attr('data-choice'),
-    //         data: choice,
-    //         traditional: true,
-    //         success: function(picked) {
-    //             console.log(picked.chosen_by);
-    //         },
-    //         error: function() {
-    //             alert("error submitting vote");
-    //         }
-    //     });
-    // });
 });

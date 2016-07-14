@@ -134,7 +134,23 @@ $(document).ready(function() {
             $message.html('Remove');
 
         }
+    });
+    $('iframe').on('click', function(e) {
+        e.preventDefault();
+        var $message = $(this).find('span.remove');
+        console.log('clicked');
+        if ($(this).attr('data-status') == 0) {
+            $(this).attr('data-status', 1);
+            $(this).addClass('selected');
+            mediaArray.push($(this));
+            $message.html('Restore');
 
+        } else if ($(this).attr('data-status') == 1) {
+            $(this).removeClass('selected');
+            $(this).attr('data-status', 0);
+            mediaArray.splice(mediaArray.indexOf($(this), 1));
+            $message.html('Remove');
 
+        }
     });
 });

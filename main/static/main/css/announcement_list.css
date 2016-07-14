@@ -83,10 +83,10 @@
 }
 .announcement-wrapper.edit .thumbnail:hover iframe {
   opacity: .2;
-  border: 1px solid #2e78ba;
 }
 .announcement-wrapper.edit .video-wrapper:hover {
   border: 1px solid #2e78ba;
+  z-index: 1;
 }
 .announcement-wrapper.edit .thumbnail:hover span.remove {
   display: block;

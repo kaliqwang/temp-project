@@ -5,7 +5,7 @@
     <h1>Ongoing Polls</h1>
     <hr /> {% for poll in open_polls %}
 
-    <div class="poll-wrapper" id="{{ poll.pk }}">
+    <div class="open poll-wrapper" id="{{ poll.pk }}">
         <div class="row">
             <div class="col-xs-10 poll-container">
                 <div class="content noedit">
@@ -24,17 +24,14 @@
 
                     <input required class="edit form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
                     <br />
-                    <div class="chosen_by ajax">
-                        {% for user in choice.chosen_by.all %} {{ user.pk }}, {% endfor %}
-                    </div>
                 </div>
                 {% endfor %}
                 <div class="noedit poll-buttons">
                     <button class="close-poll">Close</button>
                     <button class="edit-poll">Edit</button>
                     <button class="remove-poll">Remove</button>
-                    <button class="submit-poll">Submit</button>
-                    <button class="resubmit-poll">Resubmit</button>
+                    <button class="submit-poll hide">Submit</button>
+                    <button class="resubmit-poll hide">Resubmit</button>
 
                 </div>
                 <div class="edit poll-buttons">
@@ -51,7 +48,7 @@
             <hr />-->
             </div>
         </div>
-        <div class="ajax">
+        <div class="hide">
             <div class="author">{{ poll.author.pk }}</div>
             <div class="category">{{ poll.category.pk }}</div>
             <div class="date_created">{{ poll.date_created }}</div>
@@ -74,7 +71,7 @@
                 {% for choice in poll.choices.all %}
                     <label>{{ choice.content }} | {{choice.votes.count}}</label>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:50%" data-votes= "{{ choice.votes.count }}">
+                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes= "{{ choice.votes.count }}">
                         </div>
                     </div>
                     <br />
@@ -93,7 +90,7 @@
 
             </div>
         </div>
-        <div class="ajax">
+        <div class="hide">
             <div class="author">{{ poll.author.pk }}</div>
             <div class="category">{{ poll.category.pk }}</div>
             <div class="date_created">{{ poll.date_created }}</div>
