@@ -287,10 +287,10 @@ def logout(request):
 
 
 
-def votes(request, choice_pk):
-    # check for None matching case?
-    vote = request.user.votes.filter(choice__pk=choice_pk)
-    return HttpResponse(vote.pk)
+# def votes(request, choice_pk):
+#     # check for None matching case?
+#     vote = request.user.votes.filter(choice__pk=choice_pk)
+#     return HttpResponse(vote.pk)
 
 
 def votes(request, poll_pk):
