@@ -28,8 +28,8 @@
                 <div class="choices-container">
                 {% for choice in poll.choices.all %}
                     <div class="choice">
-                        <input data-choice="{{ choice.pk }}" id="{{ choice.content }}{{ choice.pk }}" name="{{ poll.pk }}" class="noedit choice" type="radio" value="{{ choice.content }}">
-                        <label class="noedit" for "{{ choice.content }}{{ choice.pk }}">{{ choice.content }}</label>
+                        <input data-choice="{{ choice.pk }}" name="{{ poll.pk }}" class="noedit" type="radio" value="{{ choice.content }}">
+                        <label class="noedit">{{ choice.content }}</label>
                         <div class="edit">
                             <div class="input-group">
                                 <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
@@ -38,8 +38,6 @@
                                 </span>
                             </div>
                         </div>
-
-
                     </div>
                 {% endfor %}
                 </div>
