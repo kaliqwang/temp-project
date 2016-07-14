@@ -328,8 +328,6 @@ class Choice(models.Model):
     poll = models.ForeignKey(
         Poll, related_name='choices', on_delete=models.CASCADE)
     content = models.CharField(max_length=200)
-    chosen_by = models.ManyToManyField(
-        User, related_name='choices_chosen', blank=True)
 
     def __str__(self):
         return self.content

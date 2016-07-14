@@ -1,6 +1,7 @@
 
 $(document).ready(function() {
     //These functions are for Users only
+    //Checks to see if a vote exists with current user and poll.
     function checkVoted() {
         $open_polls = $('#poll-list').children('.open');
         $open_polls.each(function() {
@@ -9,9 +10,20 @@ $(document).ready(function() {
                 type: 'GET',
                 url: '/votes/' + ($poll).attr('id'),
                 async: false,
-                success: function(data) {
+                success: function(pk) {
                     ($poll).find('.resubmit-poll').removeClass('hide');
-
+                    $.ajax({
+                        type: 'GET',
+                        url: '/api/votes/' + pk,
+                        async:false,
+                        success: function(vote) {
+                            $choice=$poll.find('input[data-choice=' + vote.choice + ']')
+                            $choice.attr('checked', true);
+                        },
+                        error: function() {
+                            console.log('failed to find vote');
+                        }
+                    });
                 },
                 error: function() {
                     ($poll).find('.submit-poll').removeClass('hide');
@@ -172,11 +184,33 @@ $(document).ready(function() {
         //$poll.find('.choice').children('.choice').attr('disabled', false);
         //$poll.find('.choice').children('label').attr('contenteditable', false);
     });
-
+    //removes choice if clicked
+    $('.input-group-btn').click(function(e) {
+        e.preventDefault();
+        $choice = $(this).prev();
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/choices/' + $choice.attr('data-choice'),
+            success: function() {
+                $choice.parents('.choice').remove();
+            },
+            error: function() {
+                console.log("error removing choice");
+            }
+        });
+    });
+    //adds choice if clicked
+    // $('.add-choice').click(function(e) {
+    //     e.preventDefault();
+    //     var ChoiceField = $('#choice-template').html();
+    //     $(this).parents('.choices-container').append(ChoiceField);
+    // })
     $('#poll-list').on('click', '.save-poll', function(e) {
         e.preventDefault();
 
         var $poll = $(this).closest('.poll-wrapper');
+        var $choices = $poll.find('.choices-container').find('.input-group').children('input');
+
         var poll = {
             author: $poll.find('.author').text(),
             category: $poll.find('.category').text(),
@@ -190,15 +224,34 @@ $(document).ready(function() {
             type: 'PUT',
             url: '/api/polls/' + $poll.attr('id'),
             data: poll,
-            success: function(newpoll) {
-                $poll.find('.content.noedit > a > h2').text(newpoll.content);
+            success: function(newPoll) {
+                $poll.find('.content.noedit > a > h2').text(newPoll.content);
+
+                $choices.each(function() {
+                    var $choice = $(this).parents('.choice').find('label');
+                    var choice = {
+                        poll: $poll.attr('id'),
+                        content: $(this).val(),
+                    }
+                    $.ajax({
+                        type: 'PUT',
+                        url: '/api/choices/' + $(this).attr('data-choice'),
+                        data: choice,
+                        success: function(newChoice) {
+                            $choice.html(newChoice.content);
+                            $poll.removeClass('edit');
+                        },
+                        error: function() {
+                            alert("error updating choices");
+                        },
+                    });
+                });
                 $poll.removeClass('edit');
             },
             error: function() {
                 alert('Error updating poll.');
             }
         });
-
     });
     $('#poll-list').on('click', '.close-poll', function(e) {
         e.preventDefault();

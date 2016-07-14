@@ -1,6 +1,14 @@
 {% extends "main/base.html" %} {% load static from staticfiles %} {% block extrahead %}
 <link href="{% static 'main/css/poll_list.css'%}" rel="stylesheet"> {% endblock %} {% block content %}
-
+<!-- <template id="choice-template">
+    <div class="edit">
+        <div class="input-group">
+            <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+            </span>
+        </div>
+</template> -->
 <div id="poll-list" data-user="{{ user.pk }}">
     <h1>Ongoing Polls</h1>
     <hr /> {% for poll in open_polls %}
@@ -17,18 +25,27 @@
                 <div class="edit">
                     <br/>
                 </div>
+                <div class="choices-container">
                 {% for choice in poll.choices.all %}
-                <div class="choice">
-                    <input data-choice="{{ choice.pk }}" id="{{ choice.content }}{{ choice.pk }}" name="{{ poll.pk }}" class="noedit choice" type="radio" value="{{ choice.content }}">
-                    <label class="noedit" for "{{ choice.content }}{{ choice.pk }}">{{ choice.content }}</label>
+                    <div class="choice">
+                        <input data-choice="{{ choice.pk }}" id="{{ choice.content }}{{ choice.pk }}" name="{{ poll.pk }}" class="noedit choice" type="radio" value="{{ choice.content }}">
+                        <label class="noedit" for "{{ choice.content }}{{ choice.pk }}">{{ choice.content }}</label>
+                        <div class="edit">
+                            <div class="input-group">
+                                <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
+                                <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                                </span>
+                            </div>
+                        </div>
 
-                    <input required class="edit form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
-                    <br />
-                </div>
+
+                    </div>
                 {% endfor %}
+                </div>
                 <div class="noedit poll-buttons">
-                    <button class="close-poll">Close</button>
                     <button class="edit-poll">Edit</button>
+                    <button class="close-poll">Close</button>
                     <button class="remove-poll">Remove</button>
                     <button class="submit-poll hide">Submit</button>
                     <button class="resubmit-poll hide">Resubmit</button>
@@ -37,6 +54,7 @@
                 <div class="edit poll-buttons">
                     <button class="cancel-poll">Cancel</button>
                     <button class="save-poll">Save</button>
+                    <button style="float: right;" class="add-choice">Add Choice</button>
                 </div>
                 <hr />
 
@@ -56,11 +74,14 @@
             <div class="is_open">{{ poll.is_open }}</div>
         </div>
     </div>
-
+    {% empty %}
+    <h4>~ no ongoing polls</h4>
     {% endfor %}
 
     <h1>Past Polls</h1>
+
     <hr /> {% for poll in closed_polls %}
+
     <div class="closed poll-wrapper" id="{{ poll.pk }}" data-votes="{{ poll.votes.count }}">
         <div class="row">
             <div class="col-xs-10 poll-container">
@@ -77,8 +98,10 @@
                     <br />
                 {% endfor %}
                 </div>
-                <button class="reopen-poll">Reopen</button>
-                <button class="remove-poll">Remove</button>
+                <div class="poll-buttons">
+                    <button class="reopen-poll">Reopen</button>
+                    <button class="remove-poll">Remove</button>
+                </div>
                 <hr />
 
                 <!--    <div class="signature">
@@ -99,6 +122,8 @@
         </div>
 
     </div>
+    {% empty %}
+    <h4> ~ no past polls yet.</h4>
     {% endfor %}
 </div>
 

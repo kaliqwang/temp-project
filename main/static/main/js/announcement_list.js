@@ -59,21 +59,12 @@ $(document).ready(function() {
         $announcement.removeClass("edit");
         $images.children().removeClass('selected');
         $images.children().attr('data-status', 3);
+        $images.children().each(function() {
+            $(this).find('span.remove').html('Remove');
+        })
         mediaArray = [];
     });
 
-    //Put media into array when x button is clicked. If save-announcement pressed, for each object in array, call ajax function.
-
-    /*$('#announcement-list').on('click', '.remove-media', function(e) {
-        e.preventDefault();
-        var $media = $(this).closest('.mmedia');
-        mediaArray.push($media);
-        //mediaArray.push($media.attr('data-id') + '/' + $media.attr('id'));
-        $media.fadeOut();
-
-    });*/
-
-    //error when category is null
     $('#announcement-list').on('click', '.save-announcement', function(e) {
         e.preventDefault();
         var $announcement = $(this).closest('.announcement-wrapper');
@@ -121,24 +112,6 @@ $(document).ready(function() {
         e.preventDefault();
         var $message = $(this).find('span.remove');
 
-        if ($(this).attr('data-status') == 0) {
-            $(this).attr('data-status', 1);
-            $(this).addClass('selected');
-            mediaArray.push($(this));
-            $message.html('Restore');
-
-        } else if ($(this).attr('data-status') == 1) {
-            $(this).removeClass('selected');
-            $(this).attr('data-status', 0);
-            mediaArray.splice(mediaArray.indexOf($(this), 1));
-            $message.html('Remove');
-
-        }
-    });
-    $('iframe').on('click', function(e) {
-        e.preventDefault();
-        var $message = $(this).find('span.remove');
-        console.log('clicked');
         if ($(this).attr('data-status') == 0) {
             $(this).attr('data-status', 1);
             $(this).addClass('selected');

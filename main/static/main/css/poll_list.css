@@ -4,7 +4,7 @@ label {
 hr {
     border-color: #b3b3b3;
 }
-button {
+.poll-buttons button {
     background-color: #337ab7;
     color:white;
     border-style:none;
@@ -12,10 +12,10 @@ button {
     padding:5px 12px;
     margin-top:10px;
 }
-button:hover {
-    background-color: black;
-    color:white;
+.poll-buttons button:hover {
+    background-color: #275d8b;
 }
+
 .poll-wrapper .edit {
     display:none;
 }
