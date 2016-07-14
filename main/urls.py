@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^logout/$', views.logout, name='logout'),
 
     # sample view
-    url(r'^votes/(?P<choice_pk>\d+)', views.votes, name='votes'),
+    url(r'^votes/(?P<poll_pk>\d+)', views.votes, name='votes'),
 ]
 
 if settings.DEBUG:

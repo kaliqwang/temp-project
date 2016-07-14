@@ -143,7 +143,8 @@ class VoteSerializer(serializers.HyperlinkedModelSerializer):
 
     voter = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     choice = serializers.PrimaryKeyRelatedField(queryset=Choice.objects.all())
-
+    poll = serializers.PrimaryKeyRelatedField(queryset=Poll.objects.all())
+    
     class Meta:
         model = Vote
-        fields = ('voter', 'choice')
+        fields = ('voter', 'choice', 'poll')

@@ -280,10 +280,21 @@ def logout(request):
 
 
 
-
-def votes(request, choice_pk):
+# def votes(request, choice_pk):
+#     # check for None matching case?
+#     vote = request.user.votes.filter(choice__pk=choice_pk)
+#     return HttpResponse(choice_pk)
+def votes(request, poll_pk):
     # check for None matching case?
-    vote = request.user.votes.filter(choice__pk=choice_pk)
+    #Find the poll using poll.pk
+    selected_Poll= Poll.objects.all().get(id=poll_pk)
+    a = 0;
+    #for every choice associated with that poll, if not null, vote = that.
+    for choice in selected_Poll.choices.all():
+        try:
+           vote = request.user.votes.get(choice_id=choice.pk)
+        except:
+           pass
     return HttpResponse(vote.pk)
 
 # ajax request looks like this:

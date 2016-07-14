@@ -338,6 +338,6 @@ class Choice(models.Model):
 class Vote(models.Model):
     voter = models.ForeignKey(User, related_name='votes', on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, related_name='votes', on_delete=models.CASCADE)
-
+    poll = models.ForeignKey(Poll, related_name='votes', on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return "%s - %s" %(self.choice, self.voter)
