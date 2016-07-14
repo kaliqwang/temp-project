@@ -96,7 +96,11 @@ class PollAdmin(admin.ModelAdmin):
 class ChoiceAdmin(admin.ModelAdmin):
     list_select_related = True
     list_display = ('poll', 'content')
-    # Also display the chosen_by count
+    # Also display the vote count; how to display number of related objects in admin changelist?
+
+class VoteAdmin(admin.ModelAdmin):
+    list_select_related = True
+    list_display = ('voter', 'choice')
 
 #add functions to admin (through actions bar: pin, unpin, clean ranks, etc.)
 
@@ -113,3 +117,4 @@ admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Poll, PollAdmin)
 admin.site.register(Choice, ChoiceAdmin)
+admin.site.register(Vote, VoteAdmin)
