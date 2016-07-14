@@ -158,7 +158,7 @@ def poll_list(request):
     polls_voted_id_list = request.user.votes.values('poll_id')
 
     open_polls = Poll.objects.filter(is_open=True)
-    closed_polls = Poll.objects.exclude(is_open=True)\
+    closed_polls = Poll.objects.exclude(is_open=True)
 
     polls_voted = open_polls.filter(pk__in=polls_voted_id_list)
     polls_unvoted = open_polls.exclude(pk__in=polls_voted_id_list)
