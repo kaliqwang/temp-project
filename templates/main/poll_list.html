@@ -13,13 +13,6 @@
 </template>
 <div id="poll-list" data-user="{{ user.pk }}">
     <h1>Ongoing Polls</h1>
-    <div id="sucess-alert" class="alert alert-success hide">
-        <strong>Success!</strong> Poll was Updated :)
-    </div>
-    <!--Shows when user doesn't select choice, user votes when poll is closed  -->
-    <div id="error-alert" class="alert alert-danger hide">
-        <strong>Error!</strong> Something went wrong :(
-    </div>
     <hr />
 
     {% for poll in unvoted_polls%}
@@ -28,6 +21,13 @@
             <div class="col-xs-10 poll-container">
                 <div class="content noedit">
                     <a href="{{ poll.pk }}"><h2>{{ poll.content }}</h2></a>
+                </div>
+                <div class="alert alert-success hide">
+                    <strong>Success!</strong> Poll was Updated :)
+                </div>
+                <!--Shows when user doesn't select choice, user votes when poll is closed  -->
+                <div class="alert alert-danger hide">
+                    <strong>Error!</strong> Something went wrong :(
                 </div>
                 <div class="content edit">
                     <input required class="form-control" type="text" placeholder="Question..." name="question" value="{{ poll.content}}">
@@ -99,6 +99,13 @@
                 <div class="content">
                     <a href="{{ poll.pk }}"><h2>{{ poll.content }}</h2></a>
                 </div>
+                <div class="alert alert-success hide">
+                    <strong>Success!</strong> Poll was Updated :)
+                </div>
+                <!--Shows when user doesn't select choice, user votes when poll is closed  -->
+                <div class="alert alert-danger hide">
+                    <strong>Error!</strong> Something went wrong :(
+                </div>
                 <div class="choices-container">
                 {% for choice in poll.choices.all %}
                     <div class="choice resubmit">
@@ -154,8 +161,15 @@
     <div class="closed poll-wrapper" id="{{ poll.pk }}" data-votes="{{ poll.votes.count }}">
         <div class="row">
             <div class="col-xs-10 poll-container">
-                <div class="content noedit">
+                <div class="content">
                     <a href="{{ poll.pk }}"><h2>{{ poll.content }}</h2></a>
+                </div>
+                <div class="alert alert-success hide">
+                    <strong>Success!</strong> Poll was Updated :)
+                </div>
+                <!--Shows when user doesn't select choice, user votes when poll is closed  -->
+                <div class="alert alert-danger hide">
+                    <strong>Error!</strong> Something went wrong :(
                 </div>
                 <div class="progress-bars">
                 {% for choice in poll.choices.all %}

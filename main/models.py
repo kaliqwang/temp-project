@@ -289,7 +289,7 @@ class Poll(models.Model):
     voters = models.ManyToManyField(User, related_name="polls_submitted", blank=True)
 
     class Meta:
-        ordering = ('rank', 'date_closed', 'date_created', )
+        ordering = ('is_open', 'rank', 'date_closed', 'date_created', )
 
     def __str__(self):
         return self.content
