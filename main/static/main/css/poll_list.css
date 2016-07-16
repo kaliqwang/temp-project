@@ -25,6 +25,15 @@ hr {
 .poll-wrapper.edit .noedit {
     display:none;
 }
+.poll-wrapper .resubmit {
+    display:none;
+}
+.poll-wrapper.resubmit .resubmit {
+    display:initial;
+}
+.poll-wrapper.resubmit .noresubmit {
+    display:none;
+}
 .hide {
     display:none;
 }

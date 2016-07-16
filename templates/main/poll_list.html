@@ -1,19 +1,29 @@
 {% extends "main/base.html" %} {% load static from staticfiles %} {% block extrahead %}
 <link href="{% static 'main/css/poll_list.css'%}" rel="stylesheet"> {% endblock %} {% block content %}
-<!-- <template id="choice-template">
-    <div class="edit">
-        <div class="input-group">
-            <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-            </span>
+<template id="choicetemplate">
+    <div class="choice-container">
+        <div class="edit">
+            <div class="input-group">
+                <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                </span>
+            </div>
         </div>
-</template> -->
+</template>
 <div id="poll-list" data-user="{{ user.pk }}">
     <h1>Ongoing Polls</h1>
-    <hr /> {% for poll in open_polls %}
+    <div id="sucess-alert" class="alert alert-success hide">
+        <strong>Success!</strong> Poll was Updated :)
+    </div>
+    <!--Shows when user doesn't select choice, user votes when poll is closed  -->
+    <div id="error-alert" class="alert alert-danger hide">
+        <strong>Error!</strong> Something went wrong :(
+    </div>
+    <hr />
 
-    <div class="open poll-wrapper" id="{{ poll.pk }}">
+    {% for poll in unvoted_polls%}
+    <div class="poll-wrapper resubmit" id="{{ poll.pk }}" data-votes="{{ poll.votes.count }}">
         <div class="row">
             <div class="col-xs-10 poll-container">
                 <div class="content noedit">
@@ -27,43 +37,51 @@
                 </div>
                 <div class="choices-container">
                 {% for choice in poll.choices.all %}
-                    <div class="choice">
+                <div class="choice-container">
+                    <div class="choice resubmit">
                         <input data-choice="{{ choice.pk }}" name="{{ poll.pk }}" class="noedit" type="radio" value="{{ choice.content }}">
                         <label class="noedit">{{ choice.content }}</label>
-                        <div class="edit">
-                            <div class="input-group">
-                                <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
-                                <span class="input-group-btn">
-                                  <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                                </span>
+                        <br / class="noedit">
+                    </div>
+                    <div class="progress-bars noresubmit">
+                        <label>{{ choice.content }} | {{choice.votes.count}}</label>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes= "{{ choice.votes.count }}">
                             </div>
                         </div>
                     </div>
+                    <div class="edit">
+                        <div class="input-group">
+                            <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
+                            <span class="input-group-btn">
+                              <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
                 {% endfor %}
                 </div>
-                <div class="noedit poll-buttons">
-                    <button class="edit-poll">Edit</button>
-                    <button class="close-poll">Close</button>
-                    <button class="remove-poll">Remove</button>
-                    <button class="submit-poll hide">Submit</button>
-                    <button class="resubmit-poll hide">Resubmit</button>
-
-                </div>
-                <div class="edit poll-buttons">
-                    <button class="cancel-poll">Cancel</button>
-                    <button class="save-poll">Save</button>
-                    <button style="float: right;" class="add-choice">Add Choice</button>
-                </div>
-                <hr />
-
-                <!--    <div class="signature">
-                <i><i class="fa fa-clock-o"></i> Posted by {{ poll.author }} on {{ poll.date_created }}</i> |
-                Tags: <span class="label" style="background-color:{{ poll.category.color }}; font-weight:normal">{{ poll.category }}</span>
-            </div>
-
-            <hr />-->
             </div>
         </div>
+        <div class="noedit poll-buttons">
+            <!-- User is able to submit then resubmit. When user submits, I want to show progress bars. When user presses resubmit button, poll goes into resubmit mode and user can send in another vote. -->
+            <button class="edit-poll">Edit</button>
+            <button class="close-poll">Close</button>
+            <button class="remove-poll">Remove</button>
+            <button class="submit-poll">Submit</button>
+            <button class="resubmit-mode noresubmit">Resubmit Vote</button>
+            <button class="resubmit-poll resubmit hide">Resubmit</button>
+
+
+
+        </div>
+        <div class="edit poll-buttons">
+            <button class="cancel-poll">Cancel</button>
+            <button class="save-poll">Save</button>
+            <button style="float: right;" class="add-choice">Add Choice</button>
+        </div>
+        <hr />
         <div class="hide">
             <div class="author">{{ poll.author.pk }}</div>
             <div class="category">{{ poll.category.pk }}</div>
@@ -72,8 +90,61 @@
             <div class="is_open">{{ poll.is_open }}</div>
         </div>
     </div>
-    {% empty %}
-    <h4>~ no ongoing polls</h4>
+    {% endfor %}
+    {% for poll in voted_polls %}
+
+    <div class="voted poll-wrapper" id="{{ poll.pk }}" data-votes="{{ poll.votes.count }}">
+        <div class="row">
+            <div class="col-xs-10 poll-container">
+                <div class="content">
+                    <a href="{{ poll.pk }}"><h2>{{ poll.content }}</h2></a>
+                </div>
+                <div class="choices-container">
+                {% for choice in poll.choices.all %}
+                    <div class="choice resubmit">
+                        <input data-choice="{{ choice.pk }}" name="{{ poll.pk }}" type="radio" value="{{ choice.content }}">
+                        <label>{{ choice.content }}</label>
+                        <br />
+                    </div>
+                    <div class="progress-bars noresubmit">
+                        <label>{{ choice.content }} | {{choice.votes.count}}</label>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes= "{{ choice.votes.count }}">
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+
+            <!-- <div class="edit poll-buttons">
+                <button class="cancel-poll">Cancel</button>
+                <button class="save-poll">Save</button>
+                <button style="float: right;" class="add-choice">Add Choice</button>
+            </div> -->
+
+            <!--    <div class="signature">
+            <i><i class="fa fa-clock-o"></i> Posted by {{ poll.author }} on {{ poll.date_created }}</i> |
+            Tags: <span class="label" style="background-color:{{ poll.category.color }}; font-weight:normal">{{ poll.category }}</span>
+        </div>
+
+            <hr />-->
+        </div>
+        <div class="poll-buttons">
+            <button class="close-poll">Close</button>
+            <button class="remove-poll">Remove</button>
+            <button class="resubmit-mode noresubmit">Resubmit Vote</button>
+            <button class="resubmit-poll resubmit">Resubmit</button>
+        </div>
+        <div class="hide">
+            <div class="author">{{ poll.author.pk }}</div>
+            <div class="category">{{ poll.category.pk }}</div>
+            <div class="date_created">{{ poll.date_created }}</div>
+            <div class="rank">{{ poll.rank }}</div>
+            <div class="is_open">{{ poll.is_open }}</div>
+        </div>
+        <hr />
+    </div>
     {% endfor %}
 
     <h1>Past Polls</h1>
@@ -125,6 +196,7 @@
     {% endfor %}
 </div>
 
-{% endblock %} {% block other %}
+{% endblock %}
+{% block other %}
 <script src="{% static 'main/js/poll_list.js' %}"></script>
 {% endblock %}

@@ -1,131 +1,5 @@
 
 $(document).ready(function() {
-    //These functions are for Users only
-    //Checks to see if a vote exists with current user and poll.
-    function checkVoted() {
-        $open_polls = $('#poll-list').children('.open');
-        $open_polls.each(function() {
-            $poll = $(this);
-            $.ajax({
-                type: 'GET',
-                url: '/votes/' + ($poll).attr('id'),
-                async: false,
-                success: function(pk) {
-                    ($poll).find('.resubmit-poll').removeClass('hide');
-                    $.ajax({
-                        type: 'GET',
-                        url: '/api/votes/' + pk,
-                        async:false,
-                        success: function(vote) {
-                            $choice=$poll.find('input[data-choice=' + vote.choice + ']')
-                            $choice.attr('checked', true);
-                        },
-                        error: function() {
-                            console.log('failed to find vote');
-                        }
-                    });
-                },
-                error: function() {
-                    ($poll).find('.submit-poll').removeClass('hide');
-                }
-            });
-        });
-    }
-    checkVoted();
-    $('#poll-list').on('click', '.submit-poll', function(e) {
-        e.preventDefault();
-
-        var $poll = $(this).closest('.poll-wrapper');
-        var $poll_content = $poll.find('.content > input').val();
-        var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
-
-        var vote = {
-            voter: $poll.parent().attr('data-user'),
-            choice: $choice.attr('data-choice'),
-            poll: $poll.attr('id'),
-        }
-        $.ajax({
-            type: 'POST',
-            url: '/api/votes/',
-            data: vote,
-            success: function() {
-                alert("vote successfully submitted!");
-                ($poll).find('.submit-poll').addClass('hide');
-                ($poll).find('.resubmit-poll').removeClass('hide');
-
-            },
-            error: function() {
-                alert("Please select a choice");
-            }
-        });
-    });
-    $('#poll-list').on('click', '.resubmit-poll', function(e) {
-        e.preventDefault();
-
-        var $poll = $(this).closest('.poll-wrapper');
-        var $poll_content = $poll.find('.content > input').val();
-        var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
-        var voteID;
-        var vote = {
-            voter: $poll.parent().attr('data-user'),
-            choice: $choice.attr('data-choice'),
-            poll: $poll.attr('id'),
-        }
-        //gets the id of vote previously submitted
-        $.ajax({
-            type: 'GET',
-            url: '/votes/' + $poll.attr('id'),
-            success: function(data) {
-                voteID = data;
-                $.ajax({
-                    //puts new choice of vote
-                    type: 'PUT',
-                    url: '/api/votes/' + voteID,
-                    data: vote,
-                    success: function() {
-                        alert("vote successfully resubmitted!");
-
-                    },
-                    error: function() {
-                        alert("Please select a choice");
-                    }
-                });
-            },
-            error: function() {
-                alert("no vote found");
-            }
-        });
-
-    });
-    //These functions are for Everyone
-    //calculates and sets widths of progress bars
-    function setWidths(poll) {
-
-        totalVotes = poll.attr('data-votes');
-        $bars = poll.find('.progress-bars').children('.progress').children();
-
-        $bars.each(function() {
-            votes = $(this).attr('data-votes')
-            $(this).css("width", votes/totalVotes*100 + "%");
-        });
-
-    }
-    function setProgressBars() {
-        $closed_polls = $('#poll-list').children('.closed');
-        $closed_polls.each(function() {
-            setWidths($(this));
-        });
-    }
-    setProgressBars();
-    //A test to see how fast changing the text of header is
-    // function changeHead() {
-    //     $('#poll-list').find('h1').html('How fast does this change');
-    // }
-    // changeHead();
-
-
-
-    // using jQuery
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {
@@ -155,6 +29,161 @@ $(document).ready(function() {
             }
         }
     });
+    //These functions are for Everyone
+    //calculates and sets widths of progress bars
+    function setWidths(poll) {
+        totalVotes = poll.attr('data-votes');
+        $bars = poll.find('.progress-bars').children('.progress').children();
+
+        $bars.each(function() {
+            votes = $(this).attr('data-votes')
+            $(this).css("width", votes/totalVotes*100 + "%");
+        });
+    }
+    function setProgressBars() {
+        $closed_polls = $('#poll-list').children('.closed');
+        $voted_polls = $('#poll-list').children('.voted');
+        $closed_polls.each(function() {
+            setWidths($(this));
+        });
+        $voted_polls.each(function() {
+            setWidths($(this));
+        });
+    }
+    setProgressBars();
+    // These functions are for Users only
+    // Puts the poll on resubmit-mode, prefills radio button with user's previous vote on voted polls, and add class to user's previous vote
+    function prefillVote($poll) {
+        $poll.addClass('resubmit');
+        $.ajax({
+            type: 'GET',
+            url: '/votes/' + ($poll).attr('id'),
+            async: false,
+            success: function(votepk) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/votes/' + votepk,
+                    async:false,
+                    success: function(vote) {
+                        $choice=$poll.find('input[data-choice=' + vote.choice + ']');
+                        $choice.attr('checked', true);
+                        $choice.addClass('picked');
+                    }
+                });
+            }
+        });
+    }
+    //checks if poll is closed
+    function checkClosed($poll) {
+        $.ajax({
+            type: 'GET',
+            url: '/api/polls/' + $poll.attr('id'),
+            success: function(poll) {
+                if (poll.is_open) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+    }
+    $('#poll-list').on('click', '.resubmit-mode', function() {
+        prefillVote($(this).closest('.poll-wrapper'));
+    });
+    $('#poll-list').on('click', '.submit-poll', function(e) {
+        e.preventDefault();
+        var $poll = $(this).closest('.poll-wrapper');
+        if (checkClosed($poll) == false) {
+            $('#error-alert').removeClass('hide');
+        } else {
+            var $submit_button = $(this);
+            var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
+            var vote = {
+                voter: $poll.parent().attr('data-user'),
+                choice: $choice.attr('data-choice'),
+                poll: $poll.attr('id'),
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/api/votes/',
+                data: vote,
+                success: function() {
+                    $submit_button.hide();
+                    $submit_button.next().next().removeClass('hide');
+
+                    $total_vote_count = parseInt($poll.attr('data-votes'),10) + 1;
+                    $poll.attr('data-votes', $total_vote_count);
+                    $poll.removeClass('resubmit');
+                    $.when(addVote($choice)).then(setWidths($poll));
+                },
+                error: function() {
+                    $('#error-alert').removeClass('hide');
+                }
+            });
+        }
+    });
+    //Adjusts progress-bar and label of new choice
+    function addVote($new_choice) {
+        $progress_bar = $new_choice.parent().next().find('.progress-bar');
+        $vote_count = parseInt($progress_bar.attr('data-votes'), 10) + 1;
+        $label = $progress_bar.parent().prev();
+
+        $progress_bar.attr('data-votes', $vote_count);
+        $label.html($new_choice.attr('value') + ' | ' + $vote_count);
+    }
+    //Adjusts progress-bar and label of new choice and previous choice
+    function changeVote($new_choice, $prev_choice) {
+        addVote($new_choice);
+        $progress_bar = $prev_choice.parent().next().find('.progress-bar');
+        $vote_count = parseInt($progress_bar.attr('data-votes'), 10) - 1;
+        $label = $progress_bar.parent().prev();
+
+        $progress_bar.attr('data-votes', $vote_count);
+        $label.html($prev_choice.attr('value') + ' | ' + $vote_count);
+    }
+    $('#poll-list').on('click', '.resubmit-poll', function(e) {
+        e.preventDefault();
+        var $poll = $(this).closest('.poll-wrapper');
+        if (checkClosed($poll) == false) {
+            console.log("this is happening");
+            $('#error-alert').removeClass('hide');
+        } else {
+            var $choice = $poll.find("input[name=" + $poll.attr('id') + "]:checked");
+            var $prev_choice = $choice.parents('.choices-container').find('.picked');
+            var voteID;
+            var vote = {
+                voter: $poll.parent().attr('data-user'),
+                choice: $choice.attr('data-choice'),
+                poll: $poll.attr('id'),
+            }
+            //gets the id of vote previously submitted
+            $.ajax({
+                type: 'GET',
+                url: '/votes/' + $poll.attr('id'),
+                success: function(data) {
+                    voteID = data;
+                    $.ajax({
+                        //puts new choice of vote and adjusts progress bars
+                        type: 'PUT',
+                        url: '/api/votes/' + voteID,
+                        data: vote,
+                        success: function() {
+                            $prev_choice.removeClass('picked');
+                            $poll.removeClass('resubmit');
+                            $choice.addClass('picked');
+                            $.when(changeVote($choice, $prev_choice)).then(setWidths($poll));
+                        },
+                        error: function() {
+                            $('#error-alert').removeClass('hide');
+                        }
+                    });
+                },
+                error: function() {
+                    $('#error-alert').removeClass('hide');
+                }
+            });
+        }
+    });
     //These functions are for ADMINS only
     $('#poll-list').on('click', '.remove-poll', function(e) {
         e.preventDefault();
@@ -173,38 +202,36 @@ $(document).ready(function() {
         e.preventDefault();
         var $poll = $(this).closest('.poll-wrapper');
         $poll.addClass("edit");
-        //$poll.find('.choice').children('.choice').attr('disabled', true);
-        //$poll.find('.choice').children('label').attr('contenteditable', true);
     });
 
     $('#poll-list').on('click', '.cancel-poll', function(e) {
         e.preventDefault();
         var $poll = $(this).closest('.poll-wrapper');
         $poll.removeClass("edit");
-        //$poll.find('.choice').children('.choice').attr('disabled', false);
-        //$poll.find('.choice').children('label').attr('contenteditable', false);
     });
     //removes choice if clicked
-    $('.input-group-btn').click(function(e) {
+    $('#poll-list').on('click', '.input-group-btn', function(e) {
         e.preventDefault();
-        $choice = $(this).prev();
-        $.ajax({
-            type: 'DELETE',
-            url: '/api/choices/' + $choice.attr('data-choice'),
-            success: function() {
-                $choice.parents('.choice').remove();
-            },
-            error: function() {
-                console.log("error removing choice");
-            }
-        });
+        $input_choice = $(this).prev();
+        if (!$input_choice.attr('data-choice')) {
+            $input_choice.closest('.choice-container').remove();
+        } else {
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/choices/' + $input_choice.attr('data-choice'),
+                success: function() {
+                    $input_choice.closest('.choice-container').remove();
+                },
+            });
+        }
     });
-    //adds choice if clicked
-    // $('.add-choice').click(function(e) {
-    //     e.preventDefault();
-    //     var ChoiceField = $('#choice-template').html();
-    //     $(this).parents('.choices-container').append(ChoiceField);
-    // })
+    // adds choice if clicked
+    $('.add-choice').click(function(e) {
+        e.preventDefault();
+        var ChoiceField = $('#choicetemplate').html();
+        $(this).closest('.poll-wrapper').find('.choices-container').append(ChoiceField);
+
+    })
     $('#poll-list').on('click', '.save-poll', function(e) {
         e.preventDefault();
 
@@ -242,68 +269,50 @@ $(document).ready(function() {
                             $poll.removeClass('edit');
                         },
                         error: function() {
-                            alert("error updating choices");
+                            $('#error-alert').removeClass('hide');
                         },
                     });
                 });
                 $poll.removeClass('edit');
             },
             error: function() {
-                alert('Error updating poll.');
+                $('#error-alert').removeClass('hide');
             }
         });
     });
-    $('#poll-list').on('click', '.close-poll', function(e) {
-        e.preventDefault();
+    function setStatus($poll, status) {
         var currentDate = new Date();
-        var $poll = $(this).closest('.poll-wrapper');
         var poll = {
             author: $poll.find('.author').text(),
             category: $poll.find('.category').text(),
             date_created: $poll.find('.date_created').text(),
             date_closed: currentDate.toJSON(),
-            content: $poll.find('.content > input').val(),
+            content: $poll.find('.content > a > h2').text(),
             rank: $poll.find('.rank').text(),
-            is_open: false,
+            is_open: status,
         };
-
         $.ajax({
             type: 'PUT',
             url: '/api/polls/' + $poll.attr('id'),
             data: poll,
-            success: function(newpoll) {
-                alert('poll successfully closed');
+            success: function(newPoll) {
+                $('#sucess-alert').removeClass('hide');
             },
             error: function() {
-                alert('Error updating poll.');
+                $('#error-alert').removeClass('hide');
             }
         });
+    }
+    $('#poll-list').on('click', '.close-poll', function(e) {
+        e.preventDefault();
+        var $poll = $(this).closest('.poll-wrapper');
+        setStatus($poll, false);
+
+
     });
         $('#poll-list').on('click', '.reopen-poll', function(e) {
             e.preventDefault();
-
             var $poll = $(this).closest('.poll-wrapper');
-            var poll = {
-                author: $poll.find('.author').text(),
-                category: $poll.find('.category').text(),
-                date_created: $poll.find('.date_created').text(),
-                date_closed: null,
-                content: $poll.find('.content > a > h2').text(),
-                rank: $poll.find('.rank').text(),
-                is_open: true,
-            };
-
-            $.ajax({
-                type: 'PUT',
-                url: '/api/polls/' + $poll.attr('id'),
-                data: poll,
-                success: function(newpoll) {
-                    alert('poll successfully reopened');
-                },
-                error: function() {
-                    alert('Error reopening poll.');
-                }
-            });
-
+            setStatus($poll, true);
     });
 });

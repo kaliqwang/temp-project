@@ -147,23 +147,18 @@ def event_delete(request, pk):
     event.delete()
     return redirect('event-list')
 
-
-
-
-
-
 def poll_list(request):
     categories = Category.objects.all()
 
-    polls_voted_id_list = request.user.votes.values('poll_id')
+    voted_polls_id_list = request.user.votes.values('poll_id')
 
     open_polls = Poll.objects.filter(is_open=True)
     closed_polls = Poll.objects.exclude(is_open=True)
 
-    polls_voted = open_polls.filter(pk__in=polls_voted_id_list)
-    polls_unvoted = open_polls.exclude(pk__in=polls_voted_id_list)
+    voted_polls= open_polls.filter(pk__in=voted_polls_id_list)
+    unvoted_polls = open_polls.exclude(pk__in=voted_polls_id_list)
 
-    return render(request, 'main/poll_list.html', {'polls_voted': polls_voted, 'polls_unvoted': polls_unvoted, 'closed_polls' : closed_polls, 'categories': categories})
+    return render(request, 'main/poll_list.html', {'voted_polls': voted_polls, 'unvoted_polls':unvoted_polls, 'closed_polls' : closed_polls, 'categories': categories})
 
 def poll_detail(request, pk):
     poll = Poll.objects.get(pk=pk)
