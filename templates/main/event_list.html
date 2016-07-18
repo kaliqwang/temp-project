@@ -1,11 +1,16 @@
 {% extends "main/base.html" %}
-
+{% load static from staticfiles %}
+{% block extrahead %}
+  <link href="{% static 'main/css/event_list.css'%}" rel="stylesheet">
+{% endblock %}
 {% block content %}
-
-    {% for event in events %}
+    <div id="eventsString" style="display:none"> {{ events }} </div>
+    <div id="events-list"></div>
+    <!-- {% for event in events %}
         <li>{{ event }}</li>
-    {% empty %}
-        <h4>No events yet.</h4>
-    {% endfor %}
+    {% endfor %} -->
+{% endblock %}
 
+{% block other %}
+    <script src= "{% static 'main/js/event_list.js' %}"></script>
 {% endblock %}

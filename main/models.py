@@ -261,9 +261,8 @@ class Event(models.Model):
 
     class Meta:
         ordering = ('-date_start',)
-
     def __str__(self):
-        return self.name
+        return self.name + " " + self.date_start.strftime('%m/%d/%Y')
 
 
 def get_default_date():
