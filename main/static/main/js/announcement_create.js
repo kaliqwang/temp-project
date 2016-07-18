@@ -27,7 +27,25 @@ $(document).ready(function() {
     e.preventDefault();
     $(this).closest('div.input-group').remove(); y--;
   });
+$("#multiple-image-links").on("change", "input", function(e) {
+    e.preventDefault();
+    $(this).parent().prev().append("<img src='" + $(this).val() + "'>");
+});
+$("#multiple-image-files").on("change", "input", function(e) {
+    e.preventDefault();
+    readURL(this);
+});
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        console.log("this is working as well");
+        reader.onload = function (e) {
+            $(input).parent().prev().append("<img src='" + e.target.result + "'>");
+        }
 
+        reader.readAsDataURL(input.files[0]);
+    }
+}
   // var z = 0;
   // var youtubeVideoField = $('#youtube-video-template').html()
   // $("#add-youtube-video").click(function(e){
