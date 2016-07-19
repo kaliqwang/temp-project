@@ -35,6 +35,20 @@ $("#multiple-image-files").on("change", "input", function(e) {
     e.preventDefault();
     readURL(this);
 });
+$("#multiple-videos").on("change", "input", function(e) {
+    e.preventDefault();
+    console.log("this is working");
+    $.ajax({
+        type: "GET",
+        url: "https://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=" + $(this).val() + "&format=json",
+        dataType: 'text',
+        success: function(data) {
+            console.log(data);
+        }
+
+    })
+    // $(this).parent().prev().append("<img src='" + thumbnailLink + "'>");
+})
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -46,8 +60,8 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-  // var z = 0;
-  // var youtubeVideoField = $('#youtube-video-template').html()
+  var z = 0;
+  var youtubeVideoField = $('#youtube-video-template').html()
   // $("#add-youtube-video").click(function(e){
   //   e.preventDefault();
   //   if(z < 5){
