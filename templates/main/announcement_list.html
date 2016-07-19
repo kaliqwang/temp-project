@@ -2,23 +2,22 @@
 
 {% load static from staticfiles %}
 
-{% block extrahead %}
-  <link href="{% static 'main/css/announcement_list.css'%}" rel="stylesheet">
+{% block title %}Announcements{% endblock %}
+
+{% block header %}Announcements{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li class="active">Announcements</li>
 {% endblock %}
 
 {% block content %}
 
   <div id="announcement-list">
     {% for announcement in announcements %}
-    <div class="announcement-wrapper" id="{{ announcement.pk }}">
-      <div class="row">
-          <div class="col-xs-1">
-
-                <!--{% if announcement.category %}
-                    <div class="category" style="background-color:{{ announcement.category.color }}"></div>
-                {% endif %}-->
-
-          </div>
+      <div id="{{ announcement.pk }}" class="announcement-wrapper">
+        <div class="row">
+          <div class="col-xs-1"></div>
 
           <div class="col-xs-10 announcement-container">
               <div class="title noedit">
@@ -85,43 +84,39 @@
               <hr />
 
               <div class="noedit announcement-buttons">
-                  <button class="edit-announcement">Edit</button>
-                  <button class="remove-announcement">Remove</button>
+                <button class="edit-announcement">Edit</button>
+                <button class="remove-announcement">Remove</button>
               </div>
               <div class="edit announcement-buttons">
-                  <button class="cancel-announcement">Cancel</button>
-                  <button class="save-announcement">Save</button>
+                <button class="cancel-announcement">Cancel</button>
+                <button class="save-announcement">Save</button>
               </div>
           </div>
 
-
-
-          <div class="ajax">
+          <div class="ajax" style="display:none">
             <div class="author">{{ announcement.author.pk }}</div>
             <div class="category">{{ announcement.category.pk }}</div>
             <div class="date_created">{{ announcement.date_created }}</div>
             <br />
             <div class="rank">{{ announcement.rank }}</div>
           </div>
+        </div>
       </div>
-    </div>
     {% empty %}
-      <h4>- No announcements yet. -</h4>
+      <h4> Nothing here yet! </h4>
     {% endfor %}
   </div>
 
   <!-- Pager -->
-  <ul class="pager">
+  <!-- <ul class="pager">
       <li class="next">
           <a href="#">Newer &rarr;</a>
       </li>
       <li class="previous">
           <a href="#">&larr; Older</a>
       </li>
-  </ul>
+  </ul> -->
 
 {% endblock %}
 
-{% block other %}
-  <script src="{% static 'main/js/announcement_list.js' %}"></script>
-{% endblock %}
+{% block script %}<script src="{% static 'main/js/announcement_list.js' %}"></script>{% endblock %}

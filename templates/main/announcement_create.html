@@ -4,10 +4,14 @@
 
 {% block title %}Create Announcement{% endblock %}
 
-{% block header %}<h1 class="page-header">Create Announcement</h1>{% endblock %}
-{% block extrahead %}
-  <link href="{% static 'main/css/announcement_create.css'%}" rel="stylesheet">
+{% block header %}Create Announcement{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li <a href="{% url 'announcement-list' %}">Announcements</a></li>
+  <li class="active">New</li>
 {% endblock %}
+
 {% block content %}
 
     <template id="image-file-template">
@@ -116,6 +120,4 @@
 
 {% endblock %}
 
-{% block other %}
-  <script src="{% static 'main/js/announcement_create.js' %}"></script>
-{% endblock %}
+{% block script %}<script src="{% static 'main/js/announcement_create.js' %}"></script>{% endblock %}

@@ -1,8 +1,16 @@
 {% extends "main/base.html" %}
 
+{% load static from staticfiles %}
+
 {% block title %}Event Detail{% endblock %}
 
-{% block header %}<h1 class="page-header">Event Detail</h1>{% endblock %}
+{% block header %}Event Detail{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li <a href="{% url 'event-list' %}">Events</a></li>
+  <li class="active">{{ event }}</li>
+{% endblock %}
 
 {% block content %}
   {{ event }}

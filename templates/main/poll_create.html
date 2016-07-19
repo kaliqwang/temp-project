@@ -4,7 +4,13 @@
 
 {% block title %}Create Poll{% endblock %}
 
-{% block header %}<h1 class="page-header">Create Poll</h1>{% endblock %}
+{% block header %}Create Poll{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li <a href="{% url 'poll-list' %}">Polls</a></li>
+  <li class="active">New</li>
+{% endblock %}
 
 {% block content %}
 
@@ -65,6 +71,4 @@
 
 {% endblock %}
 
-{% block other %}
-  <script src="{% static 'main/js/poll_create.js' %}"></script>
-{% endblock%}
+{% block script %}<script src="{% static 'main/js/poll_create.js' %}"></script>{% endblock%}

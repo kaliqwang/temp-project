@@ -1,8 +1,16 @@
 {% extends "main/base.html" %}
 
+{% load static from staticfiles %}
+
 {% block title %}Poll Detail{% endblock %}
 
-{% block header %}<h1 class="page-header">Poll Detail</h1>{% endblock %}
+{% block header %}Poll Detail{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li <a href="{% url 'poll-list' %}">Polls</a></li>
+  <li class="active">{{ poll }}</li>
+{% endblock %}
 
 {% block content %}
   {{ poll }}

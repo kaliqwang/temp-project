@@ -4,11 +4,15 @@
 
 {% block title %}Create Event{% endblock %}
 
-{% block extrahead %}
-  {{ form.media }}
-{% endblock%}
+{% block extrahead %}{{ form.media }}{% endblock%}
 
-{% block header %}<h1 class="page-header">Create Event</h1>{% endblock %}
+{% block header %}Create Event{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li <a href="{% url 'event-list' %}">Events</a></li>
+  <li class="active">New</li>
+{% endblock %}
 
 {% block content %}
 
@@ -84,6 +88,4 @@
 
 {% endblock %}
 
-{% block other %}
-  <script src="{% static 'main/js/event_create.js' %}"></script>
-{% endblock%}
+{% block script %}<script src="{% static 'main/js/event_create.js' %}"></script>{% endblock%}

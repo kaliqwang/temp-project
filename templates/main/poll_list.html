@@ -1,17 +1,29 @@
-{% extends "main/base.html" %} {% load static from staticfiles %} {% block extrahead %}
-<link href="{% static 'main/css/poll_list.css'%}" rel="stylesheet"> {% endblock %} {% block content %}
-<template id="choicetemplate">
-    <div class="choice-container">
-        <div class="edit">
-            <div class="input-group">
-                <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                </span>
-            </div>
-        </div>
-</template>
-<div id="poll-list" data-user="{{ user.pk }}">
+{% extends "main/base.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Polls{% endblock %}
+
+{% block header %}Polls{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li class="active">Polls</li>
+{% endblock %}
+
+{% block content %}
+  <template id="choicetemplate">
+      <div class="choice-container">
+          <div class="edit">
+              <div class="input-group">
+                  <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                  </span>
+              </div>
+          </div>
+  </template>
+  <div id="poll-list" data-user="{{ user.pk }}">
     <h1>Ongoing Polls</h1>
     <hr />
 
@@ -211,6 +223,5 @@
 </div>
 
 {% endblock %}
-{% block other %}
-<script src="{% static 'main/js/poll_list.js' %}"></script>
-{% endblock %}
+
+{% block script %}<script src="{% static 'main/js/poll_list.js' %}"></script>{% endblock %}

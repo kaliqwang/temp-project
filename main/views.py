@@ -142,7 +142,7 @@ def event_delete(request, pk):
 ################################################################################
 
 def poll_list(request):
-    voted_polls_id_list = request.user.votes.values('poll_id')
+    voted_polls_id_list = request.user.profile.votes.values('poll_id')
     open_polls = Poll.objects.filter(is_open=True)
     closed_polls = Poll.objects.exclude(is_open=True)
     voted_polls= open_polls.filter(pk__in=voted_polls_id_list)

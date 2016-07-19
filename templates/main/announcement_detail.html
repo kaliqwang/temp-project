@@ -1,8 +1,16 @@
 {% extends "main/base.html" %}
 
+{% load static from staticfiles %}
+
 {% block title %}Announcement Detail{% endblock %}
 
-{% block header %}<h1 class="page-header">Announcement Detail</h1>{% endblock %}
+{% block header %}Announcement Detail{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li <a href="{% url 'announcement-list' %}">Announcements</a></li>
+  <li class="active">{{ announcement }}</li>
+{% endblock %}
 
 {% block content %}
   {{ announcement }}

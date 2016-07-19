@@ -2,7 +2,13 @@
 
 {% load static from staticfiles %}
 
-{% block extrahead %}
+{% block title %}Events{% endblock %}
+
+{% block header %}Events{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li class="active">Events</li>
 {% endblock %}
 
 {% block content %}
@@ -24,7 +30,6 @@
 {% endblock %}
 
 {% block sidebar %}
-
     <!-- Todo: Automatically update whenever a user hover's over an event to show that event's details -->
     <div class="well">
       <h4>Event Details</h4>
@@ -35,9 +40,6 @@
         <li class="event-details category"><b>Category:</b> Quizbowl</li>
       </div>
     </div>
-
 {% endblock %}
 
-{% block other %}
-    <script src= "{% static 'main/js/event_list.js' %}"></script>
-{% endblock %}
+{% block script %}<script src= "{% static 'main/js/event_list.js' %}"></script>{% endblock %}
