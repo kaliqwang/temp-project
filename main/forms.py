@@ -5,7 +5,7 @@ from django.contrib.admin.widgets import AdminSplitDateTime
 from datetimewidget.widgets import DateTimeWidget, DateWidget, TimeWidget
 
 from django.contrib.auth.models import User
-from models import Announcement, Event, Poll, Category, StudentProfile, TeacherProfile
+from models import *
 
 class AnnouncementForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Subject...', 'required': 'required'}))
@@ -67,6 +67,12 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password', 'first_name', 'last_name')
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        fields = ('mobile',)
 
 class StudentProfileForm(forms.ModelForm):
 

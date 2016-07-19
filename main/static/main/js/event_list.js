@@ -1,13 +1,18 @@
 $(document).ready(function() {
     // Helper function for adding suffixes to dates
     function nth(d) {
-        if(d>3 && d<21) return '<sup>th</sup>';
+        // TODO: short circuit this function for case >3 and < 21, suffix = th
+        var suffix;
         switch (d % 10) {
-            case 1:  return "<sup>st</sup>";
-            case 2:  return "<sup>nd</sup>";
-            case 3:  return "<sup>rd</sup>";
-            default: return "<sup>th</sup>";
+            case 1:  suffix = "<sup>st</sup>";
+            case 2:  suffix = "<sup>nd</sup>";
+            case 3:  suffix = "<sup>rd</sup>";
+            default: suffix = "<sup>th</sup>";
         }
+        if (d < 10) {
+            return "&nbsp;&nbsp;" + d.toString() + suffix;
+        }
+        return d.toString() + suffix;
     }
 
     // Constants
@@ -44,7 +49,7 @@ $(document).ready(function() {
             // Get the current date
             currentDate = dateStart.getDate();
             // Create new current date wrapper and append it to $monthWrapper (guaranteed to be current by previous step)
-            $monthWrapper.append('<li><div class="date-header">' + dateStart.getDate() + nth(dateStart.getDate()) + ' - ' + daysOfWeek[dateStart.getDay()] + '</div><ul id="date-' + currentDate + '" class="date-wrapper"></ul></li>');
+            $monthWrapper.append('<li><div class="date-header">' + nth(dateStart.getDate()) + ' - ' + daysOfWeek[dateStart.getDay()] + '</div><ul id="date-' + currentDate + '" class="date-wrapper"></ul></li>');
             // Store current date wrapper in $dateWrapper
             $dateWrapper = $('#date-' + currentDate);
         }
@@ -60,7 +65,7 @@ $(document).ready(function() {
         var month = $(this).attr('id').substring(13);
         console.log(month);
         var $month = $('#month-' + month);
-        $month.slideToggle(400);
+        $month.slideToggle(300);
     });
 
 });

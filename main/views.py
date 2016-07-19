@@ -1,36 +1,28 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
-from serializers import EventSerializer
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 
+from django.utils import timezone
 
 from models import *
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-
-from django.utils.decorators import method_decorator
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import login_required
-
 from forms import *
-
-from django.utils import timezone
 
 def index(request):
     return render(request, 'main/index.html')
 
+################################################################################
+################################ ANNOUNCEMENTS #################################
+################################################################################
+
 def announcement_list(request):
     announcements = Announcement.objects.all()
-    categories = Category.objects.all()
-    return render(request, 'main/announcement_list.html', {'announcements': announcements, 'categories': categories})
+    return render(request, 'main/announcement_list.html', {'announcements': announcements})
 
 def announcement_detail(request, pk):
     announcement = Announcement.objects.get(pk=pk)
@@ -75,7 +67,7 @@ def announcement_create(request):
 
 @staff_member_required()
 def announcement_update(request, pk):
-    # restrict access to either the original author or a superuser admin
+    #TODO: restrict access to either the original author or a superuser admin
     announcement = Announcement.objects.get(pk=pk)
     form = AnnouncementForm(request.POST or None, instance=announcement)
     if form.is_valid():
@@ -102,20 +94,18 @@ def announcement_update(request, pk):
 
 @staff_member_required()
 def announcement_delete(request, pk):
-    # restrict access to either the original author or a superuser admin
+    #TODO: restrict access to either the original author or a superuser admin
     announcement = Announcement.objects.get(pk=pk)
     announcement.delete()
     return redirect('announcement-list')
 
-
-
-
-
+################################################################################
+#################################### EVENTS ####################################
+################################################################################
 
 def event_list(request):
     events = Event.objects.all()
-    categories = Category.objects.all()
-    return render(request, 'main/event_list.html', {'events': events, 'categories': categories})
+    return render(request, 'main/event_list.html', {'events': events})
 
 def event_detail(request, pk):
     event = Event.objects.get(pk=pk)
@@ -131,7 +121,7 @@ def event_create(request):
 
 @staff_member_required()
 def event_update(request, pk):
-    # restrict access to either the original author or a superuser admin
+    #TODO: restrict access to either the original author or a superuser admin
     event = Event.objects.get(pk=pk)
     form = EventForm(request.POST or None, instance=Event.objects.get(pk=pk))
     if form.is_valid():
@@ -142,23 +132,22 @@ def event_update(request, pk):
 
 @staff_member_required()
 def event_delete(request, pk):
-    # restrict access to either the original author or a superuser admin
+    #TODO: restrict access to either the original author or a superuser admin
     event = Event.objects.get(pk=pk)
     event.delete()
     return redirect('event-list')
 
+################################################################################
+#################################### POLLS #####################################
+################################################################################
+
 def poll_list(request):
-    categories = Category.objects.all()
-
     voted_polls_id_list = request.user.votes.values('poll_id')
-
     open_polls = Poll.objects.filter(is_open=True)
     closed_polls = Poll.objects.exclude(is_open=True)
-
     voted_polls= open_polls.filter(pk__in=voted_polls_id_list)
     unvoted_polls = open_polls.exclude(pk__in=voted_polls_id_list)
-
-    return render(request, 'main/poll_list.html', {'voted_polls': voted_polls, 'unvoted_polls':unvoted_polls, 'closed_polls' : closed_polls, 'categories': categories})
+    return render(request, 'main/poll_list.html', {'voted_polls': voted_polls, 'unvoted_polls':unvoted_polls, 'closed_polls' : closed_polls})
 
 def poll_detail(request, pk):
     poll = Poll.objects.get(pk=pk)
@@ -192,7 +181,7 @@ def poll_create(request):
 
 @staff_member_required()
 def poll_update(request, pk):
-    # restrict access to either the original author or a superuser admin
+    #TODO: restrict access to either the original author or a superuser admin
     poll = Poll.objects.get(pk=pk)
     form = PollForm(request.POST or None, instance=poll)
     if form.is_valid():
@@ -207,21 +196,28 @@ def poll_update(request, pk):
             c = Choice(content=choice, poll=p)
             c.save()
 
-        #TODO: Give a confirmation message at the top of form ("successfully updated") instead of redirecting immediately? Same for events, announcements, etc.?
         return redirect('poll-list')
     return render(request, 'main/poll_update.html', {'form': form, 'poll': poll})
 
 @staff_member_required()
 def poll_delete(request, pk):
-    # restrict access to either the original author or a superuser admin
+    #TODO: restrict access to either the original author or a superuser admin
     poll = Poll.objects.get(pk=pk)
     poll.delete()
     return redirect('poll-list')
 
+@staff_member_required()
+def get_vote(request, poll_pk):
+    poll = Poll.objects.get_or_none(pk=poll_pk)
+    if poll:
+        vote = poll.get_vote(request.user.profile.pk)
+        if vote:
+            return HttpRespones(vote.pk)
+    return HttpRespones(-1)
 
-
-
-
+################################################################################
+#################################### OTHER #####################################
+################################################################################
 
 @staff_member_required()
 def category_list(request):
@@ -243,20 +239,20 @@ def category_list(request):
     categories = Category.objects.all()
     return render(request, 'main/category_list.html', {'categories': categories})
 
-def student_register(request):
+def register(request):
     if request.method == 'POST':
         userForm = UserForm(request.POST)
-        studentProfileForm = StudentProfileForm(request.POST)
+        userProfileForm = UserProfileForm(request.POST)
 
-        if userForm.is_valid() and studentProfileForm.is_valid():
+        if userForm.is_valid() and userProfileForm.is_valid():
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = userForm.save(commit=False)
             user.set_password(password)
             user.save()
-            studentProfile = studentProfileForm.save(commit=False)
-            studentProfile.user = user
-            studentProfile.save()
+            userProfile = userProfileForm.save(commit=False)
+            userProfile.user = user
+            userProfile.save()
             user = authenticate(username=username, password=password)
             auth_login(request, user)
             return redirect('index')
@@ -264,8 +260,8 @@ def student_register(request):
             pass
     else:
         userForm = UserForm()
-        studentProfileForm = StudentProfileForm()
-    return render(request, 'main/student_register.html', {'userForm': userForm, 'studentProfileForm': studentProfileForm})
+        userProfileForm = UserProfileForm()
+    return render(request, 'main/register.html', {'userForm': userForm, 'userProfileForm': userProfileForm})
 
 def login(request):
     username = request.POST.get('username')
@@ -279,24 +275,3 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('index')
-
-
-
-# def votes(request, choice_pk):
-#     # check for None matching case?
-#     vote = request.user.votes.filter(choice__pk=choice_pk)
-#     return HttpResponse(vote.pk)
-
-
-def votes(request, poll_pk):
-    # check for None matching case?
-    #Find the poll using poll.pk
-    selected_Poll= Poll.objects.all().get(id=poll_pk)
-    a = 0;
-    #for every choice associated with that poll, if not null, vote = that.
-    for choice in selected_Poll.choices.all():
-        try:
-           vote = request.user.votes.get(choice_id=choice.pk)
-        except:
-           pass
-    return HttpResponse(vote.pk)

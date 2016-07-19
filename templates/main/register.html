@@ -2,14 +2,14 @@
 
 {% load static from staticfiles %}
 
-{% block title %}Student Registration{% endblock %}
+{% block title %}User Registration{% endblock %}
 
-{% block header %}<h1 class="page-header">Student Registration</h1>{% endblock %}
+{% block header %}<h1 class="page-header">User Registration</h1>{% endblock %}
 
 {% block content %}
-  <form id="register-form" action="{% url 'student-register' %}" method="post">{% csrf_token %}
+  <form id="register-form" action="{% url 'register' %}" method="post">{% csrf_token %}
     {{ userForm.as_p }}
-    {{ studentProfileForm.as_p }}
+    {{ userProfileForm.as_p }}
 
     <br />
     <br />
@@ -31,5 +31,5 @@
 {% endblock %}
 
 {% block other %}
-  <script src="{% static 'main/js/student_register.js' %}"></script>
+  <script src="{% static 'main/js/register.js' %}"></script>
 {% endblock%}

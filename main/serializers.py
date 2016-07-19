@@ -14,132 +14,104 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = UserProfile
+        fields = ('user', 'mobile')
+
+class StudentProfileSerializer(serializers.HyperlinkedModelSerializer):
+    user_profile = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all())
+
+    class Meta:
+        model = StudentProfile
+        fields = ('user_profile', 'student_id', 'grade_level')
+
+class TeacherProfileSerializer(serializers.HyperlinkedModelSerializer):
+    user_profile = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all())
+
+    class Meta:
+        model = TeacherProfile
+        fields = ('user_profile', 'room')
+
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Category
         fields = ('name', 'color')
 
-
-class SubjectSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = Subject
-        fields = ('subject',)
-
-
-class ClassSerializer(serializers.HyperlinkedModelSerializer):
-
-    subject = serializers.PrimaryKeyRelatedField(
-        queryset=Subject.objects.all())
-    teacher = serializers.PrimaryKeyRelatedField(
-        queryset=TeacherProfile.objects.all())
-
-    class Meta:
-        model = Class
-        fields = ('subject', 'teacher', 'room', 'period',
-                  'is_honors', 'is_ap', 'is_dual')
-
-
-class ScheduleSerializer(serializers.HyperlinkedModelSerializer):
-
-    classes = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Class.objects.all())
-
-    class Meta:
-        model = Schedule
-        fields = ('classes',)
-
-
-class StudentProfileSerializer(serializers.HyperlinkedModelSerializer):
-
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    schedule = serializers.PrimaryKeyRelatedField(
-        queryset=Schedule.objects.all())
-
-    class Meta:
-        model = StudentProfile
-        fields = ('user', 'student_id', 'grade_level', 'schedule')
-
-
-class TeacherProfileSerializer(serializers.HyperlinkedModelSerializer):
-
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    schedule = serializers.PrimaryKeyRelatedField(queryset=Schedule.objects.all())
-
-    class Meta:
-        model = TeacherProfile
-        fields = ('user', 'room', 'schedule')
-        # broken: user
-        # not-broken: schedule
-
-
 class ImageFileSerializer(serializers.HyperlinkedModelSerializer):
+    announcement =  serializers.PrimaryKeyRelatedField(queryset=Announcement.objects.all())
 
     class Meta:
         model = ImageFile
-        fields = ('image_file',)
+        fields = ('announcement', 'image_file',)
 
+    def __init__(self, *args, **kwargs):
+        many = kwargs.pop('many', True)
+        super(ImageFileSerializer, self).__init__(many=many, *args, **kwargs)
 
 class ImageLinkSerializer(serializers.HyperlinkedModelSerializer):
+    announcement =  serializers.PrimaryKeyRelatedField(queryset=Announcement.objects.all())
 
     class Meta:
         model = ImageLink
-        fields = ('image_link',)
+        fields = ('announcement', 'image_link',)
 
+    def __init__(self, *args, **kwargs):
+        many = kwargs.pop('many', True)
+        super(ImageLinkSerializer, self).__init__(many=many, *args, **kwargs)
 
-class YoutubeVideoSerializer(serializers.HyperlinkedModelSerializer):
+class YouTubeVideoSerializer(serializers.HyperlinkedModelSerializer):
+    announcement =  serializers.PrimaryKeyRelatedField(queryset=Announcement.objects.all())
 
     class Meta:
-        model = YoutubeVideo
-        fields = ('youtube_video', 'title')
+        model = YouTubeVideo
+        fields = ('announcement', 'title', 'youtube_video')
 
+    def __init__(self, *args, **kwargs):
+        many = kwargs.pop('many', True)
+        super(YouTubeVideoSerializer, self).__init__(many=many, *args, **kwargs)
 
 class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
-
-    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), allow_null=True)
+    author = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all(), allow_null=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), allow_null=True)
     image_files = serializers.PrimaryKeyRelatedField(many=True, queryset=ImageFile.objects.all(), allow_null=True)
     image_links = serializers.PrimaryKeyRelatedField(many=True, queryset=ImageLink.objects.all(), allow_null=True)
-    youtube_videos = serializers.PrimaryKeyRelatedField(many=True, queryset=YoutubeVideo.objects.all(), allow_null=True)
+    youtube_videos = serializers.PrimaryKeyRelatedField(many=True, queryset=YouTubeVideo.objects.all(), allow_null=True)
 
     class Meta:
         model = Announcement
-        fields = ('author', 'title', 'category', 'date_created', 'content',
-                  'image_files', 'image_links', 'youtube_videos', 'rank')
-
+        fields = ('title', 'author', 'date_created', 'content', 'category',
+                  'rank', 'image_files', 'image_links', 'youtube_videos')
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):
-
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), allow_null=True)
 
     class Meta:
         model = Event
-        fields = ('name', 'category', 'location', 'date_start',
-                  'time_start', 'date_end', 'time_end', 'details')
-
+        fields = ('name', 'date_start', 'time_start', 'date_end', 'time_end',
+                  'is_multi_day', 'location', 'details', 'category')
 
 class PollSerializer(serializers.HyperlinkedModelSerializer):
-
-    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), allow_null=True)
+    author = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all(), allow_null=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), allow_null=True)
+    choices = serializers.PrimaryKeyRelatedField(many=True, queryset=Choice.objects.all())
 
     class Meta:
         model = Poll
-        fields = ('content', 'category', 'author',
-                  'date_created', 'date_closed', 'is_open', 'rank')
-
+        fields = ('content', 'author', 'is_open', 'date_open', 'date_close',
+                  'category', 'rank', 'choices')
 
 class ChoiceSerializer(serializers.HyperlinkedModelSerializer):
-
     poll = serializers.PrimaryKeyRelatedField(queryset=Poll.objects.all())
 
     class Meta:
         model = Choice
-        fields = ('poll', 'content')
+        fields = ('content', 'poll')
 
 class VoteSerializer(serializers.HyperlinkedModelSerializer):
-
     voter = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     choice = serializers.PrimaryKeyRelatedField(queryset=Choice.objects.all())
     poll = serializers.PrimaryKeyRelatedField(queryset=Poll.objects.all())
@@ -147,3 +119,26 @@ class VoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Vote
         fields = ('voter', 'choice', 'poll')
+
+################################################################################
+
+# class SubjectSerializer(serializers.HyperlinkedModelSerializer):
+#
+#     class Meta:
+#         model = Subject
+#         fields = ('subject',)
+#
+# class ClassSerializer(serializers.HyperlinkedModelSerializer):
+#     subject = serializers.PrimaryKeyRelatedField(queryset=Subject.objects.all())
+#     teacher = serializers.PrimaryKeyRelatedField(queryset=TeacherProfile.objects.all())
+#
+#     class Meta:
+#         model = Class
+#         fields = ('subject', 'teacher', 'room', 'period', 'is_honors', 'is_ap', 'is_dual')
+#
+# class ScheduleSerializer(serializers.HyperlinkedModelSerializer):
+#     classes = serializers.PrimaryKeyRelatedField(many=True, queryset=Class.objects.all())
+#
+#     class Meta:
+#         model = Schedule
+#         fields = ('classes',)

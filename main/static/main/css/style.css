@@ -21,6 +21,10 @@ li {
     list-style: none;
 }
 
+li.event:hover {
+    text-decoration: underline;
+}
+
 li.event-details {
     padding-top: 10px;
 }
