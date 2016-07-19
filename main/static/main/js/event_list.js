@@ -35,7 +35,7 @@ $(document).ready(function() {
             // Get the current month
             currentMonth = dateStart.getMonth();
             // Create new current month wrapper and append it to $listWrapper
-            $listWrapper.append('<li><div class="month-header"><a href="#"><h2>' + months[dateStart.getMonth()] + '</h2></a></div><ul id="month-' + currentMonth + '" class="month-wrapper"></ul></li>');
+            $listWrapper.append('<li><div id="month-header-' + currentMonth + '" class="month-header"><a href="#"><h2>' + months[dateStart.getMonth()] + '</h2></a></div><ul id="month-' + currentMonth + '" class="month-wrapper"></ul></li>');
             // Store current month wrapper in $monthWrapper
             $monthWrapper = $('#month-' + currentMonth);
         }
@@ -54,4 +54,13 @@ $(document).ready(function() {
     });
 
     $listWrapper.removeClass('data-hidden');
+
+    $('.month-header').on('click', function(e) {
+        e.preventDefault();
+        var month = $(this).attr('id').substring(13);
+        console.log(month);
+        var $month = $('#month-' + month);
+        $month.slideToggle(400);
+    });
+
 });
