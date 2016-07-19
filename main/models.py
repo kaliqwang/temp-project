@@ -73,7 +73,7 @@ class StudentProfile(models.Model):
     objects = GetOrNoneManager()
 
     def __str__(self):
-        return self.user_profile + ' - student profile'
+        return '%s - student profile' % self.user_profile
 
 class TeacherProfile(models.Model):
     user_profile = models.OneToOneField(UserProfile, related_name='teacher_profile', null=True)
@@ -314,7 +314,7 @@ class YouTubeVideo(models.Model):
 ################################################################################
 
 # CURRENTLY UNUSED
-# 
+#
 # periods = (
 #     ('1', 'Period 1'),
 #     ('2', 'Period 2'),
