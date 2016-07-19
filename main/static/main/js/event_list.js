@@ -1,6 +1,7 @@
 $(document).ready(function() {
     // Helper function for adding suffixes to dates
     function nth(d) {
+        if(d>3 && d<21) return '<sup>th</sup>';
         switch (d % 10) {
             case 1:  return "<sup>st</sup>";
             case 2:  return "<sup>nd</sup>";
