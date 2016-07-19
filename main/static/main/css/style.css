@@ -3,7 +3,14 @@
 }
 
 .month-header {
+    color: #337ab7;
     border-bottom: 2px solid #337ab7;
+}
+
+.month-header:hover {
+    color: #23527c;
+    border-bottom: 2px solid #23527c;
+    cursor: pointer;
 }
 
 .date-header {
@@ -16,4 +23,8 @@ li {
 
 li.event-details {
     padding-top: 10px;
+}
+
+h2 {
+    margin-bottom: 4px;
 }
