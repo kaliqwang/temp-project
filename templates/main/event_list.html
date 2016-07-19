@@ -1,14 +1,41 @@
 {% extends "main/base.html" %}
+
 {% load static from staticfiles %}
+
 {% block extrahead %}
-  <link href="{% static 'main/css/event_list.css'%}" rel="stylesheet">
 {% endblock %}
+
 {% block content %}
-    <div id="eventsString" style="display:none"> {{ events }} </div>
-    <div id="events-list"></div>
-    <!-- {% for event in events %}
-        <li>{{ event }}</li>
-    {% endfor %} -->
+
+    <ul id="events-list" class="data-hidden">
+      {% for event in events %}
+        <li class="event"
+          data-event-category="{{ event.category.pk }}"
+          data-event-date-start="{{ event.date_start }}"
+          data-event-date-end="{{ event.date_end }}"
+          data-event-details="{{ event.details }}">
+          {{ event.name }}
+        </li>
+      {% empty %}
+        <h2>No events yet</h2>
+      {% endfor %}
+    </ul>
+
+{% endblock %}
+
+{% block sidebar %}
+
+    <!-- Todo: Automatically update whenever a user hover's over an event to show that event's details -->
+    <div class="well">
+      <h4>Event Details</h4>
+      <div id="event-details">
+        <li class="event-details time"><b>When:</b> Nov 14 @ 8:00 am - 5:00 pm</li>
+        <li class="event-details location"><b>Where:</b> Centennial</li>
+        <li class="event-details details"><b>Details:</b> All-day quizbowl tourney hosted by Centennial. Feel free to come help out if you can! Volunteers can earn hours for NHS and Beta club.</li>
+        <li class="event-details category"><b>Category:</b> Quizbowl</li>
+      </div>
+    </div>
+
 {% endblock %}
 
 {% block other %}

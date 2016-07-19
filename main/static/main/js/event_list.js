@@ -1,33 +1,59 @@
 $(document).ready(function() {
-    var $events = $('#eventsString');
-    var eventsArray = $events.html().split(";,");
-    var $eventsList = $('#events-list');
-    var firstEvent = eventsArray[0];
-    var lastEvent = eventsArray[eventsArray.length - 1];
-    var currentDate = firstEvent.substring(firstEvent.length - 14, firstEvent.length - 3);
-    var currentMonth = parseInt(currentDate.trim().substring(0, 2), 10);
-    var monthArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    //Adjusts for extra chars on first and last event
-    eventsArray[0] = firstEvent.substring(1);
-    eventsArray[eventsArray.length - 1] = lastEvent.substring(0, lastEvent.length - 3);
-
-    //Appends the first event's month and date
-    $eventsList.append("<h2>" + monthArray[currentMonth - 1] + "</h2>");
-    $eventsList.append("<h5 style = 'color: #2e78ba'>" + currentDate + "</h5>");
-    //If month of event is different, appends the new month
-    //If date of event is different, appends the new date
-    //Appends the event no matter what
-    eventsArray.forEach(function(event) {
-        var date = event.substring(event.length - 14, event.length - 3);
-        var month = parseInt(date.trim().substring(0, 2), 10);
-        if (date != currentDate) {
-            if (month != currentMonth) {
-                $eventsList.append("<h2>" + monthArray[month - 1] + "</h2>");
-                currentMonth = month;
-            }
-            $eventsList.append("<h5 style = 'color: #2e78ba'>" + date + "</h5>");
-            currentDate = date;
+    // Helper function for adding suffixes to dates
+    function nth(d) {
+        if(d>3 && d<21) return 'th';
+        switch (d % 10) {
+            case 1:  return "<sup>st</sup>";
+            case 2:  return "<sup>nd</sup>";
+            case 3:  return "<sup>rd</sup>";
+            default: return "<sup>th</sup>";
         }
-        $eventsList.append("<li>" + event.substring(11, event.length - 14) + "</li>");
+    }
+
+    // Constants
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    // For storing the current "wrapper" elements
+    var $listWrapper = $('#events-list');
+    var $monthWrapper = $();
+    var $dateWrapper = $();
+
+    // Initialize currentDate and currentMonth to -1
+    var currentDate = -1;
+    var currentMonth = -1;
+
+    // Events are first rendered by django as a flat list of <li> elements inside the listWrapper.
+    // For each <li> event element
+    $listWrapper.children().each(function() {
+        // Store info about each event in local variables
+        var category = $(this).data('event-date-category');
+        var details = $(this).data('event-date-details');
+        var dateStart = new Date($(this).data('event-date-start'));
+        var dateEnd = new Date($(this).data('event-date-end'));
+
+        // If new month (no month wrapper yet)
+        if (currentMonth != dateStart.getMonth()) {
+            // Get the current month
+            currentMonth = dateStart.getMonth();
+            // Create a new month wrapper and append it to $listWrapper
+            $listWrapper.append('<li><div class="month-header"><a href="#"><h2>' + months[dateStart.getMonth()] + '</h2></a></div><ul id="month-' + currentMonth + '" class="month-wrapper"></ul></li>');
+            // Store current month wrapper in $monthWrapper
+            $monthWrapper = $('#month-' + currentMonth);
+        }
+        // If new date (no date wrapper yet)
+        if (currentDate != dateStart.getDate()) {
+            // Get the current date
+            currentDate = dateStart.getDate();
+            // Create a new date wrapper and append it to $monthWrapper (guaranteed to be current by previous step)
+            $monthWrapper.append('<li><div class="date-header">' + dateStart.getDate() + nth(dateStart.getDate()) + ' - ' + daysOfWeek[dateStart.getDay()] + '</div><ul id="date-' + currentDate + '" class="date-wrapper"></ul></li>');
+            // Store current date wrapper in $dateWrapper
+            $dateWrapper = $('#date-' + currentDate);
+        }
+
+        // Append the pre-rendered event element to the $dateWrapper (guaranteed to be current by previous step)
+        $dateWrapper.append($(this));
     });
+
+    $listWrapper.removeClass('data-hidden');
 });

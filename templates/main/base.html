@@ -17,6 +17,7 @@
 
     <!-- Custom CSS -->
     <link href="{% static 'main/theme/modern-business.css' %}" rel="stylesheet">
+    <link href="{% static 'main/css/style.css' %}" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="{% static 'main/theme/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
@@ -192,11 +193,7 @@
                     <!-- /.row -->
                 </div>
 
-                <!-- Side Widget Well -->
-                <div class="well">
-                    <h4>Side Widget Well</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus laudantium odit aliquam repellat tempore quos aspernatur vero.</p>
-                </div>
+                {% block sidebar %}{% endblock %}
 
             </div>
 
