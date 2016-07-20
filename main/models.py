@@ -184,7 +184,7 @@ class Event(models.Model):
             raise ValidationError(_('Invalid end time'))
 
     def save(self, *args, **kwargs):
-        if date_start < date_end:
+        if self.date_start < self.date_end:
             self.is_multi_day = True
         super(Event, self).save(*args, **kwargs)
 
