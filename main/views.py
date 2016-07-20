@@ -2,9 +2,12 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
+
+import urllib2
+import json
 
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 
@@ -12,6 +15,7 @@ from django.utils import timezone
 
 from models import *
 from forms import *
+
 
 def index(request):
     return render(request, 'main/index.html')
@@ -275,3 +279,13 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('index')
+
+@staff_member_required
+def ytdata(request, video_id):
+    try:
+        json_string = urllib2.urlopen('https://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=' + video_id + '&format=json').read()
+        data = json.loads(json_string)
+        return JsonResponse(data)
+    except urllib2.HTTPError as e:
+        print(e.code())
+        raise Http404()

@@ -24,13 +24,15 @@ urlpatterns = [
     url(r'^polls/(?P<pk>\d+)/$', views.poll_detail, name='poll-detail'),
     url(r'^polls/(?P<pk>\d+)/update/$', views.poll_update, name='poll-update'),
     url(r'^polls/(?P<pk>\d+)/delete/$', views.poll_delete, name='poll-delete'),
-    url(r'^get_vote/(?P<poll_pk>\d+)', views.get_vote, name='get_vote'),
+    url(r'^get_vote/(?P<poll_pk>\d+)/$', views.get_vote, name='get_vote'),
 
     url(r'^categories/$', views.category_list, name='category-list'),
     url(r'^register/$', views.register, name='register'),
 
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
+
+    url(r'^ytdata/(?P<video_id>[a-zA-Z0-9_-]{11})/$', views.ytdata, name='ytdata'),
 ]
 
 if settings.DEBUG:

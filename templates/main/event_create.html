@@ -4,8 +4,6 @@
 
 {% block title %}Create Event{% endblock %}
 
-{% block extrahead %}{{ form.media }}{% endblock%}
-
 {% block header %}Create Event{% endblock %}
 
 {% block breadcrumb %}
@@ -15,77 +13,55 @@
 {% endblock %}
 
 {% block content %}
-
   <div class="row">
-    <div class="col-sm-6 col-sm-offset-3">
-      <form id="event-form" action="{% url 'event-create' %}" method="post">{% csrf_token %}
-
-        <div class="input-group {% if form.name.errors %}has-error{% endif %}">
-          <span class="input-group-addon">Name:</span>
-          {{ form.name }}
-        </div>
-        <br/>
-        <div class="input-group {% if form.location.errors %}has-error{% endif %}">
-          <span class="input-group-addon">Location:</span>
-          {{ form.location }}
-        </div>
-        <br/>
-        <div class="input-group {% if form.category.errors %}has-error{% endif %}">
-          <span class="input-group-addon">Category:</span>
-          {{ form.category }}
-        </div>
-
-        <br/>
-
+    <div class="col-sm-8 col-sm-offset-2">
+      <!-- Form -->
+      <form id="event-create-form" action="{% url 'event-create' %}" method="post">{% csrf_token %}
+        <!-- Event Name -->
+        <div class="{% if form.name.errors %}has-error{% endif %}">{{ form.name }}</div><br/>
+        <!-- Event Location -->
+        <div class="{% if form.location.errors %}has-error{% endif %}">{{ form.location }}</div><br/>
+        <!-- Event Time -->
         <div class="row event-time">
-            <div class="col-sm-6">
-                <div class="{% if form.date_start.errors %}has-error{% endif %}">
-                  {{ form.date_start.label_tag }}
-                  {{ form.date_start }}
-                </div>
-                <div class="{% if form.time_start.errors %}has-error{% endif %}">
-                  {{ form.time_start }}
-                </div>
+          <div class="col-sm-3 event-date-start">
+            <div class="{% if form.date_start.errors %}has-error{% endif %}">
+              {{ form.date_start }}
             </div>
-            <div class="col-sm-6">
-                <div class="{% if form.date_end.errors %}has-error{% endif %}">
-                  {{ form.date_end.label_tag }}
-                  {{ form.date_end }}
-                </div>
-                <div class="{% if form.time_end.errors %}has-error{% endif %}">
-                  {{ form.time_end }}
-                </div>
+          </div>
+          <div class="col-sm-3 event-time-start">
+            <div class="{% if form.time_start.errors %}has-error{% endif %}">
+              {{ form.time_start }}
             </div>
-        </div>
-
-        <br/>
-        <br/>
-
+          </div>
+          <div class="col-sm-3 event-date-end">
+            <div class="{% if form.date_end.errors %}has-error{% endif %}">
+              {{ form.date_end }}
+            </div>
+          </div>
+          <div class="col-sm-3 event-time-end">
+            <div class="{% if form.time_end.errors %}has-error{% endif %}">
+              {{ form.time_end }}
+            </div>
+          </div>
+        </div><br />
+        <!-- Event Details -->
         <div class="event-details">
           {{ form.details }}
-        </div>
-
-      </form>
-
-      <br />
-      <br />
-
+        </div><br />
+        <!-- Event Category -->
+        <div class="input-group {% if form.category.errors %}has-error{% endif %}">
+          <span class="input-group-addon">Category:</span>{{ form.category }}
+        </div><br />
+      </form><br />
+      <!-- Buttons -->
       <div class="row text-center">
         <div class="col-sm-4 col-sm-offset-2">
-          <a class="btn btn-lg btn-default" href="{% url 'index' %}">
-            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Cancel
-          </a>
+          <a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
         </div>
         <div class="col-sm-4">
-          <button type="button" id="submit-form" class="btn btn-lg btn-default" role="button">
-            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Publish
-          </button>
+          <button type="button" id="submit-event-create-form" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Publish</button>
         </div>
       </div>
-
     </div>
   </div>
-
 {% endblock %}
-
-{% block script %}<script src="{% static 'main/js/event_create.js' %}"></script>{% endblock%}

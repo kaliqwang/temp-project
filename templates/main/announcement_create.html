@@ -13,111 +13,80 @@
 {% endblock %}
 
 {% block content %}
-
-    <template id="image-file-template">
-      <div class="preview"></div>
-      <div class="input-group">
-        <input required type="file" class="form-control media-input" name="image-file[]" accept="image/*">
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        </span>
-      </div>
-    </template>
-
-    <template id="image-link-template">
-      <div class="preview"></div>
-      <div class="input-group">
-        <input required type="url" class="form-control media-input" name="image-link[]" placeholder="https://images.google.com/">
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        </span>
-      </div>
-    </template>
-
-    <template id="youtube-video-template">
-      <div class="preview"></div>
-      <div class="input-group">
-        <span class="input-group-addon">https://www.youtube.com/watch?v=</span>
-        <input required type="text" class="form-control media-input" name="youtube-video[]" maxlength="11">
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        </span>
-      </div>
-    </template>
-
-    <div class="row">
-      <div class="col-sm-8 col-sm-offset-2">
-        <form id="announcement-form" action="{% url 'announcement-create' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
-
-          <div class="{% if form.subject.errors %}has-error{% endif %}">
-            {{ form.title }}
+  <div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <form id="announcement-create-form" action="{% url 'announcement-create' %}" enctype="multipart/form-data" method="post" >{% csrf_token %}
+        <!-- Announcement Title -->
+        <div class="{% if form.subject.errors %}has-error{% endif %}">{{ form.title }}</div><br />
+        <!-- Announcement Content -->
+        <div class="{% if form.content.errors %}has-error{% endif %}">{{ form.content }}</div><br />
+        <!-- Media tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="active"><a href="#image-files" data-toggle="tab">Image Files</a></li>
+          <li><a href="#image-links" data-toggle="tab">Image Links</a></li>
+          <li><a href="#youtube-videos" data-toggle="tab">YouTube Videos</a></li>
+        </ul><br />
+        <!-- Media tab panes -->
+        <div class="tab-content">
+          <div id="image-files" class="tab-pane fade in active">
+            <input id="image-files-add" type="file" accept="image/*" multiple/><br />
+            <div id="image-files-preview" class="text-center"></div>
           </div>
-
-          <br />
-
-          <div class="{% if form.content.errors %}has-error{% endif %}">
-            {{ form.content }}
+          <div id="image-links" class="tab-pane fade">
+            <input id="image-links-add" type="url" class="form-control" name="image-links" placeholder="Paste your image URL here"><br />
+            <div id="image-links-preview" class="text-center"></div>
           </div>
-
-          <br />
-
-          <div class="input-group {% if form.category.errors %}has-error{% endif %}">
-            <span class="input-group-addon">Category:</span>
-            {{ form.category }}
+          <div id="youtube-videos" class="tab-pane fade">
+            <div class="input-group">
+              <span class="input-group-addon">https://www.youtube.com/watch?v=</span>
+              <input id="youtube-videos-add" type="text" class="form-control" name="youtube-videos" maxlength="11" placeholder="YouTube Video ID (11-characters)">
+            </div><br />
+            <div id="youtube-videos-preview"></div>
           </div>
-
-          <br />
-
-          <div class="text-right">
-            <button class="btn btn-default" id="add-image-file">
-              <span class="glyphicon glyphicon-open"></span>
-            </button>
-            <button class="btn btn-default" id="add-image-link">
-              <span class="glyphicon glyphicon-paperclip"></span>
-            </button>
-            <button class="btn btn-default" id="add-youtube-video">
-              <span class="glyphicon glyphicon-play"></span>
-            </button>
-          </div>
-
-          <br />
-
-          <div id="media-inputs">
-            <div class="form-group" id="multiple-image-files">
-            </div>
-            <div class="form-group" id="multiple-image-links">
-            </div>
-            <div class="form-group" id="multiple-videos">
-            </div>
-          </div>
-
-          <!-- <input id="youtube-video-id" type="text" maxlength="11" placeholder="YouTube Video ID" name="youtube-video-id">
-
-          <button class="btn btn-default" id="add-youtube-video">
-            <span class="glyphicon glyphicon-play"></span>
-          </button> -->
-
-        </form>
-
-        <br />
-
-        <div class="row text-center">
-          <div class="col-sm-4 col-sm-offset-2">
-            <a class="btn btn-lg btn-default" href="{% url 'index' %}">
-              <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Cancel
-            </a>
-          </div>
-          <div class="col-sm-4">
-            <button type="button" id="submit-form" class="btn btn-lg btn-default" role="button">
-              <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Publish
-            </button>
-          </div>
+        </div><hr />
+        <!-- Announcement Category -->
+        <div class="input-group {% if form.category.errors %}has-error{% endif %}">
+          <span class="input-group-addon">Category:</span>{{ form.category }}
+        </div><br />
+      </form><br />
+      <!-- Buttons -->
+      <div class="row text-center">
+        <div class="col-sm-4 col-sm-offset-2">
+          <a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
         </div>
-
+        <div class="col-sm-4">
+          <button type="button" id="submit-announcement-create-form" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Publish</button>
+        </div>
       </div>
     </div>
+  </div>
 
+  <img id="image-tester" class="hidden" src="#">
 
+  <template id="image-link-template">
+    <img class="thumbnail-preview" src="{% templatetag openvariable %} imageURL {% templatetag closevariable %}">
+    <input required type="url" class="hidden" name="image-links" value="{% templatetag openvariable %} imageURL {% templatetag closevariable %}">
+  </template>
+
+  <template id="youtube-video-template">
+    <div class="row">
+      <div class="col-xs-5 youtube-video-thumbnail">
+        <!-- Thumbnail -->
+        <img src="{% templatetag openvariable %} thumbnailURL {% templatetag closevariable %}">
+      </div>
+      <div class="col-xs-7 youtube-video-details">
+        <!-- Title -->
+        <div class="youtube-video-title">
+          <b><a href="https://www.youtube.com/watch?v={% templatetag openvariable %} videoID {% templatetag closevariable %}">{% templatetag openvariable %} videoTitle {% templatetag closevariable %}</a></b>
+        </div>
+        <!-- Author (Channel Name) -->
+        <div class="youtube-video-author">
+          <a class="youtube-video-author" href="{% templatetag openvariable %} videoAuthorURL {% templatetag closevariable %}">{% templatetag openvariable %} videoAuthor {% templatetag closevariable %}</a>
+        </div>
+      </div>
+      <input required type="text" class="hidden" name="youtube-videos" value="{% templatetag openvariable %} videoID {% templatetag closevariable %}" maxlength="11">
+    </div><br />
+  </template>
 {% endblock %}
 
 {% block script %}<script src="{% static 'main/js/announcement_create.js' %}"></script>{% endblock %}

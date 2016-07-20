@@ -1,62 +1,39 @@
 $(document).ready(function() {
-  var flavors = [
-    "Strawberry",
-    "Vanilla",
-    "Chocolate",
-    "Coffee",
-    "Peach",
-    "Mango",
-    "Pistachio",
-    "Cinnamon",
-    "Butterscotch",
-    "Cheesecake",
-    "Eggnog",
-    "S'mores",
-    "Toffee",
-    "White Fudge",
-    "Salt Caramel",
-    "Black Cherry",
-    "Butter Pecan",
-    "Green Tea",
-    "Cookie Dough",
-    "Rocky Road",
-    "Rum Raisin",
-    "Mint Chocolate Chip",
-    "Peppermint Bark",
-    "Cookies and Cream"
-   ];
 
-  var x = 0;
+    var flavors = [
+        'Strawberry', 'Vanilla', 'Chocolate', 'Coffee', 'Peach', 'Mango',
+        'Pistachio', 'Cinnamon', 'Butterscotch', 'Cheesecake', 'Eggnog',
+        'S\'mores', 'Toffee', 'White Fudge', 'Salt Caramel', 'Black Cherry',
+        'Butter Pecan', 'Green Tea', 'Cookie Dough', 'Rocky Road', 'Rum Raisin',
+        'Mint Chocolate Chip', 'Peppermint Bark', 'Cookies and Cream'
+    ];
 
-  $("#add-choice").click(function(e){e.preventDefault();
-      if(x < 20){
-          var flavor = flavors.splice(Math.floor(Math.random() * flavors.length), 1);
-          $(".choices").append(
+    var count = 0;
 
-            '<div class="input-group choice-field">' +
-              '<input type="text" class="form-control" name="choice[]" maxlength="200" placeholder="' + flavor + '">' +
-              '<span class="input-group-btn">' +
-                '<button type="button" class="btn btn-default remove_field" tabindex="-1"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>' +
-              '</span>' +
-            '</div>'
+    var choiceInputTemplate = $('#choice-input-template').html();
+    Mustache.parse(choiceInputTemplate);
 
-          );
-          x++;
-      }
-  });
+    $('#add-choice').click(function(e){
+        e.preventDefault();
+        if (count < 20) {
+            var flavor = flavors.splice(Math.floor(Math.random() * flavors.length), 1);
+            $('#poll-choices').append(Mustache.render(choiceInputTemplate, {placeholder: flavor}));
+            // $('#poll-choices > div.choice-input:last').find('button.remove-input').tooltip();
+            count++;
+        } else {
+            // TODO: Create red notification at top of choices indicating max 20 choices
+        }
+    });
 
-  $(".choices").on("click",".remove_field", function(e){e.preventDefault();
-      flavors.push($(this).parent().siblings('.form-control').attr('placeholder'))
-      $(this).closest('.input-group').remove();
-      x--;
-  });
+    $('#poll-choices').on('click','.remove-input', function(e){
+        e.preventDefault();
+        flavors.push($(this).data('flavor'));
+        $(this).closest('.choice-input').remove();
+        count--;
+    });
 
-  $("#submit-form").click(function(e){e.preventDefault();
-      $("#poll-form").submit()
-  });
-
-  $("#add-choice").click()
-  $("#add-choice").click()
-  $("#add-choice").click()
-  $("#add-choice").click()
+    $('#add-choice').click();
+    $('#add-choice').click();
+    $('#add-choice').click();
+    $('#add-choice').click();
 });

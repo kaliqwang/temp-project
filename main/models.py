@@ -153,11 +153,16 @@ class Announcement(models.Model):
         self.rank = 0
         self.save()
 
+def default_date():
+    return date.today()
+
+def default_time():
+    return datetime.now().time().strftime('%I:%M %p')
 
 class Event(models.Model):
     name = models.CharField(max_length=50)
-    date_start = models.DateField("Starts on", default=date.today, blank=True, null=True)
-    time_start = models.TimeField("Starts at", default=timezone.now, blank=True, null=True)
+    date_start = models.DateField("Starts on", default=default_date, blank=True, null=True)
+    time_start = models.TimeField("Starts at", default=default_time, blank=True, null=True)
     date_end = models.DateField("Ends on", blank=True, null=True)
     time_end = models.TimeField("Ends at", blank=True, null=True)
     is_multi_day = models.BooleanField(default=False)

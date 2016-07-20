@@ -1,112 +1,94 @@
 $(document).ready(function() {
 
-  var x = 0;
-  var imageFileField = $('#image-file-template').html()
-  $("#add-image-file").click(function(e){
-    e.preventDefault();
-    if(x < 5){
-      x++;
-      $("#multiple-image-files").append(imageFileField);
-    }
-  });
-  $("#multiple-image-files").on("click",".remove_field", function(e){
-    e.preventDefault();
-    $(this).closest('div.input-group').remove(); x--;
-  });
+    // YouTube videos
 
-  var y = 0;
-  var imageLinkField = $('#image-link-template').html()
-  $("#add-image-link").click(function(e){
-    e.preventDefault();
-    if(y < 5){
-      y++;
-      $("#multiple-image-links").append(imageLinkField);
+    var $youTubePreview = $('#youtube-videos-preview');
+    var youTubeTemplate = $('#youtube-video-template').html();
+    Mustache.parse(youTubeTemplate);
+
+    $('#youtube-videos-add').on('paste', function(e){
+        console.log('EVENT DETECTED: <Paste>');
+        var video = e.originalEvent.clipboardData.getData('text');
+        checkVideoID(video);
+    }).on('change', function(){
+        console.log('EVENT DETECTED: <Change>');
+        var video = $(this).val();
+        checkVideoID(video);
+    });
+
+    function checkVideoID(id) {
+        var videoID = id;
+        $.ajax({
+            type: 'GET',
+            url: '../../ytdata/' + videoID,
+            dataType: 'json',
+            success: function(data){
+                console.log('Success: video found');
+                addYouTubeVideo(data, videoID);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.log('Error: no video found');
+            }
+        });
     }
-  });
-  $("#multiple-image-links").on("click",".remove_field", function(e){
-    e.preventDefault();
-    $(this).closest('div.input-group').remove(); y--;
-  });
-$("#multiple-image-links").on("change", "input", function(e) {
-    e.preventDefault();
-    $(this).parent().prev().append("<img src='" + $(this).val() + "'>");
-});
-$("#multiple-image-files").on("change", "input", function(e) {
-    e.preventDefault();
-    readURL(this);
-});
-$("#multiple-videos").on("change", "input", function(e) {
-    e.preventDefault();
-    console.log("this is working");
-    $.ajax({
-        type: "GET",
-        url: "https://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=" + $(this).val() + "&format=json",
-        dataType: 'text',
-        success: function(data) {
-            console.log(data);
+
+    function addYouTubeVideo(data, id) {
+        var context = {
+            videoID: id,
+            thumbnailURL: 'http://img.youtube.com/vi/' + id + '/mqdefault.jpg',
+            videoTitle: data.title,
+            videoAuthor: data.author_name,
+            videoAurthorURL: data.author_url
+        };
+        $youTubePreview.append(Mustache.render(youTubeTemplate, context));
+        $('#youtube-videos-add').val('');
+    }
+
+    // Image links
+
+    var $imageLinksPreview = $('#image-links-preview');
+    var imageLinkTemplate = $('#image-link-template').html();
+    Mustache.parse(imageLinkTemplate);
+
+    $('#image-links-add').on('paste', function(e){
+        console.log('EVENT DETECTED: <Paste>');
+        var link = e.originalEvent.clipboardData.getData('text');
+        $('#image-tester').attr('src', link);
+    }).on('change', function(){
+        console.log('EVENT DETECTED: <Change>');
+        var link = $(this).val();
+        $('#image-tester').attr('src', link);
+    });
+
+    $('#image-tester').load(function(){
+        console.log('Success: image loaded');
+        addImageLink($(this).attr('src'));
+    }).error(function(){
+  		  console.log('Error: invalid image url');
+  	});
+
+    function addImageLink(link) {
+        $imageLinksPreview.append(Mustache.render(imageLinkTemplate, {imageURL: link}));
+        $('#image-links-add').val('');
+    }
+
+    // Image files
+
+    var $imageFilesPreview = $('#image-files-preview');
+
+    $('#image-files-add').on('change', function(e){
+        var files = e.target.files;
+        $imageFilesPreview.html('');
+        jQuery.each(files, function(i, file){
+            imageFilePreview(file);
+        });
+    });
+
+    function imageFilePreview(f) {
+        var imageReader = new FileReader();
+        imageReader.onload = function(e){
+            $imageFilesPreview.append('<img class="thumbnail-preview" src="' + e.target.result + '">');
         }
-
-    })
-    // $(this).parent().prev().append("<img src='" + thumbnailLink + "'>");
-})
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        console.log("this is working as well");
-        reader.onload = function (e) {
-            $(input).parent().prev().append("<img src='" + e.target.result + "'>");
-        }
-
-        reader.readAsDataURL(input.files[0]);
+        imageReader.readAsDataURL(f);
     }
-}
-  var z = 0;
-  var youtubeVideoField = $('#youtube-video-template').html()
-  // $("#add-youtube-video").click(function(e){
-  //   e.preventDefault();
-  //   if(z < 5){
-  //     z++;
-  //     $("#multiple-videos").append(youtubeVideoField);
-  //   }
-  // });
-  // $("#multiple-videos").on("click",".remove_field", function(e){
-  //   e.preventDefault();
-  //   $(this).closest('div.input-group').remove();
-  //   z--;
-  // });
-
-  $("#submit-form").click(function(e){e.preventDefault();
-      var success = true;
-      var $inputs = $("input.form-control, textarea.form-control");
-      if(!$("#announcement-form")[0].checkValidity()) {
-          $inputs.each(function() {
-              if($(this).val().length == 0){
-                  $(this).parent().addClass('has-error');
-                  $(this).siblings().children().css('border-color', '#a94442');
-                  success = false;
-              } else {
-                  $(this).parent().removeClass('has-error');
-                  $(this).siblings().children().css('border-color', '#ccc');
-              }
-          });
-      }
-      if(success){
-          $("#announcement-form").submit();
-      }
-  });
-
-  $("#add-youtube-video").click(function(e){
-    e.preventDefault();
-    if(z < 5){
-      z++;
-      $("#multiple-videos").append(youtubeVideoField);
-    }
-  });
-  $("#multiple-videos").on("click",".remove_field", function(e){
-    e.preventDefault();
-    $(this).closest('div.input-group').remove();
-    z--;
-  });
-
-
 });
