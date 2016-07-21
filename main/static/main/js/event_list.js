@@ -60,7 +60,6 @@ $(document).ready(function() {
     $listWrapper.removeClass('data-hidden');
 
     $('.month-header').on('click', function() {
-        e.preventDefault();
         var month = $(this).attr('id').substring(13);
         var $month = $('#month-' + month);
         $month.slideToggle(300);
