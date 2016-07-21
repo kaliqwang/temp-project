@@ -1,3 +1,5 @@
+/********************************* event_list *********************************/
+
 .data-hidden {
     display: none;
 }
@@ -29,9 +31,6 @@ li.event-details {
     padding-top: 10px;
 }
 
-h2 {
-    margin-bottom: 4px;
-}
 .remove {
     display: none;
     position: absolute;
@@ -41,10 +40,28 @@ h2 {
 
 /***************************** announcement_list ******************************/
 
+.announcement-wrapper > .title {
+    color: #337ab7;
+}
+
+.nailthumb-container {
+    display: inline-block;
+    margin: 0px;
+    width: 110px;
+    height: 110px;
+}
+
+.image-thumbnail {
+    padding: 0px;
+}
+
+.image-thumbnail-container {
+    margin: 0px;
+}
+
 .announcement-wrapper {
-    border: 20px solid #f5f5f5;
-    padding: 16px 0px;
-    margin-right: 20px;
+    border: 12px solid #f5f5f5;
+    padding: 8px 32px;
     margin-bottom: 20px;
     word-wrap:break-word;
 }
@@ -57,19 +74,7 @@ h2 {
 .announcement-wrapper.edit .noedit {
     display:none;
 }
-.video-wrapper {
-    position: relative;
-    padding-top: 25px;
-    padding-bottom: 56.25%; /* 16:9 */
-    height: 0;
-}
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
+
 .selected img {
     opacity:.2;
 }
@@ -78,11 +83,6 @@ h2 {
 }
 .selected.video-wrapper {
     border: 1px solid #2e78ba
-}
-.thumbnail{
-    position: relative;
-    width: auto;
-    text-align: center;
 }
 .announcement-wrapper.edit .thumbnail:hover img {
     opacity: .2;
@@ -98,6 +98,21 @@ h2 {
 .announcement-wrapper.edit .thumbnail:hover span.remove {
     display: block;
     color:#2e78ba;
+}
+
+.show-more {
+    padding-top: 5px;
+    border-top: 1px solid #eee;
+    color: grey;
+}
+
+.show-more:hover {
+    color: black;
+    cursor: pointer;
+}
+
+.category {
+    font-weight: normal;
 }
 
 /********************************* poll_list **********************************/
@@ -150,18 +165,37 @@ h2 {
 
 /******************************** event_create ********************************/
 
-.event-date-start {
-    padding-right: 2px;
+.event-datetime .input-group-addon {
+    padding: 0px 15px;
 }
 
-.event-time-start {
-    padding-left: 2px;
+#date-start {
+    border-top-left-radius: 4px;
 }
 
-.event-date-end {
-    padding-right: 2px;
+#time-start {
+    border-bottom-left-radius: 4px;
 }
 
-.event-time-end {
-    padding-left: 2px;
+#date-end {
+    border-top-right-radius: 4px;
+}
+
+#time-end {
+    border-bottom-right-radius: 4px;
+}
+
+/********************************* event_list *********************************/
+
+#event-details-container {
+    position: fixed;
+    width: 360px;
+}
+
+/******************************* category_list ********************************/
+
+#categories input[type="color"] {
+    width: 100px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
 }

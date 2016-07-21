@@ -36,11 +36,11 @@ class EventForm(forms.ModelForm):
         fields = ('name', 'category', 'location', 'date_start', 'time_start', 'date_end', 'time_end', 'category', 'details')
         widgets = {
             'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Ice Cream Tasting Event Extravaganza', 'title':'Name', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'}),
-            'location': forms.TextInput(attrs={'class':'form-control', 'placeholder':'CHS Cafeteria', 'title':'Location', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'}),
-            'date_start': forms.TextInput(attrs={'class':'form-control', 'title':'Start', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'}),
-            'time_start': forms.TextInput(attrs={'class':'form-control', 'title':'Start', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'}),
-            'date_end': forms.TextInput(attrs={'class':'form-control', 'title':'End', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'}),
-            'time_end': forms.TextInput(attrs={'class':'form-control', 'title':'End', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'}),
+            'location': forms.TextInput(attrs={'class':'form-control', 'placeholder':'CHS Cafeteria', 'title':'Location (Optional)', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'}),
+            'date_start': forms.TextInput(attrs={'id':'date-start', 'class':'form-control date start', 'title':'Start', 'data-toggle':'tooltip', 'data-placement':'left', 'data-trigger':'focus', 'required':'required'}),
+            'time_start': forms.TextInput(attrs={'id':'time-start', 'class':'form-control time start', 'title':'Start', 'data-toggle':'tooltip', 'data-placement':'left', 'data-trigger':'focus'}),
+            'date_end': forms.TextInput(attrs={'id':'date-end', 'class':'form-control date end', 'title':'End', 'data-toggle':'tooltip', 'data-placement':'right', 'data-trigger':'focus'}),
+            'time_end': forms.TextInput(attrs={'id':'time-end', 'class':'form-control time end', 'title':'End', 'data-toggle':'tooltip', 'data-placement':'right', 'data-trigger':'focus'}),
             'details': forms.Textarea(attrs={'class':'form-control', 'placeholder':sample_event_details, 'rows':'12', 'title':'Details (optional)', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'})
         }
 
@@ -67,9 +67,13 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'first_name', 'last_name')
+        fields = ('username', 'password', 'first_name', 'last_name', 'email')
         widgets = {
-            'password': forms.widgets.PasswordInput()
+            'username': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Username'}),
+            'password': forms.widgets.PasswordInput(attrs={'class':'form-control', 'placeholder':'Password'}),
+            'first_name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}),
+            'last_name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}),
+            'email': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email (doej1234@chsknights.com)'}),
         }
 
 class UserProfileForm(forms.ModelForm):
@@ -77,9 +81,16 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('mobile',)
+        widgets = {
+            'mobile': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Phone Number'}),
+        }
 
 class StudentProfileForm(forms.ModelForm):
 
     class Meta:
         model = StudentProfile
         fields = ('student_id', 'grade_level')
+        widgets = {
+            'student_id': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Student ID (Ex. 1100987654)'}),
+            'grade_level': forms.Select(attrs={'class':'form-control', 'placeholder':'Grade Level'}),
+        }

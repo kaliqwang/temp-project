@@ -8,41 +8,26 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'index' %}">Home</a></li>
-  <li <a href="{% url 'event-list' %}">Events</a></li>
+  <li><a href="{% url 'event-list' %}">Events</a></li>
   <li class="active">New</li>
 {% endblock %}
 
 {% block content %}
   <div class="row">
-    <div class="col-sm-8 col-sm-offset-2">
+    <div class="col-sm-10 col-sm-offset-1">
       <!-- Form -->
       <form id="event-create-form" action="{% url 'event-create' %}" method="post">{% csrf_token %}
         <!-- Event Name -->
         <div class="{% if form.name.errors %}has-error{% endif %}">{{ form.name }}</div><br/>
         <!-- Event Location -->
         <div class="{% if form.location.errors %}has-error{% endif %}">{{ form.location }}</div><br/>
-        <!-- Event Time -->
-        <div class="row event-time">
-          <div class="col-sm-3 event-date-start">
-            <div class="{% if form.date_start.errors %}has-error{% endif %}">
-              {{ form.date_start }}
-            </div>
-          </div>
-          <div class="col-sm-3 event-time-start">
-            <div class="{% if form.time_start.errors %}has-error{% endif %}">
-              {{ form.time_start }}
-            </div>
-          </div>
-          <div class="col-sm-3 event-date-end">
-            <div class="{% if form.date_end.errors %}has-error{% endif %}">
-              {{ form.date_end }}
-            </div>
-          </div>
-          <div class="col-sm-3 event-time-end">
-            <div class="{% if form.time_end.errors %}has-error{% endif %}">
-              {{ form.time_end }}
-            </div>
-          </div>
+        <!-- Event Date/Time -->
+        <div class="input-group input-daterange event-datetime">
+          <div class="{% if form.date_start.errors %}has-error{% endif %}">{{ form.date_start }}</div>
+          <div class="{% if form.time_start.errors %}has-error{% endif %}">{{ form.time_start }}</div>
+          <span class="input-group-addon">to</span>
+          <div class="{% if form.date_end.errors %}has-error{% endif %}">{{ form.date_end }}</div>
+          <div class="{% if form.time_end.errors %}has-error{% endif %}">{{ form.time_end }}</div>
         </div><br />
         <!-- Event Details -->
         <div class="event-details">
@@ -65,3 +50,5 @@
     </div>
   </div>
 {% endblock %}
+
+{% block script %}<script src= "{% static 'main/js/event_create.js' %}"></script>{% endblock %}

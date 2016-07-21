@@ -1,0 +1,38 @@
+{% extends "main/base.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Student Registration{% endblock %}
+
+{% block header %}Student Registration{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li class="active">Student Registration</li>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <form id="student-register-form" action="{% url 'student-register' %}" method="post">{% csrf_token %}
+        {{ userForm.username }}<br />
+        {{ userForm.password }}<br />
+        {{ userForm.first_name }}<br />
+        {{ userForm.last_name }}<br />
+        {{ userForm.email }}<br />
+        {{ userProfileForm.mobile }}<br />
+        {{ studentProfileForm.student_id }}<br />
+        {{ studentProfileForm.grade_level }}<br />
+      </form><br />
+      <!-- Buttons -->
+      <div class="row text-center">
+        <div class="col-sm-6">
+          <a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
+        </div>
+        <div class="col-sm-6">
+          <button type="button" id="submit-student-register-form" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 
 from colorful.fields import RGBColorField
 from django.utils import timezone
@@ -89,6 +90,8 @@ class Category(models.Model):
     name = models.CharField(max_length=50)
     color = RGBColorField(unique=True, colors=colors)
 
+    objects = GetOrNoneManager()
+
     class Meta:
         ordering = ('name',)
         verbose_name_plural = "categories"
@@ -130,7 +133,10 @@ class Announcement(models.Model):
         ordering = ('-rank', '-date_created')
 
     def __str__(self):
-        return "%s - %s (%s)" % (self.title, self.date_created.strftime('%a - %b %d, %Y'), self.category)
+        return "%s - %s (%s)" % (self.date_created.strftime('%b %d'), self.title, self.category)
+
+    def get_absolute_url(self):
+        return reverse('announcement-detail', args=[str(self.pk)])
 
     @classmethod
     def clean_ranks(cls):
@@ -161,9 +167,9 @@ def default_time():
 
 class Event(models.Model):
     name = models.CharField(max_length=50)
-    date_start = models.DateField("Starts on", default=default_date, blank=True, null=True)
-    time_start = models.TimeField("Starts at", default=default_time, blank=True, null=True)
-    date_end = models.DateField("Ends on", blank=True, null=True)
+    date_start = models.DateField("Starts on")
+    time_start = models.TimeField("Starts at", blank=True, null=True)
+    date_end = models.DateField("Ends on", blank=True)
     time_end = models.TimeField("Ends at", blank=True, null=True)
     is_multi_day = models.BooleanField(default=False)
     location = models.CharField(blank=True, max_length=50)
@@ -178,15 +184,24 @@ class Event(models.Model):
         return "%s - %s (%s)" % (self.name, self.date_start.strftime('%a - %b %d, %Y'), self.category)
 
     def clean(self):
-        if self.date_end < self.date_start:
+        # Set end date if needed
+        if self.date_end is None:
+            self.date_end = self.date_start
+        # Check if end date comes before start date
+        elif self.date_end < self.date_start:
             raise ValidationError(_('Invalid end date'))
-        elif self.time_end < self.time_start:
-            raise ValidationError(_('Invalid end time'))
+        # Check if both end time comes before start time if both are on the same day
+        elif self.date_end == self.date_start and self.time_start and self.time_end:
+            if self.time_end < self.time_start:
+                raise ValidationError(_('Invalid end time'))
 
     def save(self, *args, **kwargs):
         if self.date_start < self.date_end:
             self.is_multi_day = True
         super(Event, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('event-detail', args=[str(self.pk)])
 
 class Poll(models.Model):
     content = models.CharField(max_length=200)
@@ -213,6 +228,9 @@ class Poll(models.Model):
         else:
             self.date_close = None
         super(Poll, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('poll-detail', args=[str(self.pk)])
 
     def vote_count(self):
         count = {c.pk : c.vote_count() for c in self.choices}

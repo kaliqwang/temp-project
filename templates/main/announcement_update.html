@@ -4,38 +4,117 @@
 
 {% block title %}Update Announcement{% endblock %}
 
-{% block header %}<h1 class="page-header">Update Announcement</h1>{% endblock %}
+{% block header %}Update Announcement{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li><a href="{% url 'announcement-list' %}">Announcements</a></li>
+  <li><a href="{% url 'announcement-detail' announcement.pk %}">{{ announcement }}</a></li>
+  <li class="active">Update</li>
+{% endblock %}
 
 {% block content %}
-
   <div class="row">
-    <div class="col-sm-6 col-sm-offset-3">
-
-      <form id="announcement-form" action="{% url 'announcement-update' announcement.pk %}" method="post">{% csrf_token %}
-        {{ form.as_p }}
-      </form>
-
-      <br />
-      <br />
-
+    <div class="col-sm-10 col-sm-offset-1">
+      <form id="announcement-update-form" action="{% url 'announcement-update' announcement.pk %}" enctype="multipart/form-data" method="post" >{% csrf_token %}
+        <!-- Announcement Title -->
+        <div class="{% if form.subject.errors %}has-error{% endif %}">{{ form.title }}</div><br />
+        <!-- Announcement Content -->
+        <div class="{% if form.content.errors %}has-error{% endif %}">{{ form.content }}</div><br />
+        <!-- Media tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="active"><a href="#image-files" data-toggle="tab">Image Files</a></li>
+          <li><a href="#image-links" data-toggle="tab">Image Links</a></li>
+          <li><a href="#youtube-videos" data-toggle="tab">YouTube Videos</a></li>
+        </ul><br />
+        <!-- Media tab panes -->
+        <div class="tab-content">
+          <div id="image-files" class="tab-pane fade in active">
+            <input id="image-files-add" type="file" name="image-files" accept="image/*" multiple/><br />
+            <div id="image-files-existing" class="row">
+              {% for image in announcement.image_files.all %}
+                <div class="col-xs-4 col-sm-3 image-thumbnail">
+                  <a href="{{ image.image_file.url }}"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover image" src="{{ image.image_file.url }}"></div></a>
+                </div>
+              {% endfor %}
+            </div>
+            <div id="image-files-preview" class="row"></div>
+          </div>
+          <div id="image-links" class="tab-pane fade">
+            <input id="image-links-add" type="url" class="form-control" name="image-links" placeholder="Paste your image URL here"><br />
+            <div id="image-links-existing" class="row">
+              {% for image in announcement.image_links.all %}
+                <div class="col-xs-4 col-sm-3 image-thumbnail">
+                  <a href="{{ image.image_link }}"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover" src="{{ image.image_link }}"></div></a>
+                </div>
+              {% endfor %}
+            </div>
+            <div id="image-links-preview" class="row"></div>
+          </div>
+          <div id="youtube-videos" class="tab-pane fade">
+            <div class="input-group">
+              <span class="input-group-addon">https://www.youtube.com/watch?v=</span>
+              <input id="youtube-videos-add" type="text" class="form-control" name="youtube-videos" maxlength="11" placeholder="YouTube Video ID">
+            </div><br />
+            <div id="youtube-videos-existing">
+              {% for video in announcement.youtube_videos.all %}
+                <div id="{{ video.pk }}" class="hidden">{{ video.youtube_video }}</div>
+              {% endfor %}
+            </div>
+            <div id="youtube-videos-preview"></div>
+          </div>
+        </div><hr />
+        <!-- Announcement Category -->
+        <div class="input-group {% if form.category.errors %}has-error{% endif %}">
+          <span class="input-group-addon">Category:</span>{{ form.category }}
+        </div><br />
+      </form><br />
+      <!-- Buttons -->
       <div class="row text-center">
         <div class="col-sm-4 col-sm-offset-2">
-          <a class="btn btn-lg btn-default" href="{% url 'index' %}">
-            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Cancel
-          </a>
+          <a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
         </div>
         <div class="col-sm-4">
-          <button type="button" id="submit-form" class="btn btn-lg btn-default" role="button">
-            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Publish
-          </button>
+          <button type="button" id="submit-announcement-update-form" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Publish</button>
         </div>
       </div>
-
     </div>
   </div>
 
+  <img id="image-tester" class="hidden" src="#">
+
+  <template id="image-file-template">
+    <div class="col-xs-4 col-sm-3 image-thumbnail">
+      <div class="nailthumb-container"><img class="img-responsive img-hover image" src="{% templatetag openvariable %} imageURL {% templatetag closevariable %}"></div>
+    </div>
+  </template>
+
+  <template id="image-link-template">
+    <div class="col-xs-4 col-sm-3 image-thumbnail">
+      <a href="{% templatetag openvariable %} imageURL {% templatetag closevariable %}"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover" src="{% templatetag openvariable %} imageURL {% templatetag closevariable %}"></div></a>
+      <input required type="url" class="hidden" name="image-links" value="{% templatetag openvariable %} imageURL {% templatetag closevariable %}">
+    </div>
+  </template>
+
+  <template id="youtube-video-template">
+    <div class="row">
+      <div class="col-xs-5 youtube-video-thumbnail">
+        <!-- Thumbnail -->
+        <img src="{% templatetag openvariable %} thumbnailURL {% templatetag closevariable %}">
+      </div>
+      <div class="col-xs-7 youtube-video-details">
+        <!-- Title -->
+        <div class="youtube-video-title">
+          <b><a href="https://www.youtube.com/watch?v={% templatetag openvariable %} videoID {% templatetag closevariable %}">{% templatetag openvariable %} videoTitle {% templatetag closevariable %}</a></b>
+        </div>
+        <!-- Author (Channel Name) -->
+        <div class="youtube-video-author">
+          <a class="youtube-video-author" href="{% templatetag openvariable %} videoAuthorURL {% templatetag closevariable %}">{% templatetag openvariable %} videoAuthor {% templatetag closevariable %}</a>
+        </div>
+      </div>
+      <input required type="text" class="hidden" name="youtube-videos" value="{% templatetag openvariable %} videoID {% templatetag closevariable %}" maxlength="11">
+    </div><br />
+  </template>
 {% endblock %}
 
-{% block script %}
-  <script src="{% static 'main/js/announcement_update.js' %}"></script>
-{% endblock%}
+{% block script %}<script src="{% static 'main/js/announcement_update.js' %}"></script>{% endblock%}

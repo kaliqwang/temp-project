@@ -24,10 +24,12 @@ def index(request):
 ################################ ANNOUNCEMENTS #################################
 ################################################################################
 
+@login_required
 def announcement_list(request):
     announcements = Announcement.objects.all()
     return render(request, 'main/announcement_list.html', {'announcements': announcements})
 
+@login_required
 def announcement_detail(request, pk):
     announcement = Announcement.objects.get(pk=pk)
     return render(request, 'main/announcement_detail.html', {'announcement': announcement})
@@ -49,21 +51,21 @@ def announcement_create(request):
     form = AnnouncementForm(request.POST or None)
     if form.is_valid():
         a = form.save(commit=False)
-        a.author = request.user
+        a.author = request.user.profile
         a.save()
 
-        image_files = request.FILES
-        image_links = request.POST.getlist('image-link[]')
-        youtube_videos = request.POST.getlist('youtube-video[]')
+        image_files = request.FILES.getlist('image-files')
+        image_links = request.POST.getlist('image-links')
+        youtube_videos = request.POST.getlist('youtube-videos')
 
-        for image_file in request.FILES.getlist('image-file[]'):
+        for image_file in image_files:
             f = ImageFile(image_file=image_file, announcement=a)
             f.save()
         for image_link in image_links:
             link = ImageLink(image_link=image_link, announcement=a)
             link.save()
         for youtube_video in youtube_videos:
-            video = YoutubeVideo(youtube_video=youtube_video, announcement=a)
+            video = YouTubeVideo(youtube_video=youtube_video, announcement=a)
             video.save()
 
         return redirect('announcement-list')
@@ -77,23 +79,22 @@ def announcement_update(request, pk):
     if form.is_valid():
         a = form.save()
 
-        image_files = request.FILES
+        image_files = request.FILES.getlist('image-files')
         image_links = request.POST.getlist('image-link[]')
         youtube_videos = request.POST.getlist('youtube-video[]')
 
-        for image_file in request.FILES.getlist('image-file[]'):
+        for image_file in image_files:
             f = ImageFile(image_file=image_file, announcement=a)
             f.save()
-
         for image_link in image_links:
             link = ImageLink(image_link=image_link, announcement=a)
             link.save()
-
         for youtube_video in youtube_videos:
-            video = YoutubeVideo(youtube_video=youtube_video, announcement=a)
+            video = YouTubeVideo(youtube_video=youtube_video, announcement=a)
             video.save()
 
-        return redirect('announcement-list')
+        # TODO: Define model's get_absolute_url() and redirect() to the model instance redirect(model_instance)
+        return redirect(announcement)
     return render(request, 'main/announcement_update.html', {'form': form, 'announcement': announcement})
 
 @staff_member_required()
@@ -107,10 +108,12 @@ def announcement_delete(request, pk):
 #################################### EVENTS ####################################
 ################################################################################
 
+@login_required
 def event_list(request):
-    events = Event.objects.all()
+    events = Event.objects.all().reverse()
     return render(request, 'main/event_list.html', {'events': events})
 
+@login_required
 def event_detail(request, pk):
     event = Event.objects.get(pk=pk)
     return render(request, 'main/event_detail.html', {'event': event})
@@ -121,6 +124,9 @@ def event_create(request):
     if form.is_valid():
         form.save()
         return redirect('event-list')
+    else:
+        print(request.POST)
+        print(form.errors)
     return render(request, 'main/event_create.html', {'form': form})
 
 @staff_member_required()
@@ -145,6 +151,7 @@ def event_delete(request, pk):
 #################################### POLLS #####################################
 ################################################################################
 
+@login_required
 def poll_list(request):
     voted_polls_id_list = request.user.profile.votes.values('poll_id')
     open_polls = Poll.objects.filter(is_open=True)
@@ -153,6 +160,7 @@ def poll_list(request):
     unvoted_polls = open_polls.exclude(pk__in=voted_polls_id_list)
     return render(request, 'main/poll_list.html', {'voted_polls': voted_polls, 'unvoted_polls':unvoted_polls, 'closed_polls' : closed_polls})
 
+@login_required
 def poll_detail(request, pk):
     poll = Poll.objects.get(pk=pk)
     return render(request, 'main/poll_detail.html', {'poll': poll})
@@ -174,7 +182,7 @@ def poll_create(request):
     form = PollForm(request.POST or None)
     if form.is_valid():
         p = form.save(commit=False)
-        p.author = request.user
+        p.author = request.user.profile
         p.save()
         choices = request.POST.getlist('choice[]')
         for choice in choices:
@@ -243,28 +251,45 @@ def category_list(request):
     categories = Category.objects.all()
     return render(request, 'main/category_list.html', {'categories': categories})
 
-def register(request):
-    if request.method == 'POST':
-        userForm = UserForm(request.POST)
-        userProfileForm = UserProfileForm(request.POST)
+def student_register(request):
+    userForm = UserForm(request.POST or None)
+    userProfileForm = UserProfileForm(request.POST or None)
+    studentProfileForm = StudentProfileForm(request.POST or None)
 
-        if userForm.is_valid() and userProfileForm.is_valid():
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = userForm.save(commit=False)
-            user.set_password(password)
-            user.save()
-            userProfile = userProfileForm.save(commit=False)
-            userProfile.user = user
-            userProfile.save()
-            user = authenticate(username=username, password=password)
-            auth_login(request, user)
-            return redirect('index')
-        else:
-            pass
-    else:
-        userForm = UserForm()
-        userProfileForm = UserProfileForm()
+    if userForm.is_valid() and userProfileForm.is_valid() and studentProfileForm.is_valid():
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = userForm.save(commit=False)
+        user.set_password(password)
+        user.save()
+        userProfile = userProfileForm.save(commit=False)
+        userProfile.user = user
+        userProfile.save()
+        studentProfile = studentProfileForm.save(commit=False)
+        studentProfile.user_profile = userProfile
+        studentProfile.save()
+        user = authenticate(username=username, password=password)
+        auth_login(request, user)
+        return redirect('index')
+
+    return render(request, 'main/student_register.html', {'userForm': userForm, 'userProfileForm': userProfileForm, 'studentProfileForm': studentProfileForm})
+
+def register(request):
+    userForm = UserForm(request.POST or None)
+    userProfileForm = UserProfileForm(request.POST or None)
+
+    if userForm.is_valid() and userProfileForm.is_valid():
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = userForm.save(commit=False)
+        user.set_password(password)
+        user.save()
+        userProfile = userProfileForm.save(commit=False)
+        userProfile.user = user
+        userProfile.save()
+        user = authenticate(username=username, password=password)
+        auth_login(request, user)
+        return redirect('index')
     return render(request, 'main/register.html', {'userForm': userForm, 'userProfileForm': userProfileForm})
 
 def login(request):

@@ -27,8 +27,9 @@ urlpatterns = [
     url(r'^get_vote/(?P<poll_pk>\d+)/$', views.get_vote, name='get_vote'),
 
     url(r'^categories/$', views.category_list, name='category-list'),
-    url(r'^register/$', views.register, name='register'),
 
+    url(r'^student_register/$', views.student_register, name='student-register'),
+    url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
 

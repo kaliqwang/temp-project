@@ -8,10 +8,43 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'index' %}">Home</a></li>
-  <li <a href="{% url 'announcement-list' %}">Announcements</a></li>
+  <li><a href="{% url 'announcement-list' %}">Announcements</a></li>
   <li class="active">{{ announcement }}</li>
+  <li><a href="{% url 'announcement-update' announcement.pk %}">Update</a></li>
 {% endblock %}
 
 {% block content %}
-  {{ announcement }}
+  <div class="announcement-wrapper">
+    <!-- Announcement Title -->
+    <div class="title"><h3>{{ announcement.title }}</h3></div>
+    <!-- Announcement Signature -->
+    <div class="signature">
+      <i class="fa fa-clock-o"></i>
+      <i class="datetime">{{ announcement.date_created|date:'F j' }}, {{ announcement.date_created|time:'P' }}</i> | Tags:
+      <span class="category label" style="background-color:{{ announcement.category.color }}">{{ announcement.category }}</span>
+    </div><br />
+    <!-- Announcement Content -->
+    <div class="content">{{ announcement.content }}</div><br />
+    <!-- Announcement Images -->
+    <div class="row image-thumbnail-container">
+      {% for image in announcement.image_files.all %}
+        <div class="col-xs-4 col-sm-3 image-thumbnail">
+          <a href="{{ image.image_file.url }}"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover image" src="{{ image.image_file.url }}"></div></a>
+        </div>
+      {% endfor %}
+      {% for image in announcement.image_links.all %}
+        <div class="col-xs-4 col-sm-3 image-thumbnail">
+          <a href="{{ image.image_link }}"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover" src="{{ image.image_link }}"></div></a>
+        </div>
+      {% endfor %}
+    </div><br />
+    <!-- Announcement Videos -->
+    {% for video in announcement.youtube_videos.all %}
+      <div id="{{ video.pk }}" class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" width="560" height="315" src="https://www.youtube.com/embed/{{ video.youtube_video }}" allowfullscreen></iframe>
+      </div><br />
+    {% endfor %}
+  </div>
 {% endblock %}
+
+{% block script %}<script src="{% static 'main/js/announcement_detail.js' %}"></script>{% endblock %}

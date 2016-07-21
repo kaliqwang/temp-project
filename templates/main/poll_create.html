@@ -8,13 +8,13 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'index' %}">Home</a></li>
-  <li <a href="{% url 'poll-list' %}">Polls</a></li>
+  <li><a href="{% url 'poll-list' %}">Polls</a></li>
   <li class="active">New</li>
 {% endblock %}
 
 {% block content %}
   <div class="row">
-    <div class="col-sm-8 col-sm-offset-2">
+    <div class="col-sm-10 col-sm-offset-1">
       <!-- Form -->
       <form id="poll-create-form" action="{% url 'poll-create' %}" method="post">{% csrf_token %}
         <!-- Poll Content -->
@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="col-xs-2">
-            <button id="add-choice" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Add Choice"><span class="glyphicon glyphicon-plus"></span></button>
+            <button id="add-choice" class="btn btn-default" title="Add Choice" data-toggle="tooltip" data-placement="right"><span class="glyphicon glyphicon-plus"></span></button>
           </div>
         </div><br />
         <!-- Poll Choices -->
