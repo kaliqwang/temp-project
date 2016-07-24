@@ -12,52 +12,60 @@
 {% endblock %}
 
 {% block content %}
-    <ul id="events-list" class="data-hidden">
-      {% for event in events %}
-        <li class="event"
-          data-event-name="{{ event.name }}"
-          data-event-date-start="{{ event.date_start|date:'M j' }}"
-          data-event-date-end="{{ event.date_end|date:'M j' }}"
-          data-event-time-start="{{ event.time_start|default_if_none:'' }}"
-          data-event-time-end="{{ event.time_end|default_if_none:'' }}"
-          data-event-is-multi-day="{{ event.is_multi_day }}"
-          data-event-location="{{ event.location|default:'TBA' }}"
-          data-event-details="{{ event.details|default:'TBA' }}"
-          data-event-category="{{ event.category.pk }}">
-          <a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
-          <div class="event-category-label">
-            <span class="category label" style="background-color:{{ event.category.color }};">{{ event.category }}</span>
-          </div>
-        </li>
-      {% empty %}
-        <h2>No events yet</h2>
-      {% endfor %}
-    </ul>
+  <!-- Category Filter -->
+  <div id="event-filter" class="well">
+    <a href="?"><span class="category label" style="background-color:white; color:black">Show All</span></a>
+    {% for category in categories %}
+      <a href="?category={{ category.pk }}"><span id="{{ category.pk }}" class="category label" style="background-color:{{ category.color }};">{{ category.name }}</span></a>
+    {% endfor %}
+  </div>
 
-    <template id="event-details-template">
-      <li class="event-details"><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
-      <li class="event-details"><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
-      <li class="event-details"><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
-      <li class="event-details"><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
-      <li class="event-details"><b>Category:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
-    </template>
-
-    <template id="event-details-category-template">
-      <li class="event-details"><b>Category:</b>
-        <span class="category label" style="background-color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}">
-          {% templatetag openvariable %} categoryName {% templatetag closevariable %}
-        </span>
+  <ul id="events-list" class="data-hidden">
+    {% for event in events %}
+      <li class="event"
+        data-event-name="{{ event.name }}"
+        data-event-date-start="{{ event.date_start|date:'M j' }}"
+        data-event-date-end="{{ event.date_end|date:'M j' }}"
+        data-event-time-start="{{ event.time_start|default_if_none:'' }}"
+        data-event-time-end="{{ event.time_end|default_if_none:'' }}"
+        data-event-is-multi-day="{{ event.is_multi_day }}"
+        data-event-location="{{ event.location|default:'TBA' }}"
+        data-event-details="{{ event.details|default:'TBA' }}"
+        data-event-category="{{ event.category.pk }}">
+        <a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
+        <div class="event-category-label">
+          <span class="category label" style="background-color:{{ event.category.color }};">{{ event.category }}</span>
+        </div>
       </li>
-    </template>
+    {% endfor %}
+  </ul>
+
+  <template id="event-details-template">
+    <li class="event-details"><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
+    <li class="event-details"><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
+    <li class="event-details"><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
+    <li class="event-details"><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
+    <li class="event-details"><b>Category:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
+  </template>
 {% endblock %}
 
 {% block sidebar %}
     <!-- Todo: Automatically update whenever a user hover's over an event to show that event's details -->
-    <div id="event-details-container" class="well">
-      <h4>Event Details</h4>
-      <div id="event-details">
+    <div id="event-list-sidebar">
+      <div class="row">
+        <div class="col-sm-8">
+          <div id="event-details-container" class="well">
+            <h4>Event Details</h4>
+            <div id="event-details">
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+
+        </div>
       </div>
     </div>
+
 {% endblock %}
 
 {% block script %}<script src= "{% static 'main/js/event_list.js' %}"></script>{% endblock %}

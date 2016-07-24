@@ -42,9 +42,13 @@ $(document).ready(function() {
             $listWrapper.prepend('<li><div id="month-header-' + currentMonth + '" class="month-header"><h2>' + months[dateStart.getMonth()] + '</h2></div><ul id="month-' + currentMonth + '" class="month-wrapper"></ul></li>');
             // Store current month wrapper in $monthWrapper
             $monthWrapper = $('#month-' + currentMonth);
-        }
-        // If new date (no date wrapper yet)
-        if (currentDate != dateStart.getDate()) {
+            // Get the current date
+            currentDate = dateStart.getDate();
+            // Create new current date wrapper and prepend it to $monthWrapper (guaranteed to be current by previous step)
+            $monthWrapper.prepend('<li><div class="date-header">' + nth(dateStart.getDate()) + ' - ' + daysOfWeek[dateStart.getDay()] + '</div><ul id="date-' + currentDate + '" class="date-wrapper"></ul></li>');
+            // Store current date wrapper in $dateWrapper
+            $dateWrapper = $('#date-' + currentDate);
+        } else if (currentDate != dateStart.getDate()) { // If new date in same month (no date wrapper yet)
             // Get the current date
             currentDate = dateStart.getDate();
             // Create new current date wrapper and prepend it to $monthWrapper (guaranteed to be current by previous step)

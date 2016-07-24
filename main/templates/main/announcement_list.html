@@ -12,6 +12,14 @@
 {% endblock %}
 
 {% block content %}
+  <!-- Category Filter -->
+  <div id="announcement-filter" class="well">
+    <a href="?"><span class="category label" style="background-color:white; color:black">Show All</span></a>
+    {% for category in categories %}
+      <a href="?category={{ category.pk }}"><span id="{{ category.pk }}" class="category label" style="background-color:{{ category.color }};">{{ category.name }}</span></a>
+    {% endfor %}
+  </div>
+
   <div id="announcement-list">
     {% for announcement in announcements %}
       <div id="{{ announcement.pk }}" class="announcement-wrapper">

@@ -97,6 +97,7 @@ class EventAdmin(admin.ModelAdmin):
         return 'General'
     display_category.short_description = 'Category'
     display_category.allow_tags = True
+    display_category.admin_order_field = 'category__name'
 
 class ChoiceInlineAdmin(admin.TabularInline):
     model = Choice

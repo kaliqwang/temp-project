@@ -26,8 +26,16 @@ def index(request):
 
 @login_required
 def announcement_list(request):
+    filters = request.GET.getlist('category', None)
     announcements = Announcement.objects.all()
-    return render(request, 'main/announcement_list.html', {'announcements': announcements})
+    if filters:
+        announcements = announcements.filter(category_id__in=filters)
+    else:
+        #TODO: default is filter by user's saved settings
+        #TODO: maybe update user's settings every time the filters are applied (above)?
+        pass
+    categories = Category.objects.all()
+    return render(request, 'main/announcement_list.html', {'announcements': announcements, 'categories': categories})
 
 @login_required
 def announcement_detail(request, pk):
@@ -110,8 +118,16 @@ def announcement_delete(request, pk):
 
 @login_required
 def event_list(request):
+    filters = request.GET.getlist('category', None)
     events = Event.objects.all().reverse()
-    return render(request, 'main/event_list.html', {'events': events})
+    if filters:
+        events = events.filter(category_id__in=filters)
+    else:
+        #TODO: default is filter by user's saved settings
+        #TODO: maybe update user's settings every time the filters are applied (above)?
+        pass
+    categories = Category.objects.all()
+    return render(request, 'main/event_list.html', {'events': events, 'categories': categories})
 
 @login_required
 def event_detail(request, pk):
@@ -153,12 +169,21 @@ def event_delete(request, pk):
 
 @login_required
 def poll_list(request):
+    filters = request.GET.getlist('category', None)
+    polls = Poll.objects.all()
+    if filters:
+        polls = polls.filter(category_id__in=filters)
+    else:
+        #TODO: default is filter by user's saved settings
+        #TODO: maybe update user's settings every time the filters are applied (above)?
+        pass
+    categories = Category.objects.all()
     polls_voted_id_list = request.user.profile.votes.values('poll_id')
-    polls_open = Poll.objects.filter(is_open=True)
-    polls_closed = Poll.objects.exclude(is_open=True)
-    polls_voted= polls_open.filter(pk__in=polls_voted_id_list)
-    polls_unvoted = polls_open.exclude(pk__in=polls_voted_id_list)
-    return render(request, 'main/poll_list.html', {'polls_voted': polls_voted, 'polls_unvoted':polls_unvoted, 'polls_closed' : polls_closed})
+    polls_open = polls.filter(is_open=True)
+    polls_closed = polls.exclude(is_open=True)
+    polls_voted= polls.filter(pk__in=polls_voted_id_list)
+    polls_unvoted = polls.exclude(pk__in=polls_voted_id_list)
+    return render(request, 'main/poll_list.html', {'polls_voted': polls_voted, 'polls_unvoted':polls_unvoted, 'polls_closed' : polls_closed, 'categories': categories})
 
 @login_required
 def poll_detail(request, pk):

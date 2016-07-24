@@ -215,9 +215,10 @@ li.event-details {
 
 /********************************* event_list *********************************/
 
-#event-details-container {
+#event-list-sidebar {
     position: fixed;
-    width: 360px;
+    width: 555px;
+    /*width: 360px;*/
 }
 
 .event-category-label {
