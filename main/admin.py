@@ -1,4 +1,5 @@
 from django.contrib import admin
+from imagekit.admin import AdminThumbnail
 from django import forms
 
 from models import *
@@ -74,6 +75,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
     list_select_related = True
     list_display = ('title', 'author', 'date_created', 'display_category', 'rank')
     inlines = (ImageFileInlineAdmin, ImageLinkInlineAdmin, YouTubeVideoInlineAdmin)
+    save_as = True
+    view_on_site = True
 
     def display_category(self, obj):
         if obj.category is not None:
@@ -85,6 +88,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     list_select_related = True
     list_display = ('name', 'date_start', 'time_start', 'date_end', 'time_end', 'is_multi_day', 'display_category')
+    save_as = True
+    view_on_site = True
 
     def display_category(self, obj):
         if obj.category is not None:
@@ -106,6 +111,8 @@ class PollAdmin(admin.ModelAdmin):
     list_select_related = True
     list_display = ('content', 'date_open', 'is_open', 'date_close', 'display_category', 'rank')
     inlines = (ChoiceInlineAdmin,)
+    save_as = True
+    view_on_site = True
 
     def display_category(self, obj):
         if obj.category is not None:
@@ -122,6 +129,17 @@ class VoteAdmin(admin.ModelAdmin):
     list_select_related = True
     list_display = ('voter', 'choice', 'poll')
 
+class ImageFileAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'admin_thumbnail', 'announcement')
+    admin_thumbnail = AdminThumbnail(image_field='image_file_thumbnail')
+
+class ImageLinkAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'admin_thumbnail', 'announcement')
+    admin_thumbnail = AdminThumbnail(image_field='image_file_thumbnail')
+
+class YouTubeVideoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'announcement')
+
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(StudentProfile, StudentProfileAdmin)
@@ -132,6 +150,6 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(Poll, PollAdmin)
 admin.site.register(Choice, ChoiceAdmin)
 admin.site.register(Vote, VoteAdmin)
-admin.site.register(ImageFile)
-admin.site.register(ImageLink)
-admin.site.register(YouTubeVideo)
+admin.site.register(ImageFile, ImageFileAdmin)
+admin.site.register(ImageLink, ImageLinkAdmin)
+admin.site.register(YouTubeVideo, YouTubeVideoAdmin)

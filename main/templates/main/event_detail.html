@@ -10,8 +10,24 @@
   <li><a href="{% url 'index' %}">Home</a></li>
   <li><a href="{% url 'event-list' %}">Events</a></li>
   <li class="active">{{ event }}</li>
+  <li><a href="{% url 'event-update' event.pk %}">Update</a></li>
 {% endblock %}
 
 {% block content %}
-  {{ event }}
+  <div>
+    <li class="event-details"><b>What:</b> {{ event.name }}</li>
+    <li id="event-details-when" class="event-details"
+      data-event-date-start="{{ event.date_start|date:'M j' }}"
+      data-event-date-end="{{ event.date_end|date:'M j' }}"
+      data-event-time-start="{{ event.time_start|default_if_none:'' }}"
+      data-event-time-end="{{ event.time_end|default_if_none:'' }}"
+      data-event-is-multi-day="{{ event.is_multi_day }}">
+      <b>When:</b>
+    </li>
+    <li class="event-details"><b>Where:</b> {{ event.location|default:'TBA' }}</li>
+    <li class="event-details"><b>Details:</b> {{ event.details|default:'TBA' }}</li>
+    <li class="event-details"><b>Category:</b> <span class="category label" style="background-color:{{ event.category.color }};">{{ event.category }}</span></li>
+  </div>
 {% endblock %}
+
+{% block script %}<script src= "{% static 'main/js/event_detail.js' %}"></script>{% endblock %}

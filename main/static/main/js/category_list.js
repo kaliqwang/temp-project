@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+    var count = 0;
+
     var $categories = $('#categories');
     var $colors = $('#datalist-color-choices');
 
@@ -16,7 +18,7 @@ $(document).ready(function() {
     Mustache.parse($newCategoryTemplate);
 
     // Render all currently existing categories
-    $categories.children('li').each(function(i, c){
+    $categories.children('li').each(function(i){
         var cName = $(this).data('name');
         var cColor = $(this).data('color');
         var cPK = $(this).data('pk');
@@ -27,6 +29,7 @@ $(document).ready(function() {
             pk: cPK,
         }));
         removeColor(cColor);
+        count++;
     });
 
     // Helper functions
@@ -39,8 +42,6 @@ $(document).ready(function() {
         colors.splice(colors.indexOf(c), 1);
     }
 
-    // Initialize count
-    var count = Number($('#initial-count').text());
     var i = count;
 
     // Add categories

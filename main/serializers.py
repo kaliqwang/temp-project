@@ -46,7 +46,7 @@ class ImageFileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ImageFile
-        fields = ('announcement', 'image_file',)
+        fields = ('announcement', 'image_file__url', 'image_file_thumbnail__url')
 
     def __init__(self, *args, **kwargs):
         many = kwargs.pop('many', True)
@@ -57,7 +57,7 @@ class ImageLinkSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ImageLink
-        fields = ('announcement', 'image_link',)
+        fields = ('announcement', 'image_link', 'image_file__url', 'image_file_thumbnail__url')
 
     def __init__(self, *args, **kwargs):
         many = kwargs.pop('many', True)

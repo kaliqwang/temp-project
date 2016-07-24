@@ -19,23 +19,23 @@
         <div class="title"><h3><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h3></div>
         <!-- Announcement Signature -->
         <div class="signature">
-          <i class="fa fa-clock-o"></i>
+          <!-- <i class="fa fa-clock-o"></i> -->
           <i class="datetime">{{ announcement.date_created|date:'F j' }}, {{ announcement.date_created|time:'P' }}</i> | Tags:
           <span class="category label" style="background-color:{{ announcement.category.color }}">{{ announcement.category }}</span>
         </div><br />
         <!-- Announcement Content -->
         <div class="content">{{ announcement.content }}</div><br />
         <!-- Announcement Images -->
-        <div class="row image-thumbnail-container">
+        <div class="image-thumbnail-container">
           {% for image in announcement.image_files.all %}
-            <div class="col-xs-4 col-sm-3 image-thumbnail">
-              <a href="{{ image.image_file.url }}"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover image" src="{{ image.image_file.url }}"></div></a>
-            </div>
+            <a href="{{ image.image_file.url }}" class="image-thumbnail" target="_blank"/>
+              <img class="img-responsive img-hover" src="{{ image.image_file_thumbnail.url }}">
+            </a>
           {% endfor %}
           {% for image in announcement.image_links.all %}
-            <div class="col-xs-4 col-sm-3 image-thumbnail">
-              <a href="{{ image.image_link }}"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover" src="{{ image.image_link }}"></div></a>
-            </div>
+            <a href="{{ image.image_link }}" class="image-thumbnail" target="_blank"/>
+              <img class="img-responsive img-hover" src="{{ image.image_file_thumbnail.url }}">
+            </a>
           {% endfor %}
         </div><br />
         <div id="collapse-{{ announcement.pk }}" class="collapse">

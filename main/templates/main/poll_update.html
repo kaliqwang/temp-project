@@ -6,36 +6,68 @@
 
 {% block header %}Update Poll{% endblock %}
 
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li><a href="{% url 'poll-list' %}">Polls</a></li>
+  <li><a href="{{ poll.get_absolute_url }}">{{ poll }}</a></li>
+  <li class="active">Update</li>
+{% endblock %}
+
 {% block content %}
-
   <div class="row">
-    <div class="col-sm-6 col-sm-offset-3">
-
-      <form id="poll-form" action="{% url 'poll-update' poll.pk %}" method="post">{% csrf_token %}
-        {{ form.as_p }}
-      </form>
-
-      <br />
-      <br />
-
+    <div class="col-sm-10 col-sm-offset-1">
+      <!-- Form -->
+      <form id="poll-update-form" action="{% url 'poll-update' poll.pk %}" method="post">{% csrf_token %}
+        <div class="alert alert-warning alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+          <b>Note:</b> This page is incomplete.
+        </div>
+        <!-- Poll Content -->
+        <div class="row">
+          <div class="col-xs-10">
+            <div id="poll-content" class="{% if form.content.errors %}has-error{% endif %}" contenteditable="true">
+              {{ form.content }}
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <button id="add-choice" class="btn btn-default" title="Add Choice" data-toggle="tooltip" data-placement="right"><span class="glyphicon glyphicon-plus"></span></button>
+          </div>
+        </div><br />
+        <!-- Poll Choices -->
+        <div id="poll-choices-existing">
+          {% for choice in poll.choices.all %}
+            <li data-content="{{ choice.content }}" data-pk="{{ choice.pk }}"></li>
+          {% endfor %}
+        </div>
+        <div id="poll-choices" class="form-group"></div><br />
+        <!-- Poll Category -->
+        <div id="poll-category" class="input-group {% if form.category.errors %}has-error{% endif %}">
+          <span class="input-group-addon">Category:</span>{{ form.category }}
+        </div><br />
+      </form><br />
+      <!-- Buttons -->
       <div class="row text-center">
         <div class="col-sm-4 col-sm-offset-2">
-          <a class="btn btn-lg btn-default" href="{% url 'index' %}">
-            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Cancel
-          </a>
+          <a class="btn btn-default" href="{% url 'poll-list' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
         </div>
         <div class="col-sm-4">
-          <button type="button" id="submit-form" class="btn btn-lg btn-default" role="button">
-            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Publish
-          </button>
+          <button type="button" id="submit-poll-update-form" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Publish</button>
         </div>
       </div>
-
     </div>
   </div>
 
+  <template id="choice-input-template">
+    <div class="input-group choice-input-wrapper">
+      <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}"/>
+      <input required type="text" class="form-control choice-input" name="choice[]" value="{% templatetag openvariable %} content {% templatetag closevariable %}" placeholder="{% templatetag openvariable %} placeholder {% templatetag closevariable %}" maxlength="200">
+      <span class="input-group-btn" tabindex="-1">
+        <button type="button" class="btn btn-default remove-input" data-flavor="{% templatetag openvariable %} placeholder {% templatetag closevariable %}">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
+      </span>
+    </div>
+  </template>
 {% endblock %}
 
-{% block script %}
-  <script src="{% static 'main/js/poll_update.js' %}"></script>
-{% endblock%}
+{% block script %}<script src="{% static 'main/js/poll_update.js' %}"></script>{% endblock%}

@@ -13,7 +13,9 @@ $(document).ready(function() {
     var choiceInputTemplate = $('#choice-input-template').html();
     Mustache.parse(choiceInputTemplate);
 
-    $('#add-choice').click(function(e){
+    $addChoiceButton = $addChoiceButton;
+
+    $addChoiceButton.click(function(e){
         e.preventDefault();
         if (count < 20) {
             var flavor = flavors.splice(Math.floor(Math.random() * flavors.length), 1);
@@ -28,12 +30,12 @@ $(document).ready(function() {
     $('#poll-choices').on('click','.remove-input', function(e){
         e.preventDefault();
         flavors.push($(this).data('flavor'));
-        $(this).closest('.choice-input').remove();
+        $(this).closest('.choice-input-wrapper').remove();
         count--;
     });
 
-    $('#add-choice').click();
-    $('#add-choice').click();
-    $('#add-choice').click();
-    $('#add-choice').click();
+    $addChoiceButton.click();
+    $addChoiceButton.click();
+    $addChoiceButton.click();
+    $addChoiceButton.click();
 });

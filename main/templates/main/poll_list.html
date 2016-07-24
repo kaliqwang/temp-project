@@ -12,215 +12,255 @@
 {% endblock %}
 
 {% block content %}
-  <template id="choicetemplate">
-      <div class="choice-container">
-          <div class="edit">
-              <div class="input-group">
-                  <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
-                  <span class="input-group-btn">
-                    <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                  </span>
-              </div>
+  <div class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+    <b>Note:</b> This page is incomplete.
+  </div>
+  <!-- Media tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="active"><a href="#polls-unvoted" data-toggle="tab">Not Voted</a></li>
+    <li><a href="#polls-voted" data-toggle="tab">Voted Already</a></li>
+    <li><a href="#polls-closed" data-toggle="tab">Closed</a></li>
+  </ul><br />
+  <!-- Media tab panes -->
+  <div id="poll-list" class="tab-content" data-user="{{ user.pk }}">
+    <!-- Unvoted Polls -->
+    <div id="polls-unvoted" class="tab-pane fade in active">
+      {% for poll in polls_unvoted %}
+        <div id="poll-{{ poll.pk }}" class="poll-wrapper"
+          data-votes="{{ poll.votes.count }}"
+          data-author="{{ poll.author.pk }}"
+          data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
+          data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
+          data-is-open="{{ poll.is_open }}"
+          data-category="{{ poll.category.pk }}">
+          <!-- How to pass python dict context variable containing vote count for each choice and total? -->
+
+          <!-- Poll Content -->
+          <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
+          <!-- Poll Signature -->
+          <div class="signature">
+            <!-- <i class="fa fa-clock-o"></i> -->
+            <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
+            <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
           </div>
+          <!-- Poll Choices -->
+          <div class="poll-choices">
+            {% for choice in poll.choices.all %}
+              <div class="row choice-wrapper">
+                <div class="col-xs-2 text-right">
+                  <input id="choice-{{ choice.pk }}" type="radio" name="poll-{{ poll.pk }}" value="{{ choice.pk }}">
+                </div>
+                <div class="col-xs-10">
+                  <label for="choice-{{ choice.pk }}" class="poll-choice-label">{{ choice.content }}</label>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <!-- Buttons -->
+          <div class="row poll-bottom">
+            <div class="col-sm-5">
+              <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
+              <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
+            </div>
+            <div class="col-sm-5 col-sm-offset-2">
+              <button type="button" class="btn btn-default btn-sm show-results">Show Results</button>
+              <button type="button" class="btn btn-primary btn-sm submit-poll">Submit</button>
+              <button type="button" class="btn btn-default btn-sm submit-poll hidden">Change Vote</button>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- Voted Polls -->
+    <div id="polls-voted" class="tab-pane fade">
+      {% for poll in polls_voted %}
+        <div id="poll-{{ poll.pk }}" class="poll-wrapper"
+          data-votes="{{ poll.votes.count }}"
+          data-author="{{ poll.author.pk }}"
+          data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
+          data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
+          data-is-open="{{ poll.is_open }}"
+          data-category="{{ poll.category.pk }}">
+          <!-- How to pass python dict context variable containing vote count for each choice and total? -->
+
+          <!-- Poll Content -->
+          <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
+          <!-- Poll Signature -->
+          <div class="signature">
+            <!-- <i class="fa fa-clock-o"></i> -->
+            <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
+            <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
+          </div>
+          <!-- Poll Choices -->
+          <div class="poll-choices">
+            {% for choice in poll.choices.all %}
+              <div class="row choice-wrapper">
+                <div class="col-xs-2 text-right">
+                  <input id="choice-{{ choice.pk }}" type="radio" name="poll-{{ poll.pk }}" value="{{ choice.pk }}">
+                </div>
+                <div class="col-xs-10">
+                  <label for="choice-{{ choice.pk }}" class="poll-choice-label">{{ choice.content }}</label>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <!-- Buttons -->
+          <div class="row poll-bottom">
+            <div class="col-sm-5">
+              <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
+              <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
+            </div>
+            <div class="col-sm-5 col-sm-offset-2">
+              <button type="button" class="btn btn-default btn-sm show-results">Show Results</button>
+              <button type="button" class="btn btn-primary btn-sm submit-poll">Submit</button>
+              <button type="button" class="btn btn-default btn-sm submit-poll hidden">Change Vote</button>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- Closed Polls -->
+    <div id="polls-closed" class="tab-pane fade">
+      {% for poll in polls_closed %}
+        <div id="poll-{{ poll.pk }}" class="poll-wrapper"
+          data-votes="{{ poll.votes.count }}"
+          data-author="{{ poll.author.pk }}"
+          data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
+          data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
+          data-is-open="{{ poll.is_open }}"
+          data-category="{{ poll.category.pk }}">
+          <!-- How to pass python dict context variable containing vote count for each choice and total? -->
+
+          <!-- Poll Content -->
+          <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
+          <!-- Poll Signature -->
+          <div class="signature">
+            <!-- <i class="fa fa-clock-o"></i> -->
+            <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
+            <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
+          </div>
+          <!-- Poll Choices -->
+          <div class="poll-choices">
+            {% for choice in poll.choices.all %}
+              <div class="row choice-wrapper">
+                <div class="col-xs-2 text-right">
+                  <input id="choice-{{ choice.pk }}" type="radio" name="poll-{{ poll.pk }}" value="{{ choice.pk }}">
+                </div>
+                <div class="col-xs-10">
+                  <label for="choice-{{ choice.pk }}" class="poll-choice-label">{{ choice.content }}</label>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <!-- Buttons -->
+          <div class="row poll-bottom">
+            <div class="col-sm-5">
+              <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
+              <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
+            </div>
+            <div class="col-sm-5 col-sm-offset-2">
+              <button type="button" class="btn btn-default btn-sm show-results">Show Results</button>
+              <button type="button" class="btn btn-primary btn-sm submit-poll">Submit</button>
+              <button type="button" class="btn btn-default btn-sm submit-poll hidden">Change Vote</button>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+
+  <!-- Below here is unfinished -->
+
+  <li class="hidden"
+    data-votes="{{ poll.votes.count }}"
+    data-pk="{{ poll.pk }}"
+    data-url="{{ poll.get_absolute_url }}"
+    data-content="{{ poll.content }}"
+    data-author="{{ poll.author.pk }}"
+    data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
+    data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
+    data-is-open="{{ poll.is_open }}"
+    data-category="{{ poll.category.pk }}">
+    <div class="signature">
+      <!-- <i class="fa fa-clock-o"></i> -->
+      <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
+      <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
+    </div>
+    <div class="poll-choices">
+      {% for choice in poll.choices.all %}
+        <div class="row choice-wrapper">
+          <div class="col-xs-2 text-right">
+            <input id="choice-{{ choice.pk }}" type="radio" name="poll-{{ poll.pk }}" value="{{ choice.pk }}">
+          </div>
+          <div class="col-xs-10">
+            <label for="choice-{{ choice.pk }}">{{ choice.content }}</label>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </li>
+
+  <!-- Templates -->
+  <template id="open-poll-template">
+    <div id="poll-{{ poll.pk }}" class="poll-wrapper"
+      data-votes="{{ poll.votes.count }}"
+      data-author="{{ poll.author.pk }}"
+      data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
+      data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
+      data-is-open="{{ poll.is_open }}"
+      data-category="{{ poll.category.pk }}">
+      <!-- How to pass python dict context variable containing vote count for each choice and total? -->
+
+      <!-- Poll Content -->
+      <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
+      <!-- Poll Signature -->
+      <div class="signature">
+        <!-- <i class="fa fa-clock-o"></i> -->
+        <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
+        <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
+      </div><br />
+      <!-- Poll Choices -->
+      <div class="poll-choices">
+        {% for choice in poll.choices.all %}
+          <div class="row choice-wrapper">
+            <div class="col-xs-2 text-right">
+              <input id="choice-{{ choice.pk }}" type="radio" name="poll-{{ poll.pk }}" value="{{ choice.pk }}">
+            </div>
+            <div class="col-xs-10">
+              <label for="choice-{{ choice.pk }}">{{ choice.content }}</label>
+            </div>
+          </div>
+        {% endfor %}
+      </div><br />
+      <!-- Buttons -->
+      <div class="row poll-bottom">
+        <div class="col-sm-5">
+          <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
+          <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
+        </div>
+        <div class="col-sm-5 col-sm-offset-2">
+          <button type="button" class="btn btn-default btn-sm show-results">Show Results</button>
+          <button type="button" class="btn btn-primary btn-sm submit-poll">Submit</button>
+          <button type="button" class="btn btn-default btn-sm submit-poll hidden">Change Vote</button>
+        </div>
+      </div>
+    </div>
   </template>
-  <div id="poll-list" data-user="{{ user.pk }}">
-    <h1>Ongoing Polls</h1>
-    <hr />
 
-    {% for poll in unvoted_polls%}
-    <div class="poll-wrapper resubmit" id="{{ poll.pk }}" data-votes="{{ poll.votes.count }}">
-        <div class="row">
-            <div class="col-xs-10 poll-container">
-                <div class="content noedit">
-                    <a href="{{ poll.pk }}"><h3>{{ poll.content }}</h3></a>
-                </div>
-                <div class="alert alert-success hide">
-                    <strong>Success!</strong> Poll was Updated :)
-                </div>
-                <!--Shows when user doesn't select choice, user votes when poll is closed  -->
-                <div class="alert alert-danger hide">
-                    <strong>Error!</strong> Something went wrong :(
-                </div>
-                <div class="content edit">
-                    <input required class="form-control" type="text" placeholder="Question..." name="question" value="{{ poll.content}}">
-                </div>
-                <div class="edit">
-                    <br/>
-                </div>
-                <div class="choices-container">
-                {% for choice in poll.choices.all %}
-                <div class="choice-container">
-                    <div class="choice resubmit">
-                        <input data-choice="{{ choice.pk }}" name="{{ poll.pk }}" class="noedit" type="radio" value="{{ choice.content }}">
-                        <label class="noedit">{{ choice.content }}</label>
-                        <br / class="noedit">
-                    </div>
-                    <div class="progress-bars noresubmit">
-                        <label>{{ choice.content }} | {{choice.votes.count}}</label>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes= "{{ choice.votes.count }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="edit">
-                        <div class="input-group">
-                            <input data-choice="{{ choice.pk }}" required class="form-control" type="text" placeholder="Choice..." name="choice" value="{{ choice.content }}">
-                            <span class="input-group-btn">
-                              <button type="button" class="btn btn-default remove_field"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                {% endfor %}
-                </div>
-            </div>
+  <template id="closed-poll-template">
+    <div class="progress-bars">
+      {% for choice in poll.choices.all %}
+        <label>{{ choice.content }} | {{choice.votes.count}}</label>
+        <div class="progress">
+          <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}">
+          </div>
         </div>
-        <div class="noedit poll-buttons">
-            <!-- User is able to submit then resubmit. When user submits, I want to show progress bars. When user presses resubmit button, poll goes into resubmit mode and user can send in another vote. -->
-            <button class="edit-poll">Edit</button>
-            <button class="close-poll">Close</button>
-            <button class="remove-poll">Remove</button>
-            <button class="submit-poll">Submit</button>
-            <button class="resubmit-mode noresubmit">Resubmit Vote</button>
-            <button class="resubmit-poll resubmit hide">Resubmit</button>
-
-
-
-        </div>
-        <div class="edit poll-buttons">
-            <button class="cancel-poll">Cancel</button>
-            <button class="save-poll">Save</button>
-            <button style="float: right;" class="add-choice">Add Choice</button>
-        </div>
-        <hr />
-        <div class="hide">
-            <div class="author">{{ poll.author.pk }}</div>
-            <div class="category">{{ poll.category.pk }}</div>
-            <div class="date_created">{{ poll.date_created }}</div>
-            <div class="rank">{{ poll.rank }}</div>
-            <div class="is_open">{{ poll.is_open }}</div>
-        </div>
+        <br />
+      {% endfor %}
     </div>
-    {% endfor %}
-    {% for poll in voted_polls %}
-
-    <div class="voted poll-wrapper" id="{{ poll.pk }}" data-votes="{{ poll.votes.count }}">
-        <div class="row">
-            <div class="col-xs-10 poll-container">
-                <div class="content">
-                    <a href="{{ poll.pk }}"><h3>{{ poll.content }}</h3></a>
-                </div>
-                <div class="alert alert-success hide">
-                    <strong>Success!</strong> Poll was Updated :)
-                </div>
-                <!--Shows when user doesn't select choice, user votes when poll is closed  -->
-                <div class="alert alert-danger hide">
-                    <strong>Error!</strong> Something went wrong :(
-                </div>
-                <div class="choices-container">
-                {% for choice in poll.choices.all %}
-                    <div class="choice resubmit">
-                        <input data-choice="{{ choice.pk }}" name="{{ poll.pk }}" type="radio" value="{{ choice.content }}">
-                        <label>{{ choice.content }}</label>
-                        <br />
-                    </div>
-                    <div class="progress-bars noresubmit">
-                        <label>{{ choice.content }} | {{choice.votes.count}}</label>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes= "{{ choice.votes.count }}">
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                </div>
-            </div>
-
-            <!-- <div class="edit poll-buttons">
-                <button class="cancel-poll">Cancel</button>
-                <button class="save-poll">Save</button>
-                <button style="float: right;" class="add-choice">Add Choice</button>
-            </div> -->
-
-            <!--    <div class="signature">
-            <i><i class="fa fa-clock-o"></i> Posted by {{ poll.author }} on {{ poll.date_created }}</i> |
-            Tags: <span class="label" style="background-color:{{ poll.category.color }}; font-weight:normal">{{ poll.category }}</span>
-        </div>
-
-            <hr />-->
-        </div>
-        <div class="poll-buttons">
-            <button class="close-poll">Close</button>
-            <button class="remove-poll">Remove</button>
-            <button class="resubmit-mode noresubmit">Resubmit Vote</button>
-            <button class="resubmit-poll resubmit">Resubmit</button>
-        </div>
-        <div class="hide">
-            <div class="author">{{ poll.author.pk }}</div>
-            <div class="category">{{ poll.category.pk }}</div>
-            <div class="date_created">{{ poll.date_created }}</div>
-            <div class="rank">{{ poll.rank }}</div>
-            <div class="is_open">{{ poll.is_open }}</div>
-        </div>
-        <hr />
-    </div>
-    {% endfor %}
-
-    <h1>Past Polls</h1>
-
-    <hr /> {% for poll in closed_polls %}
-
-    <div class="closed poll-wrapper" id="{{ poll.pk }}" data-votes="{{ poll.votes.count }}">
-        <div class="row">
-            <div class="col-xs-10 poll-container">
-                <div class="content">
-                    <a href="{{ poll.pk }}"><h3>{{ poll.content }}</h3></a>
-                </div>
-                <div class="alert alert-success hide">
-                    <strong>Success!</strong> Poll was Updated :)
-                </div>
-                <!--Shows when user doesn't select choice, user votes when poll is closed  -->
-                <div class="alert alert-danger hide">
-                    <strong>Error!</strong> Something went wrong :(
-                </div>
-                <div class="progress-bars">
-                {% for choice in poll.choices.all %}
-                    <label>{{ choice.content }} | {{choice.votes.count}}</label>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes= "{{ choice.votes.count }}">
-                        </div>
-                    </div>
-                    <br />
-                {% endfor %}
-                </div>
-                <div class="poll-buttons">
-                    <button class="reopen-poll">Reopen</button>
-                    <button class="remove-poll">Remove</button>
-                </div>
-                <hr />
-
-                <!--    <div class="signature">
-                    <i><i class="fa fa-clock-o"></i> Posted by {{ poll.author }} on {{ poll.date_created }}</i> |
-                    Tags: <span class="label" style="background-color:{{ poll.category.color }}; font-weight:normal">{{ poll.category }}</span>
-                </div>
-
-            <hr />-->
-
-            </div>
-        </div>
-        <div class="hide">
-            <div class="author">{{ poll.author.pk }}</div>
-            <div class="category">{{ poll.category.pk }}</div>
-            <div class="date_created">{{ poll.date_created }}</div>
-            <div class="rank">{{ poll.rank }}</div>
-            <div class="is_open">{{ poll.is_open }}</div>
-        </div>
-
-    </div>
-    {% empty %}
-    <h4> ~ no past polls yet.</h4>
-    {% endfor %}
-</div>
+  </template>
 
 {% endblock %}
 

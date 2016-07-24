@@ -4,8 +4,4 @@ $(document).ready(function() {
     //     $(this).text($(this).text().replace(/\./g, ''));
     //     $(this).removeClass('hidden');
     // });
-
-    // Fakecrop
-    // $('img').fakecrop();
-
 });

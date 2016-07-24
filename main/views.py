@@ -137,7 +137,7 @@ def event_update(request, pk):
     if form.is_valid():
         form.save()
         #TODO: Give a confirmation message at the top of form ("successfully updated") instead of redirecting immediately? Same for events, announcements, etc.?
-        return redirect('event-list')
+        return redirect(event)
     return render(request, 'main/event_update.html', {'form': form, 'event': event})
 
 @staff_member_required()
@@ -153,12 +153,12 @@ def event_delete(request, pk):
 
 @login_required
 def poll_list(request):
-    voted_polls_id_list = request.user.profile.votes.values('poll_id')
-    open_polls = Poll.objects.filter(is_open=True)
-    closed_polls = Poll.objects.exclude(is_open=True)
-    voted_polls= open_polls.filter(pk__in=voted_polls_id_list)
-    unvoted_polls = open_polls.exclude(pk__in=voted_polls_id_list)
-    return render(request, 'main/poll_list.html', {'voted_polls': voted_polls, 'unvoted_polls':unvoted_polls, 'closed_polls' : closed_polls})
+    polls_voted_id_list = request.user.profile.votes.values('poll_id')
+    polls_open = Poll.objects.filter(is_open=True)
+    polls_closed = Poll.objects.exclude(is_open=True)
+    polls_voted= polls_open.filter(pk__in=polls_voted_id_list)
+    polls_unvoted = polls_open.exclude(pk__in=polls_voted_id_list)
+    return render(request, 'main/poll_list.html', {'polls_voted': polls_voted, 'polls_unvoted':polls_unvoted, 'polls_closed' : polls_closed})
 
 @login_required
 def poll_detail(request, pk):
@@ -196,19 +196,19 @@ def poll_update(request, pk):
     #TODO: restrict access to either the original author or a superuser admin
     poll = Poll.objects.get(pk=pk)
     form = PollForm(request.POST or None, instance=poll)
-    if form.is_valid():
-        p = form.save()
-
-        old_choices = p.choices.all()
-        for choice in old_choices:
-            choice.delete()
-
-        new_choices = request.POST.getlist('choice[]')
-        for choice in new_choices:
-            c = Choice(content=choice, poll=p)
-            c.save()
-
-        return redirect('poll-list')
+    # if form.is_valid():
+    #     p = form.save()
+    #
+    #     old_choices = p.choices.all()
+    #     for choice in old_choices:
+    #         choice.delete()
+    #
+    #     new_choices = request.POST.getlist('choice[]')
+    #     for choice in new_choices:
+    #         c = Choice(content=choice, poll=p)
+    #         c.save()
+    #
+    #     return redirect(poll)
     return render(request, 'main/poll_update.html', {'form': form, 'poll': poll})
 
 @staff_member_required()
@@ -224,8 +224,15 @@ def get_vote(request, poll_pk):
     if poll:
         vote = poll.get_vote(request.user.profile.pk)
         if vote:
-            return HttpRespones(vote.pk)
-    return HttpRespones(-1)
+            return HttpResponse(vote.pk)
+    return HttpResponse(-1)
+
+@staff_member_required()
+def get_vote_count(request, choice_pk):
+    choice = Choice.objects.get_or_none(pk=poll_pk)
+    if choice:
+        return HttpResponse(choice.vote_count())
+    return HttpResponse(-1)
 
 ################################################################################
 #################################### OTHER #####################################

@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^polls/(?P<pk>\d+)/update/$', views.poll_update, name='poll-update'),
     url(r'^polls/(?P<pk>\d+)/delete/$', views.poll_delete, name='poll-delete'),
     url(r'^get_vote/(?P<poll_pk>\d+)/$', views.get_vote, name='get_vote'),
+    url(r'^get_vote_count/(?P<choice_pk>\d+)/$', views.get_vote_count, name='get_vote_count'),
 
     url(r'^categories/$', views.category_list, name='category-list'),
 

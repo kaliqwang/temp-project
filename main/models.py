@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import os
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
@@ -12,8 +14,19 @@ from django.core.urlresolvers import reverse
 from colorful.fields import RGBColorField
 from django.utils import timezone
 from datetime import datetime, date, time, timedelta
+import requests
 import urllib2
 import json
+
+from imagekit.models import ImageSpecField, ProcessedImageField
+from imagekit.processors import ResizeToFill, ResizeToFit
+
+from django.core.files.images import ImageFile
+from django.core.files.base import ContentFile
+from django.core.files import File
+from StringIO import StringIO
+from PIL import Image
+from urlparse import urlparse
 
 ################################################################################
 
@@ -181,7 +194,7 @@ class Event(models.Model):
         ordering = ('-date_start', '-time_start')
 
     def __str__(self):
-        return "%s - %s (%s)" % (self.name, self.date_start.strftime('%a - %b %d, %Y'), self.category)
+        return "%s - %s (%s)" % (self.date_start.strftime('%b %d'), self.name, self.category)
 
     def clean(self):
         # Set end date if needed
@@ -289,34 +302,76 @@ class Vote(models.Model):
 
     class Meta:
         ordering = ('poll', 'choice')
+        unique_together = ('voter', 'poll')
 
     def __str__(self):
         return "%s - %s" %(self.choice, self.voter)
 
     def save(self, *args, **kwargs):
         self.poll = self.choice.poll
+        previous_vote = Vote.objects.get_or_none(voter=self.voter, poll=self.poll)
+        if previous_vote:
+            previous_vote.delete()
         super(Vote, self).save(*args, **kwargs)
 
 ################################################################################
 
 class ImageFile(models.Model):
-    image_file = models.ImageField(upload_to='main/images/')
     announcement = models.ForeignKey(Announcement, related_name='image_files', on_delete=models.CASCADE)
+    #TODO: change w, h, and quality settings to settings.py variables
+    image_file = ProcessedImageField(upload_to='main/images/', blank=True, null=True, processors=[ResizeToFit(1280, 720)], format='JPEG', options={'quality': 80})
+    image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(110, 110)], format='JPEG', options={'quality': 50})
 
     def __str__(self):
-        return self.image_file.name
+        return os.path.basename(self.image_file.path)
 
 class ImageLink(models.Model):
-    image_link = models.URLField()
     announcement = models.ForeignKey(Announcement, related_name='image_links', on_delete=models.CASCADE)
+    image_link = models.URLField()
+    #TODO: change w, h, and quality settings to settings.py variables
+    image_file = ProcessedImageField(upload_to='main/images/', blank=True, null=True, processors=[ResizeToFit(1280, 720)], format='JPEG', options={'quality': 80})
+    image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(110, 110)], format='JPEG', options={'quality': 50})
 
     def __str__(self):
-        return self.image_link
+        return os.path.basename(self.image_file.path)
+
+    def save(self, *args, **kwargs):
+        #TODO: MESSY SOLUTION: clean up all of the code in this method: find a cleaner solution
+        original = ImageLink.objects.get(pk=self.pk)
+        if not self.image_file or self.image_link != original.image_link:
+            # Image Object
+            img = self.download_image()
+            if img is not None:
+                # w, h = img.size
+                # format = img.format
+                # file_size = f.size
+                # Image filename
+                name = os.path.basename(self.image_link)
+                # Write image contents to temporary file-like object
+                f = StringIO()
+                img.save(f)
+                # Save image to model's ImageField
+                self.image_file.save(name, File(f), save=False)
+                super(ImageLink, self).save(*args, **kwargs)
+
+    def download_image(self):
+        r = requests.get(self.image_link)
+        if r.status_code == 200:
+            img = Image.open(StringIO(r.content))
+            return img
+        return None
+
+    def image_exists(self):
+        try:
+            r = requests.head(self.image_link)
+        except:
+            return False
+        return r.status_code == 200
 
 class YouTubeVideo(models.Model):
+    announcement = models.ForeignKey(Announcement, related_name='youtube_videos', on_delete=models.CASCADE)
     title = models.CharField('Video Title', max_length=200, blank=True)
     youtube_video = models.CharField('YouTube Video ID', max_length=11, validators=[youtube_validator])
-    announcement = models.ForeignKey(Announcement, related_name='youtube_videos', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

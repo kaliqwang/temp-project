@@ -9,7 +9,7 @@
 {% block breadcrumb %}
   <li><a href="{% url 'index' %}">Home</a></li>
   <li><a href="{% url 'announcement-list' %}">Announcements</a></li>
-  <li><a href="{% url 'announcement-detail' announcement.pk %}">{{ announcement }}</a></li>
+  <li><a href="{{ announcement.get_absolute_url }}">{{ announcement }}</a></li>
   <li class="active">Update</li>
 {% endblock %}
 
@@ -29,33 +29,37 @@
         </ul><br />
         <!-- Media tab panes -->
         <div class="tab-content">
+          <!-- Image Files -->
           <div id="image-files" class="tab-pane fade in active">
             <input id="image-files-add" type="file" name="image-files" accept="image/*" multiple/><br />
             <div id="image-files-existing" class="row">
               {% for image in announcement.image_files.all %}
                 <div class="col-xs-4 col-sm-3 image-thumbnail">
-                  <a href="{{ image.image_file.url }}"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover image" src="{{ image.image_file.url }}"></div></a>
+                  <a href="{{ image.image_file.url }}" target="_blank"/>
+                    <img class="img-responsive img-hover image" src="{{ image.image_file_thumbnail.url }}">
+                  </a>
                 </div>
               {% endfor %}
             </div>
             <div id="image-files-preview" class="row"></div>
           </div>
+          <!-- Image Links -->
           <div id="image-links" class="tab-pane fade">
             <input id="image-links-add" type="url" class="form-control" name="image-links" placeholder="Paste your image URL here"><br />
             <div id="image-links-existing" class="row">
               {% for image in announcement.image_links.all %}
                 <div class="col-xs-4 col-sm-3 image-thumbnail">
-                  <a href="{{ image.image_link }}"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover" src="{{ image.image_link }}"></div></a>
+                  <a href="{{ image.image_link }}" target="_blank"/>
+                    <img class="img-responsive img-hover" src="{{ image.image_file_thumbnail.url }}">
+                  </a>
                 </div>
               {% endfor %}
             </div>
             <div id="image-links-preview" class="row"></div>
           </div>
+          <!-- YouTube Videos -->
           <div id="youtube-videos" class="tab-pane fade">
-            <div class="input-group">
-              <span class="input-group-addon">https://www.youtube.com/watch?v=</span>
-              <input id="youtube-videos-add" type="text" class="form-control" name="youtube-videos" maxlength="11" placeholder="YouTube Video ID">
-            </div><br />
+            <input id="youtube-videos-add" type="url" class="form-control" name="youtube-videos" placeholder="https://www.youtube.com/watch?v=" pattern="https://www.youtube.com/watch?v=[a-zA-Z0-9_-]{11}"><br />
             <div id="youtube-videos-existing">
               {% for video in announcement.youtube_videos.all %}
                 <div id="{{ video.pk }}" class="hidden">{{ video.youtube_video }}</div>
@@ -72,7 +76,7 @@
       <!-- Buttons -->
       <div class="row text-center">
         <div class="col-sm-4 col-sm-offset-2">
-          <a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
+          <a class="btn btn-default" href="{{ announcement.get_absolute_url }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
         </div>
         <div class="col-sm-4">
           <button type="button" id="submit-announcement-update-form" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Publish</button>
@@ -81,7 +85,9 @@
     </div>
   </div>
 
-  <img id="image-tester" class="hidden" src="#">
+  <!-- Templates -->
+
+  <img id="image-tester" class="hidden" src="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300">
 
   <template id="image-file-template">
     <div class="col-xs-4 col-sm-3 image-thumbnail">
@@ -91,8 +97,8 @@
 
   <template id="image-link-template">
     <div class="col-xs-4 col-sm-3 image-thumbnail">
-      <a href="{% templatetag openvariable %} imageURL {% templatetag closevariable %}"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover" src="{% templatetag openvariable %} imageURL {% templatetag closevariable %}"></div></a>
-      <input required type="url" class="hidden" name="image-links" value="{% templatetag openvariable %} imageURL {% templatetag closevariable %}">
+      <a href="{% templatetag openvariable %} imageURL {% templatetag closevariable %}" target="_blank"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover" src="{% templatetag openvariable %} imageURL {% templatetag closevariable %}"></div></a>
+      <input required type="hidden" name="image-links" value="{% templatetag openvariable %} imageURL {% templatetag closevariable %}">
     </div>
   </template>
 
@@ -100,19 +106,19 @@
     <div class="row">
       <div class="col-xs-5 youtube-video-thumbnail">
         <!-- Thumbnail -->
-        <img src="{% templatetag openvariable %} thumbnailURL {% templatetag closevariable %}">
+        <a href="https://www.youtube.com/watch?v={% templatetag openvariable %} videoID {% templatetag closevariable %}" target="_blank"><img src="{% templatetag openvariable %} thumbnailURL {% templatetag closevariable %}"></a>
       </div>
       <div class="col-xs-7 youtube-video-details">
         <!-- Title -->
         <div class="youtube-video-title">
-          <b><a href="https://www.youtube.com/watch?v={% templatetag openvariable %} videoID {% templatetag closevariable %}">{% templatetag openvariable %} videoTitle {% templatetag closevariable %}</a></b>
+          <b><a href="https://www.youtube.com/watch?v={% templatetag openvariable %} videoID {% templatetag closevariable %}" target="_blank">{% templatetag openvariable %} videoTitle {% templatetag closevariable %}</a> <span class="glyphicon glyphicon-new-window"></span></b>
         </div>
         <!-- Author (Channel Name) -->
         <div class="youtube-video-author">
-          <a class="youtube-video-author" href="{% templatetag openvariable %} videoAuthorURL {% templatetag closevariable %}">{% templatetag openvariable %} videoAuthor {% templatetag closevariable %}</a>
+          <a class="youtube-video-author" href="{% templatetag openvariable %} videoAuthorURL {% templatetag closevariable %}" target="_blank">{% templatetag openvariable %} videoAuthor {% templatetag closevariable %} <span class="glyphicon glyphicon-new-window"></span></a>
         </div>
       </div>
-      <input required type="text" class="hidden" name="youtube-videos" value="{% templatetag openvariable %} videoID {% templatetag closevariable %}" maxlength="11">
+      <input required type="hidden" name="youtube-videos" value="{% templatetag openvariable %} videoID {% templatetag closevariable %}" maxlength="11">
     </div><br />
   </template>
 {% endblock %}

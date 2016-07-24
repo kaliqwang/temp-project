@@ -79,7 +79,7 @@ $(document).ready(function() {
         var isMultiDay = $(this).data('event-is-multi-day');
         var location = $(this).data('event-location');
         var details = $(this).data('event-details');
-        var category = $(this).data('event-category');
+        var category = $(this).find('.event-category-label').html();
 
         var $details = $('#event-details');
 
@@ -108,18 +108,8 @@ $(document).ready(function() {
             when: dateTime,
             where: location,
             details: details,
+            category: category,
         }));
-
-        $.ajax({
-            type: 'GET',
-            url: '../api/categories/' + category,
-            success: function(data) {
-                $details.append(Mustache.render($eventDetailsCategoryTemplate, {
-                  categoryName: data.name,
-                  categoryColor: data.color,
-                }));
-            }
-        });
 
     });
 

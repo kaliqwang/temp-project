@@ -13,16 +13,40 @@
 
 {% block content %}
   <div class="row">
-    <div class="col-sm-6 col-sm-offset-3">
+    <div class="col-sm-8">
       <form id="student-register-form" action="{% url 'student-register' %}" method="post">{% csrf_token %}
-        {{ userForm.username }}<br />
-        {{ userForm.password }}<br />
-        {{ userForm.first_name }}<br />
-        {{ userForm.last_name }}<br />
-        {{ userForm.email }}<br />
-        {{ userProfileForm.mobile }}<br />
-        {{ studentProfileForm.student_id }}<br />
-        {{ studentProfileForm.grade_level }}<br />
+        <div class="{% if userForm.username.errors %}has-error{% endif %}">
+          {% if userForm.username.errors %}<div class="alert alert-danger"><b>{{ userForm.username.errors }}</b></div>{% endif %}
+          {{ userForm.username }}
+        </div><br />
+        <div class="{% if userForm.password.errors %}has-error{% endif %}">
+          {% if userForm.password.errors %}<div class="alert alert-danger"><b>{{ userForm.password.errors }}</b></div>{% endif %}
+          {{ userForm.password }}
+        </div><br />
+        <div class="{% if userForm.first_name.errors %}has-error{% endif %}">
+          {% if userForm.first_name.errors %}<div class="alert alert-danger"><b>{{ userForm.first_name.errors }}</b></div>{% endif %}
+          {{ userForm.first_name }}
+        </div><br />
+        <div class="{% if userForm.last_name.errors %}has-error{% endif %}">
+          {% if userForm.last_name.errors %}<div class="alert alert-danger"><b>{{ userForm.last_name.errors }}</b></div>{% endif %}
+          {{ userForm.last_name }}
+        </div><br />
+        <div class="{% if userForm.email.errors %}has-error{% endif %}">
+          {% if userForm.email.errors %}<div class="alert alert-danger"><b>{{ userForm.email.errors }}</b></div>{% endif %}
+          {{ userForm.email }}
+        </div><br />
+        <div class="{% if userProfileForm.mobile.errors %}has-error{% endif %}">
+          {% if userProfileForm.mobile.errors %}<div class="alert alert-danger"><b>{{ userProfileForm.mobile.errors }}</b></div>{% endif %}
+          {{ userProfileForm.mobile }}
+        </div><br />
+        <div class="{% if studentProfileForm.student_id.errors %}has-error{% endif %}">
+          {% if studentProfileForm.student_id.errors %}<div class="alert alert-danger"><b>{{ studentProfileForm.student_id.errors }}</b></div>{% endif %}
+          {{ studentProfileForm.student_id }}
+        </div><br />
+        <div class="{% if studentProfileForm.grade_level.errors %}has-error{% endif %}">
+          {% if studentProfileForm.grade_level.errors %}<div class="alert alert-danger"><b>{{ studentProfileForm.grade_level.errors }}</b></div>{% endif %}
+          {{ studentProfileForm.grade_level }}
+        </div><br />
       </form><br />
       <!-- Buttons -->
       <div class="row text-center">

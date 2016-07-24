@@ -15,8 +15,9 @@ $(document).ready(function() {
         }
         return cookieValue;
     }
-    var csrftoken = getCookie('csrftoken');
 
+    // CSRF protection
+    var csrftoken = getCookie('csrftoken');
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -86,15 +87,111 @@ $(document).ready(function() {
         }
     });
 
+    $('#submit-announcement-update-form').click(function(e){
+        e.preventDefault();
+        var error = false;
+        if(!$('#announcement-update-form')[0].checkValidity()) {
+            $('input.form-control, textarea.form-control').each(function() {
+                if ($(this).val().trim() == '') {
+                    $(this).parent().addClass('has-error');
+                    $(this).siblings().children().css('border-color', '#a94442');
+                    error = true;
+                } else {
+                    $(this).parent().removeClass('has-error');
+                    $(this).siblings().children().css('border-color', '#ccc');
+                }
+            });
+        }
+        if (!error) {
+            $('#image-links-add').remove();
+            $('#youtube-videos-add').remove();
+            $('#image-links-existing').remove();
+            $('#youtube-videos-existing').remove();
+            $('#announcement-update-form').submit();
+        }
+    });
+
     $('#submit-event-create-form').click(function(e){
         e.preventDefault();
         $('#event-create-form').submit()
     });
 
-    $('#submit-poll-create-form').click(function(e){
+    $('#submit-event-update-form').click(function(e){
         e.preventDefault();
-        $('#poll-create-form').submit()
+        $('#event-update-form').submit()
     });
+
+    $("#submit-poll-create-form").click(function(e){
+        e.preventDefault();
+        var error = false;
+        if(!$("#poll-create-form")[0].checkValidity()) {
+            $content = $('#poll-content > input');
+            if ($content.val().trim() == ''){
+                $content.parent().addClass('has-error');
+                error = true;
+            } else {
+                $content.parent().removeClass('has-error');
+            }
+            $(".choice-input").each(function() {
+                if($(this).val().trim() == ''){
+                    $(this).parent().addClass('has-error');
+                    error = true;
+                } else {
+                    $(this).parent().removeClass('has-error');
+                }
+            });
+        } else {
+            var uniqueValues = [];
+            $(".choice-input").each(function() {
+                if (uniqueValues.indexOf($(this).val().trim()) != -1) {
+                    $(this).parent().addClass('has-error');
+                    error = true;
+                } else {
+                    $(this).parent().removeClass('has-error');
+                    uniqueValues.push($(this).val().trim());
+                }
+            });
+        }
+        if(!error){
+            $("#poll-create-form").submit();
+        }
+    });
+
+    // $("#submit-poll-update-form").click(function(e){
+    //     e.preventDefault();
+    //     var error = false;
+    //     if(!$("#poll-update-form")[0].checkValidity()) {
+    //         $content = $('#poll-content > input');
+    //         if ($content.val().trim() == ''){
+    //             $content.parent().addClass('has-error');
+    //             error = true;
+    //         } else {
+    //             $content.parent().removeClass('has-error');
+    //         }
+    //         $(".choice-input").each(function() {
+    //             if($(this).val().trim() == ''){
+    //                 $(this).parent().addClass('has-error');
+    //                 error = true;
+    //             } else {
+    //                 $(this).parent().removeClass('has-error');
+    //             }
+    //         });
+    //     } else {
+    //         var uniqueValues = [];
+    //         $(".choice-input").each(function() {
+    //             if (uniqueValues.indexOf($(this).val().trim()) != -1) {
+    //                 $(this).parent().addClass('has-error');
+    //                 error = true;
+    //             } else {
+    //                 $(this).parent().removeClass('has-error');
+    //                 uniqueValues.push($(this).val().trim());
+    //             }
+    //         });
+    //     }
+    //     if(!error){
+    //         $("#poll-update-form").submit();
+    //     }
+    // });
 
     $("#submit-category-list-form").click(function(e){
         e.preventDefault();

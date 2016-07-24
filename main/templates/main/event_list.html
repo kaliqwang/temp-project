@@ -24,7 +24,10 @@
           data-event-location="{{ event.location|default:'TBA' }}"
           data-event-details="{{ event.details|default:'TBA' }}"
           data-event-category="{{ event.category.pk }}">
-          {{ event.name }}
+          <a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
+          <div class="event-category-label">
+            <span class="category label" style="background-color:{{ event.category.color }};">{{ event.category }}</span>
+          </div>
         </li>
       {% empty %}
         <h2>No events yet</h2>
@@ -36,11 +39,12 @@
       <li class="event-details"><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
       <li class="event-details"><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
       <li class="event-details"><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
+      <li class="event-details"><b>Category:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
     </template>
 
     <template id="event-details-category-template">
       <li class="event-details"><b>Category:</b>
-        <span class="label" style="background-color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}; font-weight:normal">
+        <span class="category label" style="background-color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}">
           {% templatetag openvariable %} categoryName {% templatetag closevariable %}
         </span>
       </li>
