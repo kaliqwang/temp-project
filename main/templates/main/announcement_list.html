@@ -16,7 +16,7 @@
     {% for announcement in announcements %}
       <div class="announcement-wrapper">
         <!-- Announcement Title -->
-        <div class="title"><h3><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h3></div>
+        <div class="title"><h3><a href="{{ announcement.get_absolute_url }}"><div>{{ announcement.title }}</div></a></h3></div>
         <!-- Announcement Signature -->
         <div class="signature">
           <span class="fa fa-clock-o"></span>

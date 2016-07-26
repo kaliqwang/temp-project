@@ -321,7 +321,7 @@ class ImageFile(models.Model):
     announcement = models.ForeignKey(Announcement, related_name='image_files', on_delete=models.CASCADE)
     #TODO: change w, h, and quality settings to settings.py variables
     image_file = ProcessedImageField(upload_to='main/images/', blank=True, null=True, processors=[ResizeToFit(1280, 720)], format='JPEG', options={'quality': 80})
-    image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(110, 110)], format='JPEG', options={'quality': 50})
+    image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(110, 110)], format='JPEG', options={'quality': 100})
 
     def __str__(self):
         return os.path.basename(self.image_file.path)

@@ -52,7 +52,6 @@ $(document).ready(function() {
                 $(this).parent().removeClass('has-error');
             }
         });
-        console.log('Error: ' + error);
         if (!error) {
             $('#image-links-add').remove();
             $('#youtube-videos-add').remove();
@@ -90,32 +89,17 @@ $(document).ready(function() {
         $('#event-update-form').submit()
     });
 
-    /**************************** To Test / Debug *****************************/
-
+    // Authentication
     $('#submit-login-form').click(function(e){e.preventDefault();
         $("#login-form").submit();
     });
 
+    // Student Registration
     $("#submit-student-register-form").click(function(e){e.preventDefault();
-        var error = false;
-        // if(!$("#student-register-form")[0].checkValidity()) {
-        //     $("input.form-control, textarea.form-control").each(function() {
-        //         if($(this).val().length == 0){
-        //             $(this).parent().addClass('has-error');
-        //             $(this).siblings().children().css('border-color', '#a94442');
-        //             error = true;
-        //         } else {
-        //             $(this).parent().removeClass('has-error');
-        //             $(this).siblings().children().css('border-color', '#ccc');
-        //         }
-        //     });
-        // }
-        if(!error){
-            $("#student-register-form").submit();
-        }
+        $("#student-register-form").submit();
     });
 
-
+    /**************************** To Test / Debug *****************************/
 
     $("#submit-poll-create-form").click(function(e){
         e.preventDefault();

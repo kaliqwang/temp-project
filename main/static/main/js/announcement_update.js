@@ -69,7 +69,7 @@ $(document).ready(function() {
         $imageFilesCount.html(processedCount);
         $imageFilesBadge.removeClass('hidden');
         filenames += '<a href="' + path + '" class="no-underline" target="_blank"><span class="label label-default">' + file.name + ' (' + bytesToSize(file.size) + ')</span></a> ';
-        $imageFilesFilenames.html(filenames);
+        $imageFilesFilenames.html(filenames + '<br /><br />');
         if (processedCount == totalCount) {
             $imageFilesLoading.hide(0);
             $imageFilesOk.show(0);

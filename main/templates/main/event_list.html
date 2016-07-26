@@ -35,6 +35,7 @@
 {% endblock %}
 
 {% block templates %}
+  <!-- Month Header Template -->
   <template id="month-header-template">
     <li>
       <div id="month-header-{% templatetag openvariable %} monthIndex {% templatetag closevariable %}" class="month-header">
@@ -43,12 +44,14 @@
       <ul id="month-{% templatetag openvariable %} monthIndex {% templatetag closevariable %}" class="month-wrapper"></ul>
     </li>
   </template>
+  <!-- Date Header Template -->
   <template id="date-header-template">
     <li>
       <div class="date-header">{% templatetag openvariable %}{ dateName }{% templatetag closevariable %} - {% templatetag openvariable %} dayName {% templatetag closevariable %}</div>
       <ul id="date-{% templatetag openvariable %} dateIndex {% templatetag closevariable %}" class="date-wrapper"></ul>
     </li>
   </template>
+  <!-- Event Info Template -->
   <template id="event-info-template">
     <li><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
     <li><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
