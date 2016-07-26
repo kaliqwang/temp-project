@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    // Constants
     var flavors = [
         'Strawberry', 'Vanilla', 'Chocolate', 'Coffee', 'Peach', 'Mango',
         'Pistachio', 'Cinnamon', 'Butterscotch', 'Cheesecake', 'Eggnog',
@@ -8,18 +8,21 @@ $(document).ready(function() {
         'Mint Chocolate Chip', 'Peppermint Bark', 'Cookies and Cream'
     ];
 
+    // Templates
+    var $choiceInputTemplate = $('#choice-input-template').html();
+    Mustache.parse($choiceInputTemplate);
+
+    // Variables
+    var $pollChoiceAdd = $('#poll-choice-add');
+    var $choiceContainer = $('#choice-container');
     var count = 0;
 
-    var choiceInputTemplate = $('#choice-input-template').html();
-    Mustache.parse(choiceInputTemplate);
+    /***************************** Event Handlers *****************************/
 
-    $addChoiceButton = $addChoiceButton;
-
-    $addChoiceButton.click(function(e){
-        e.preventDefault();
+    $pollChoiceAdd.click(function(e){e.preventDefault();
         if (count < 20) {
             var flavor = flavors.splice(Math.floor(Math.random() * flavors.length), 1);
-            $('#poll-choices').append(Mustache.render(choiceInputTemplate, {placeholder: flavor}));
+            $choiceContainer.append(Mustache.render($choiceInputTemplate, {placeholder: flavor}));
             // $('#poll-choices > div.choice-input:last').find('button.remove-input').tooltip();
             count++;
         } else {
@@ -27,15 +30,15 @@ $(document).ready(function() {
         }
     });
 
-    $('#poll-choices').on('click','.remove-input', function(e){
+    $choiceContainer.on('click','.remove-input', function(e){
         e.preventDefault();
         flavors.push($(this).data('flavor'));
         $(this).closest('.choice-input-wrapper').remove();
         count--;
     });
 
-    $addChoiceButton.click();
-    $addChoiceButton.click();
-    $addChoiceButton.click();
-    $addChoiceButton.click();
+    $pollChoiceAdd.click();
+    $pollChoiceAdd.click();
+    $pollChoiceAdd.click();
+    $pollChoiceAdd.click();
 });

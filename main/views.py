@@ -16,7 +16,6 @@ from django.utils import timezone
 from models import *
 from forms import *
 
-
 def index(request):
     return render(request, 'main/index.html')
 
@@ -41,18 +40,6 @@ def announcement_list(request):
 def announcement_detail(request, pk):
     announcement = Announcement.objects.get(pk=pk)
     return render(request, 'main/announcement_detail.html', {'announcement': announcement})
-
-@staff_member_required()
-def pin_announcement(request, pk):
-    a = Announcement.objects.get(pk=pk)
-    a.pin()
-    return redirect('announcement-list')
-
-@staff_member_required()
-def unpin_announcement(request, pk):
-    a = Announcement.objects.get(pk=pk)
-    a.unpin()
-    return redirect('announcement-list')
 
 @staff_member_required()
 def announcement_create(request):
@@ -88,18 +75,18 @@ def announcement_update(request, pk):
         a = form.save()
 
         image_files = request.FILES.getlist('image-files')
-        image_links = request.POST.getlist('image-link[]')
-        youtube_videos = request.POST.getlist('youtube-video[]')
+        image_links = request.POST.getlist('image-links')
+        youtube_videos = request.POST.getlist('youtube-videos')
 
         for image_file in image_files:
-            f = ImageFile(image_file=image_file, announcement=a)
-            f.save()
+            i = ImageFile(image_file=image_file, announcement=a)
+            i.save()
         for image_link in image_links:
-            link = ImageLink(image_link=image_link, announcement=a)
-            link.save()
+            i = ImageLink(image_link=image_link, announcement=a)
+            i.save()
         for youtube_video in youtube_videos:
-            video = YouTubeVideo(youtube_video=youtube_video, announcement=a)
-            video.save()
+            v = YouTubeVideo(youtube_video=youtube_video, announcement=a)
+            v.save()
 
         # TODO: Define model's get_absolute_url() and redirect() to the model instance redirect(model_instance)
         return redirect(announcement)
@@ -110,6 +97,18 @@ def announcement_delete(request, pk):
     #TODO: restrict access to either the original author or a superuser admin
     announcement = Announcement.objects.get(pk=pk)
     announcement.delete()
+    return redirect('announcement-list')
+
+@staff_member_required()
+def pin_announcement(request, pk):
+    a = Announcement.objects.get(pk=pk)
+    a.pin()
+    return redirect('announcement-list')
+
+@staff_member_required()
+def unpin_announcement(request, pk):
+    a = Announcement.objects.get(pk=pk)
+    a.unpin()
     return redirect('announcement-list')
 
 ################################################################################
@@ -140,9 +139,6 @@ def event_create(request):
     if form.is_valid():
         form.save()
         return redirect('event-list')
-    else:
-        print(request.POST)
-        print(form.errors)
     return render(request, 'main/event_create.html', {'form': form})
 
 @staff_member_required()
@@ -191,18 +187,6 @@ def poll_detail(request, pk):
     return render(request, 'main/poll_detail.html', {'poll': poll})
 
 @staff_member_required()
-def pin_poll(request, pk):
-    p = Poll.objects.get(pk=pk)
-    p.pin()
-    return redirect('poll-list')
-
-@staff_member_required()
-def unpin_poll(request, pk):
-    p = Poll.objects.get(pk=pk)
-    p.unpin()
-    return redirect('poll-list')
-
-@staff_member_required()
 def poll_create(request):
     form = PollForm(request.POST or None)
     if form.is_valid():
@@ -241,6 +225,18 @@ def poll_delete(request, pk):
     #TODO: restrict access to either the original author or a superuser admin
     poll = Poll.objects.get(pk=pk)
     poll.delete()
+    return redirect('poll-list')
+
+@staff_member_required()
+def pin_poll(request, pk):
+    p = Poll.objects.get(pk=pk)
+    p.pin()
+    return redirect('poll-list')
+
+@staff_member_required()
+def unpin_poll(request, pk):
+    p = Poll.objects.get(pk=pk)
+    p.unpin()
     return redirect('poll-list')
 
 @staff_member_required()
@@ -344,5 +340,5 @@ def ytdata(request, video_id):
         data = json.loads(json_string)
         return JsonResponse(data)
     except urllib2.HTTPError as e:
-        print(e.code())
+        print('YouTube data error code: ' + e.code())
         raise Http404()

@@ -1,4 +1,4 @@
-{% extends "main/base.html" %}
+{% extends "main/base_form.html" %}
 
 {% load static from staticfiles %}
 
@@ -12,51 +12,88 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div class="col-sm-8">
-      <form id="student-register-form" action="{% url 'student-register' %}" method="post">{% csrf_token %}
-        <div class="{% if userForm.username.errors %}has-error{% endif %}">
-          {% if userForm.username.errors %}<div class="alert alert-danger"><b>{{ userForm.username.errors }}</b></div>{% endif %}
+  <form id="student-register-form" action="{% url 'student-register' %}" method="post">{% csrf_token %}
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Username</div></div>
+      <div class="col-sm-9">
+        <div class="has-feedback {% if userForm.username.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.username.errors.as_text }}" data-toggle="tooltip" data-placement="bottom">
           {{ userForm.username }}
-        </div><br />
-        <div class="{% if userForm.password.errors %}has-error{% endif %}">
-          {% if userForm.password.errors %}<div class="alert alert-danger"><b>{{ userForm.password.errors }}</b></div>{% endif %}
-          {{ userForm.password }}
-        </div><br />
-        <div class="{% if userForm.first_name.errors %}has-error{% endif %}">
-          {% if userForm.first_name.errors %}<div class="alert alert-danger"><b>{{ userForm.first_name.errors }}</b></div>{% endif %}
-          {{ userForm.first_name }}
-        </div><br />
-        <div class="{% if userForm.last_name.errors %}has-error{% endif %}">
-          {% if userForm.last_name.errors %}<div class="alert alert-danger"><b>{{ userForm.last_name.errors }}</b></div>{% endif %}
-          {{ userForm.last_name }}
-        </div><br />
-        <div class="{% if userForm.email.errors %}has-error{% endif %}">
-          {% if userForm.email.errors %}<div class="alert alert-danger"><b>{{ userForm.email.errors }}</b></div>{% endif %}
-          {{ userForm.email }}
-        </div><br />
-        <div class="{% if userProfileForm.mobile.errors %}has-error{% endif %}">
-          {% if userProfileForm.mobile.errors %}<div class="alert alert-danger"><b>{{ userProfileForm.mobile.errors }}</b></div>{% endif %}
-          {{ userProfileForm.mobile }}
-        </div><br />
-        <div class="{% if studentProfileForm.student_id.errors %}has-error{% endif %}">
-          {% if studentProfileForm.student_id.errors %}<div class="alert alert-danger"><b>{{ studentProfileForm.student_id.errors }}</b></div>{% endif %}
-          {{ studentProfileForm.student_id }}
-        </div><br />
-        <div class="{% if studentProfileForm.grade_level.errors %}has-error{% endif %}">
-          {% if studentProfileForm.grade_level.errors %}<div class="alert alert-danger"><b>{{ studentProfileForm.grade_level.errors }}</b></div>{% endif %}
-          {{ studentProfileForm.grade_level }}
-        </div><br />
-      </form><br />
-      <!-- Buttons -->
-      <div class="row text-center">
-        <div class="col-sm-6">
-          <a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
-        </div>
-        <div class="col-sm-6">
-          <button type="button" id="submit-student-register-form" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Register</button>
+          {% if userForm.username.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+          {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
         </div>
       </div>
-    </div>
-  </div>
+    </div><br/>
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Password</div></div>
+      <div class="col-sm-9">
+        <div class="has-feedback {% if userForm.password.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.password.errors.as_text }}" data-toggle="tooltip" data-placement="bottom">
+          {{ userForm.password }}
+          {% if userForm.password.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+          {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+        </div>
+      </div>
+    </div><br/>
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">First Name</div></div>
+      <div class="col-sm-9">
+        <div class="has-feedback {% if userForm.first_name.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.first_name.errors.as_text }}" data-toggle="tooltip" data-placement="bottom">
+          {{ userForm.first_name }}
+          {% if userForm.first_name.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+          {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+        </div>
+      </div>
+    </div><br/>
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Last Name</div></div>
+      <div class="col-sm-9">
+        <div class="has-feedback {% if userForm.last_name.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.last_name.errors.as_text }}" data-toggle="tooltip" data-placement="bottom">
+          {{ userForm.last_name }}
+          {% if userForm.last_name.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+          {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+        </div>
+      </div>
+    </div><br/>
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Phone Number</div></div>
+      <div class="col-sm-9">
+        <div class="has-feedback {% if userProfileForm.mobile.errors %}has-error{% elif userProfileForm.is_bound %}has-success{% endif %}" title="{{ userProfileForm.mobile.errors.as_text }}" data-toggle="tooltip" data-placement="bottom">
+          {{ userProfileForm.mobile }}
+          {% if userProfileForm.mobile.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+          {% elif userProfileForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+        </div>
+      </div>
+    </div><br/>
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">School Email</div></div>
+      <div class="col-sm-9">
+        <div class="has-feedback {% if userForm.email.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.email.errors.as_text }}" data-toggle="tooltip" data-placement="bottom">
+          {{ userForm.email }}
+          {% if userForm.email.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+          {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+        </div>
+      </div>
+    </div><br/>
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Student ID</div></div>
+      <div class="col-sm-9">
+        <div class="has-feedback {% if studentProfileForm.student_id.errors %}has-error{% elif studentProfileForm.is_bound %}has-success{% endif %}" title="{{ studentProfileForm.student_id.errors.as_text }}" data-toggle="tooltip" data-placement="bottom">
+          {{ studentProfileForm.student_id }}
+          {% if studentProfileForm.student_id.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+          {% elif studentProfileForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+        </div>
+      </div>
+    </div><br/>
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Grade Level</div></div>
+      <div class="col-sm-9">
+        <div class="has-feedback {% if studentProfileForm.grade_level.errors %}has-error{% elif studentProfileForm.is_bound %}has-success{% endif %}" title="{{ studentProfileForm.grade_level.errors.as_text }}" data-toggle="tooltip" data-placement="bottom">
+          {{ studentProfileForm.grade_level }}
+          {% if studentProfileForm.grade_level.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+          {% elif studentProfileForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+        </div>
+      </div>
+    </div><br/>
+  </form>
 {% endblock %}
+
+{% block submit-button-id %}submit-student-register-form{% endblock %}{% block submit-button-text %}Register{% endblock %}

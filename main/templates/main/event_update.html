@@ -1,4 +1,4 @@
-{% extends "main/base.html" %}
+{% extends "main/base_form.html" %}
 
 {% load static from staticfiles %}
 
@@ -14,42 +14,43 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div class="col-sm-10 col-sm-offset-1">
-      <!-- Form -->
-      <form id="event-update-form" action="{% url 'event-update' event.pk %}" method="post">{% csrf_token %}
-        <!-- Event Name -->
-        <div class="{% if form.name.errors %}has-error{% endif %}">{{ form.name }}</div><br/>
-        <!-- Event Location -->
-        <div class="{% if form.location.errors %}has-error{% endif %}">{{ form.location }}</div><br/>
-        <!-- Event Date/Time -->
-        <div class="input-group input-daterange event-datetime">
-          <div class="{% if form.date_start.errors %}has-error{% endif %}">{{ form.date_start }}</div>
-          <div class="{% if form.time_start.errors %}has-error{% endif %}">{{ form.time_start }}</div>
-          <span class="input-group-addon">to</span>
-          <div class="{% if form.date_end.errors %}has-error{% endif %}">{{ form.date_end }}</div>
-          <div class="{% if form.time_end.errors %}has-error{% endif %}">{{ form.time_end }}</div>
-        </div><br />
-        <!-- Event Details -->
-        <div class="event-details">
-          {{ form.details }}
-        </div><br />
-        <!-- Event Category -->
-        <div class="input-group {% if form.category.errors %}has-error{% endif %}">
-          <span class="input-group-addon">Category:</span>{{ form.category }}
-        </div><br />
-      </form><br />
-      <!-- Buttons -->
-      <div class="row text-center">
-        <div class="col-sm-4 col-sm-offset-2">
-          <a class="btn btn-default" href="{{ event.get_absolute_url }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
-        </div>
-        <div class="col-sm-4">
-          <button type="button" id="submit-event-update-form" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Publish</button>
-        </div>
-      </div>
+  <form id="event-update-form" action="{% url 'event-update' event.pk %}" method="post">{% csrf_token %}
+    <!-- Event Name -->
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Name</div></div>
+      <div class="col-sm-9"><div class="{% if form.name.errors %}has-error{% endif %}">{{ form.name }}</div></div>
+    </div><br/>
+    <!-- Event Location -->
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Location</div></div>
+      <div class="col-sm-9"><div class="{% if form.location.errors %}has-error{% endif %}">{{ form.location }}</div></div>
+    </div><br/>
+    <!-- Event Date/Time -->
+    <div class="input-daterange">
+      <div class="row">
+        <div class="col-sm-3"><div class="form-label">Start</div></div>
+        <div class="col-sm-4"><div class="has-feedback {% if form.date_start.errors %}has-error{% endif %}">{{ form.date_start }}<span class="glyphicon glyphicon-calendar form-control-feedback"></span></div></div>
+        <div class="col-sm-3"><div class="has-feedback {% if form.time_start.errors %}has-error{% endif %}">{{ form.time_start }}<span class="glyphicon glyphicon-time form-control-feedback"></div></div>
+      </div><br />
+      <div class="row">
+        <div class="col-sm-3"><div class="form-label">End</div></div>
+        <div class="col-sm-4"><div class="has-feedback {% if form.date_start.errors %}has-error{% endif %}">{{ form.date_end }}<span class="glyphicon glyphicon-calendar form-control-feedback"></span></div></div>
+        <div class="col-sm-3"><div class="has-feedback {% if form.time_start.errors %}has-error{% endif %}">{{ form.time_end }}<span class="glyphicon glyphicon-time form-control-feedback"></div></div>
+      </div><br />
     </div>
-  </div>
+    <!-- Event Details -->
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Details</div></div>
+      <div class="col-sm-9">{{ form.details }}</div>
+    </div><br/>
+    <!-- Event Category -->
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Category</div></div>
+      <div class="col-sm-9"><div class="{% if form.category.errors %}has-error{% endif %}">{{ form.category }}</div></div>
+    </div><br/>
+  </form><br />
 {% endblock %}
+
+{% block submit-button-id %}submit-event-update-form{% endblock %}
 
 {% block script %}<script src= "{% static 'main/js/event_update.js' %}"></script>{% endblock %}

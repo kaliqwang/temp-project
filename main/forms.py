@@ -15,8 +15,6 @@ from models import *
 # It will be cold, so bring a sweater or jacket!
 # """
 
-sample_event_details = "Tell people more about the event"
-
 category_form_field = forms.ModelChoiceField(required=False, queryset=Category.objects.all(), empty_label='Everyone (default)', widget=forms.Select(attrs={'class': 'form-control'}))
 
 class AnnouncementForm(forms.ModelForm):
@@ -26,8 +24,8 @@ class AnnouncementForm(forms.ModelForm):
         model = Announcement
         fields = ('title', 'category', 'content')
         widgets = {
-            'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Title...', 'required':'required', 'title':'Title', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'}),
-            'content': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Content...', 'required':'required', 'rows':'6', 'title':'Content', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'})
+            'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Add a short, clear title', 'required':'required'}),
+            'content': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Put the body of your announcement here', 'rows':'6', 'required':'required'}),
         }
 
 class EventForm(forms.ModelForm):
@@ -37,13 +35,13 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ('name', 'category', 'location', 'date_start', 'time_start', 'date_end', 'time_end', 'category', 'details')
         widgets = {
-            'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Add a short, clear name', 'title':'Name', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'}),
-            'location': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Include a place or address', 'title':'Location (Optional)', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'}),
-            'date_start': forms.TextInput(attrs={'id':'date-start', 'class':'form-control date start', 'title':'Start', 'data-toggle':'tooltip', 'data-placement':'left', 'data-trigger':'focus', 'required':'required'}),
-            'time_start': forms.TextInput(attrs={'id':'time-start', 'class':'form-control time start', 'title':'Start', 'data-toggle':'tooltip', 'data-placement':'left', 'data-trigger':'focus'}),
-            'date_end': forms.TextInput(attrs={'id':'date-end', 'class':'form-control date end', 'title':'End', 'data-toggle':'tooltip', 'data-placement':'right', 'data-trigger':'focus'}),
-            'time_end': forms.TextInput(attrs={'id':'time-end', 'class':'form-control time end', 'title':'End', 'data-toggle':'tooltip', 'data-placement':'right', 'data-trigger':'focus'}),
-            'details': forms.Textarea(attrs={'class':'form-control', 'placeholder':sample_event_details, 'rows':'3', 'title':'Details (optional)', 'data-toggle':'tooltip', 'data-placement':'top', 'data-trigger':'focus'})
+            'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Add a short, clear name'}),
+            'location': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Include a place or address'}),
+            'date_start': forms.TextInput(attrs={'class':'form-control date start', 'placeholder':'Date'}),
+            'time_start': forms.TextInput(attrs={'class':'form-control time start', 'placeholder':'Time'}),
+            'date_end': forms.TextInput(attrs={'class':'form-control date end', 'placeholder':'Date'}),
+            'time_end': forms.TextInput(attrs={'class':'form-control time end', 'placeholder':'Time'}),
+            'details': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Tell people more about the event', 'rows':'6'}),
         }
 
 class PollForm(forms.ModelForm):
@@ -53,29 +51,20 @@ class PollForm(forms.ModelForm):
         model = Poll
         fields = ('content', 'category')
         widgets = {
-            'content': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What is your favorite ice cream flavor?', 'required':'required'})
-        }
-
-class CategoryForm(forms.ModelForm):
-
-    class Meta:
-        model = Category
-        fields = ('name', 'color')
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Category Name'})
+            'content': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What is your favorite ice cream flavor?', 'required':'required'}),
         }
 
 class UserForm(forms.ModelForm):
+    first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}))
+    last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}))
+    email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'doej1234@chsknights.com'}))
 
     class Meta:
         model = User
         fields = ('username', 'password', 'first_name', 'last_name', 'email')
         widgets = {
-            'username': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Username', 'required':'required'}),
-            'password': forms.widgets.PasswordInput(attrs={'class':'form-control', 'placeholder':'Password', 'required':'required'}),
-            'first_name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name', 'required':'required'}),
-            'last_name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name', 'required':'required'}),
-            'email': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email (doej1234@chsknights.com)', 'required':'required'}),
+            'username': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Username'}),
+            'password': forms.widgets.PasswordInput(attrs={'class':'form-control', 'placeholder':'Password'}),
         }
 
 class UserProfileForm(forms.ModelForm):
@@ -93,6 +82,6 @@ class StudentProfileForm(forms.ModelForm):
         model = StudentProfile
         fields = ('student_id', 'grade_level')
         widgets = {
-            'student_id': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Student ID (Ex. 1100987654)', 'required':'required'}),
-            'grade_level': forms.Select(attrs={'class':'form-control', 'placeholder':'Grade Level', 'required':'required'}),
+            'student_id': forms.TextInput(attrs={'class':'form-control', 'placeholder':'1100987654'}),
+            'grade_level': forms.Select(attrs={'class':'form-control', 'placeholder':'Grade Level'}),
         }

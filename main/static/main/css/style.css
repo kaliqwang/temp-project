@@ -1,66 +1,34 @@
-/********************************* event_list *********************************/
+/************************************ All *************************************/
 
-.data-hidden {
-    display: none;
-}
-
-.month-header {
-    color: #337ab7;
-    border-bottom: 2px solid #337ab7;
-}
-
-.month-header:hover {
-    color: #23527c;
-    border-bottom: 2px solid #23527c;
-    cursor: pointer;
-}
-
-.date-header {
-    padding-top: 20px;
+img {
+    background-color: black;
 }
 
 li {
     list-style: none;
 }
 
-li.event > a {
-    color: black;
+.label {
+    font-weight: normal;
 }
 
-li.event-details {
-    padding-top: 10px;
+.no-underline:hover {
+    text-decoration: none;
 }
 
-.remove {
-    display: none;
-    position: absolute;
-    width: 100%;
-    top: 40%
+.fixed-element {
+    position: fixed;
 }
 
-/***************************** announcement_list ******************************/
-
-.announcement-wrapper > .title {
-    color: #337ab7;
+.form-label {
+    font-weight: bold;
+    padding: 6px 0px;
+    text-align: right;
 }
 
-.nailthumb-container {
-    display: inline-block;
-    margin: 0px;
-    width: 110px;
-    height: 110px;
-}
+/******************************* Announcements ********************************/
 
-.image-thumbnail {
-    padding-right: 4px;
-    padding-bottom: 3px;
-    display: inline-block;
-}
-
-.image-thumbnail-container {
-    margin-right: -4px;
-}
-
+/* announcement_list / announcement_detail */
 .announcement-wrapper {
     border: 12px solid #f5f5f5;
     border-radius: 4px;
@@ -68,58 +36,88 @@ li.event-details {
     margin-bottom: 20px;
     word-wrap:break-word;
 }
-.announcement-wrapper .edit {
-    display:none;
+.announcement-wrapper .title {
+    color: #337ab7;
 }
-.announcement-wrapper.edit .edit {
-    display:initial;
-}
-.announcement-wrapper.edit .noedit {
-    display:none;
-}
-
-.selected img {
-    opacity:.2;
-}
-.selected iframe {
-    opacity:.2;
-}
-.selected.video-wrapper {
-    border: 1px solid #2e78ba
-}
-.announcement-wrapper.edit .thumbnail:hover img {
-    opacity: .2;
-}
-.announcement-wrapper.edit .thumbnail:hover iframe {
-    opacity: .2;
-    pointer-events:none;
-}
-.announcement-wrapper.edit .video-wrapper:hover {
-    border: 1px solid #2e78ba;
-    z-index: 1;
-}
-.announcement-wrapper.edit .thumbnail:hover span.remove {
-    display: block;
-    color:#2e78ba;
-}
-
-.show-more {
-    padding-top: 5px;
-    border-top: 1px solid #eee;
+.announcement-wrapper .toggle-collapse {
     color: grey;
+    border-top: 1px solid #eee;
+    padding-top: 5px;
 }
-
-.show-more:hover {
+.announcement-wrapper .toggle-collapse:hover {
     color: black;
     cursor: pointer;
 }
 
-.category {
-    font-weight: normal;
+/* announcement_create / announcement_update */
+.youtube-video-thumbnail {
+    padding-right: 0px;
+}
+.youtube-video-thumbnail img {
+    width: 100%;
+    height: auto;
+}
+.youtube-video-details {
+    padding-left: 10px;
+}
+.youtube-video-details .author {
+    font-size: .9em;
 }
 
-/********************************* poll_list **********************************/
+/* images */
+.image-list {
+    margin-right: -9px;
+    line-height: 0px;
+}
+.image-list.form {
+    padding: 0px 30px;
+}
+.image-list .image {
+    display: inline-block;
+    padding-right: 9px;
+    padding-bottom: 9px;
+    vertical-align: middle;
+}
+.image-list .image:hover {
+    opacity: 0.8;
+}
+.image-list .image-thumbnail {
+    width: 110px;
+    height: 110px;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 
+/*********************************** Events ***********************************/
+
+/* event_list / event_detail */
+#event-list .month-header {
+    color: #337ab7;
+    border-bottom: 2px solid #337ab7;
+}
+#event-list .month-header:hover {
+    color: #23527c;
+    border-color: #23527c;
+    cursor: pointer;
+}
+#event-list .date-header {
+    padding-top: 20px;
+}
+#event-list li > a {
+    color: black;
+}
+#event-info-box {
+    position: fixed;
+    width: 555px;
+}
+#event-info > li {
+    padding-top: 10px;
+}
+
+/*********************************** Polls ************************************/
+
+/* poll_list */
 .poll-wrapper {
     border: 12px solid #f5f5f5;
     border-radius: 4px;
@@ -132,7 +130,7 @@ li.event-details {
     display:none;
 }
 .poll-wrapper.edit .edit {
-    display:initial;
+    display: initial;
 }
 .poll-wrapper.edit .noedit {
     display:none;
@@ -146,10 +144,6 @@ li.event-details {
 .poll-wrapper.resubmit .noresubmit {
     display:none;
 }
-.hide {
-    display:none;
-}
-
 .poll-choices {
     padding: 16px;
     border-bottom: 1px solid #eee;
@@ -167,86 +161,17 @@ li.event-details {
     text-decoration: underline;
 }
 
-/**************************** announcement_create *****************************/
-
-.thumbnail-preview {
-    height: 120px;
-    padding: 5px;
-}
-
-.youtube-video-thumbnail img {
-    width: 100%;
-    height: auto;
-}
-
-.youtube-video-thumbnail {
-    padding-right: 4px;
-}
-
-.youtube-video-details {
-    padding-left: 4px;
-}
-
-.youtube-video-author {
-    font-size: .9em;
-}
-
-/******************************** event_create ********************************/
-
-.event-datetime .input-group-addon {
-    padding: 0px 15px;
-}
-
-#date-start {
-    border-top-left-radius: 4px;
-}
-
-#time-start {
-    border-bottom-left-radius: 4px;
-}
-
-#date-end {
-    border-top-right-radius: 4px;
-}
-
-#time-end {
-    border-bottom-right-radius: 4px;
-}
-
-/********************************* event_list *********************************/
-
-#event-list-sidebar {
-    position: fixed;
-    width: 555px;
-    /*width: 360px;*/
-}
-
-.event-category-label {
-    display: inline-block;
-}
-
 /******************************* category_list ********************************/
 
 #categories input[type="color"] {
     width: 100px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+    border-radius: 0px 4px 4px 0px;
 }
 
-/******************************** poll_create *********************************/
-
-/****************************** student_register ******************************/
-
-.errorlist {
-    margin: 0px;
-    padding: 0px;
+#categories .input-group-wrapper {
+    padding-bottom: 10px;
 }
 
-#student-register-form .alert {
-    padding: 6px 12px;
-    margin-bottom: 5px;
-}
-
-.errorlist > li {
-
+#categories .input-group-wrapper .remove_field {
+    padding: 6px 0px;
 }

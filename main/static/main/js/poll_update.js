@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    // Constants
     var flavors = [
         'Strawberry', 'Vanilla', 'Chocolate', 'Coffee', 'Peach', 'Mango',
         'Pistachio', 'Cinnamon', 'Butterscotch', 'Cheesecake', 'Eggnog',
@@ -7,19 +7,24 @@ $(document).ready(function() {
         'Butter Pecan', 'Green Tea', 'Cookie Dough', 'Rocky Road', 'Rum Raisin',
         'Mint Chocolate Chip', 'Peppermint Bark', 'Cookies and Cream'
     ];
+    // Templates
+    var $choiceInputTemplate = $('#choice-input-template').html();
+    Mustache.parse($choiceInputTemplate);
 
-    var count = 0;
-
-    var choiceInputTemplate = $('#choice-input-template').html();
-    Mustache.parse(choiceInputTemplate);
-
+    // Variables
     var $existingChoices = $('#poll-choices-existing');
+    var $pollChoiceAdd = $('#poll-choice-add');
+    var $choiceContainer = $('#choice-container');
+    var count = 0;
+    var i = count;
+
+    /****************************** On Page Load ******************************/
 
     $existingChoices.children('li').each(function(i){
         var cContent = $(this).data('content');
         var cPK = $(this).data('pk');
         var flavor = flavors.splice(Math.floor(Math.random() * flavors.length), 1);
-        $existingChoices.append(Mustache.render(choiceInputTemplate, {
+        $existingChoices.append(Mustache.render($choiceInputTemplate, {
             index: i,
             pk: cPK,
             content: cContent,
@@ -28,13 +33,13 @@ $(document).ready(function() {
         count++;
     });
 
-    var i = count;
+    /***************************** Event Handlers *****************************/
 
-    $('#add-choice').click(function(e){
+    $pollChoiceAdd.click(function(e){
         e.preventDefault();
         if (count < 20) {
             var flavor = flavors.splice(Math.floor(Math.random() * flavors.length), 1);
-            $('#poll-choices').append(Mustache.render(choiceInputTemplate, {placeholder: flavor}));
+            $choiceContainer.append(Mustache.render($choiceInputTemplate, {placeholder: flavor}));
             // $('#poll-choices > div.choice-input:last').find('button.remove-input').tooltip();
             count++;
             i++;
@@ -43,18 +48,17 @@ $(document).ready(function() {
         }
     });
 
-    $('#poll-choices-existing').on('click','.remove-input', function(e){
+    $choiceContainer.on('click','.remove-input', function(e){
         e.preventDefault();
         flavors.push($(this).data('flavor'));
         $(this).closest('.choice-input-wrapper').remove();
         count--;
     });
 
-    $('#poll-choices').on('click','.remove-input', function(e){
+    $existingChoices.on('click','.remove-input', function(e){
         e.preventDefault();
         flavors.push($(this).data('flavor'));
         $(this).closest('.choice-input-wrapper').remove();
         count--;
     });
-
 });

@@ -1,140 +1,103 @@
 $(document).ready(function() {
+    // Templates
+    var $imageFileTemplate = $('#image-file-template').html().trim();
+    var $imageLinkTemplate = $('#image-link-template').html().trim();
+    var $videoTemplate = $('#youtube-video-template').html();
+    Mustache.parse($imageFileTemplate);
+    Mustache.parse($imageLinkTemplate);
+    Mustache.parse($videoTemplate);
 
-    // YouTube videos
-    var context;
-
-    var $youTubeVideosAdd = $('#youtube-videos-add');
-    var $youTubeExisting = $('#youtube-videos-existing');
-    var $youTubePreview = $('#youtube-videos-preview');
-    var youTubeTemplate = $('#youtube-video-template').html();
-    Mustache.parse(youTubeTemplate);
-
-    $youTubeVideosAdd.on('paste', function(e){
-        console.log('EVENT DETECTED: <Paste>');
-        var videoURL = e.originalEvent.clipboardData.getData('text');
-        var videoID = parseYouTubeURL(videoURL);
-        addYouTubeVideo(videoID);
-    }).on('change', function(){
-        console.log('EVENT DETECTED: <Change>');
-        var videoURL = $(this).val();
-        var videoID = parseYouTubeURL(videoURL);
-        addYouTubeVideo(videoID);
-    });
-
-    $('#youtube-videos-existing').children('.hidden').each(function(){
-        var videoID = $(this).text();
-        addExistingYouTubeVideo(videoID);
-    });
-
-    function addYouTubeVideo(id) {
-        $.ajax({
-            type: 'GET',
-            url: '../../../ytdata/' + id,
-            crossOrigin: true,
-            success: function(data){
-                $youTubeVideosAdd.parent().removeClass('has-error');
-                console.log('Success: video found');
-                context = {
-                    videoID: id,
-                    thumbnailURL: 'http://img.youtube.com/vi/' + id + '/mqdefault.jpg',
-                    videoTitle: data.title,
-                    videoAuthor: data.author_name,
-                    videoAuthorURL: data.author_url
-                };
-                $youTubePreview.prepend(Mustache.render(youTubeTemplate, context));
-                $('#youtube-videos-add').val('');
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                $youTubeVideosAdd.parent().addClass('has-error');
-                console.log('Error: no video found');
-            }
-        });
-    }
-
-    function addExistingYouTubeVideo(id) {
-        $.ajax({
-            type: 'GET',
-            url: '../../../ytdata/' + id,
-            crossOrigin: true,
-            success: function(data){
-                console.log('Success: video found');
-                context = {
-                    videoID: id,
-                    thumbnailURL: 'http://img.youtube.com/vi/' + id + '/mqdefault.jpg',
-                    videoTitle: data.title,
-                    videoAuthor: data.author_name,
-                    videoAurthorURL: data.author_url
-                };
-                $youTubeExisting.append(Mustache.render(youTubeTemplate, context));
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                console.log('Error: no video found');
-            }
-        });
-    }
-
-    function parseYouTubeURL(url) {
-        return url.split('v=')[1];
-    }
-
-    // Image links
+    // Variables
+    var $imageFilesAdd = $('#image-files-add');
+    var $imageFilesPreview = $('#image-files-preview');
 
     var $imageLinksAdd = $('#image-links-add');
-    var $imageTester = $('#image-tester');
     var $imageLinksPreview = $('#image-links-preview');
-    var imageLinkTemplate = $('#image-link-template').html();
-    Mustache.parse(imageLinkTemplate);
+    var $imageTester = $('#image-tester');
 
-    $imageLinksAdd.on('paste', function(e){
-        console.log('EVENT DETECTED: <Paste>');
-        var link = e.originalEvent.clipboardData.getData('text');
-        $imageTester.attr('src', link);
-    }).on('change', function(){
-        console.log('EVENT DETECTED: <Change>');
-        var link = $(this).val();
-        $imageTester.attr('src', link);
+    var $youTubeVideosAdd = $('#youtube-videos-add');
+    var $youTubeVideosPreview = $('#youtube-videos-preview');
+    var $youTubeVideosExisting = $('#youtube-videos-existing');
+
+    /****************************** Image Files *******************************/
+
+    $imageFilesAdd.on('change', function(){
+        var files = $(this)[0].files;
+        $imageFilesPreview.html('');
+        jQuery.each(files, function(i, file){
+            var imageReader = new FileReader();
+            imageReader.onload = function(e){
+                var path = e.target.result;
+                $imageFilesPreview.prepend(Mustache.render($imageFileTemplate, {
+                  imageURL: path,
+                }));
+            }
+            imageReader.readAsDataURL(file);
+        });
+    });
+
+    /****************************** Image Links *******************************/
+
+    $imageLinksAdd.on('change', function(){
+        var path = $(this).val();
+        $imageTester.attr('src', path);
+    }).on('paste', function(e){
+        var path = e.originalEvent.clipboardData.getData('text');
+        $imageTester.attr('src', path);
     });
 
     $imageTester.load(function(){
+        $imageLinksAdd.val('');
         $imageLinksAdd.parent().removeClass('has-error');
-        console.log('Success: image loaded');
-        addImageLink($(this).attr('src'));
+        $imageLinksAdd.siblings('span').addClass('hidden');
+        var path = $(this).attr('src');
+        $imageLinksPreview.prepend(Mustache.render($imageLinkTemplate, {
+          imageURL: path,
+        }));
     }).error(function(){
-        $imageLinksAdd.parent().addClass('has-error');
-  		  console.log('Error: invalid image url');
+        if ($(this).data('status') == 0){
+            $(this).data('status', 1);
+        } else {
+            $imageLinksAdd.parent().addClass('has-error');
+            $imageLinksAdd.siblings('span').removeClass('hidden');
+        }
   	});
 
-    function addImageLink(link) {
-        var e = Mustache.render(imageLinkTemplate, {imageURL: link});
-        $(e).prependTo($imageLinksPreview).find('.nailthumb-container > img').load(function(){
-            $(this).parent().nailthumb({preload:false, replaceAnimation:null}).removeClass('hidden');
-        });
-        $imageLinksAdd.val('');
-    }
+    /***************************** YouTube Videos *****************************/
 
-    // Image files
-
-    var $imageFilesPreview = $('#image-files-preview');
-    var imageFileTemplate = $('#image-file-template').html();
-    Mustache.parse(imageFileTemplate);
-
-    $('#image-files-add').on('change', function(e){
-        var files = e.target.files;
-        $imageFilesPreview.html('');
-        jQuery.each(files, function(i, file){
-            imageFilePreview(file);
-        });
+    $youTubeVideosExisting.children().each(function(){
+        var videoID = $(this).data('video-id');
+        addYouTubeVideo(videoID, $youTubeVideosExisting);
     });
 
-    function imageFilePreview(f) {
-        var imageReader = new FileReader();
-        imageReader.onload = function(e){
-            var link = e.target.result;
-            var e = Mustache.render(imageFileTemplate, {imageURL: link});
-            $(e).prependTo($imageFilesPreview).find('.nailthumb-container > img').load(function(){
-                $(this).parent().nailthumb({preload:false, replaceAnimation:null}).removeClass('hidden');
-            });
-        }
-        imageReader.readAsDataURL(f);
+    $youTubeVideosAdd.on('change', function(){
+        var videoID = $(this).val().split('v=')[1];
+        addYouTubeVideo(videoID, $youTubeVideosPreview);
+    }).on('paste', function(e){
+        var videoID = e.originalEvent.clipboardData.getData('text').split('v=')[1];
+        addYouTubeVideo(videoID, $youTubeVideosPreview);
+    });
+
+    function addYouTubeVideo(videoID, $container) {
+        $.ajax({
+            type: 'GET',
+            url: '../../../ytdata/' + videoID,
+            success: function(data){
+                $youTubeVideosAdd.val('');
+                $youTubeVideosAdd.parent().removeClass('has-error');
+                $youTubeVideosAdd.siblings('span').addClass('hidden');
+                $container.prepend(Mustache.render($videoTemplate, {
+                    thumbnailURL: 'http://img.youtube.com/vi/' + videoID + '/mqdefault.jpg',
+                    videoTitle: data.title,
+                    videoAuthor: data.author_name,
+                    videoAuthorURL: data.author_url,
+                    videoID: videoID,
+                }));
+            },
+            error: function() {
+                $youTubeVideosAdd.parent().addClass('has-error');
+                $youTubeVideosAdd.siblings('span').removeClass('hidden');
+            }
+        });
     }
 });

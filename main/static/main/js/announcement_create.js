@@ -1,112 +1,98 @@
 $(document).ready(function() {
+    // Templates
+    var $imageFileTemplate = $('#image-file-template').html().trim();
+    var $imageLinkTemplate = $('#image-link-template').html().trim();
+    var $videoTemplate = $('#youtube-video-template').html();
+    Mustache.parse($imageFileTemplate);
+    Mustache.parse($imageLinkTemplate);
+    Mustache.parse($videoTemplate);
 
-    // YouTube videos
-    var context;
+    // Variables
+    var $imageFilesAdd = $('#image-files-add');
+    var $imageFilesPreview = $('#image-files-preview');
+
+    var $imageLinksAdd = $('#image-links-add');
+    var $imageLinksPreview = $('#image-links-preview');
+    var $imageTester = $('#image-tester');
 
     var $youTubeVideosAdd = $('#youtube-videos-add');
-    var $youTubePreview = $('#youtube-videos-preview');
-    var youTubeTemplate = $('#youtube-video-template').html();
-    Mustache.parse(youTubeTemplate);
+    var $youTubeVideosPreview = $('#youtube-videos-preview');
 
-    $youTubeVideosAdd.on('paste', function(e){
-        console.log('EVENT DETECTED: <Paste>');
-        var videoURL = e.originalEvent.clipboardData.getData('text');
-        var videoID = parseYouTubeURL(videoURL);
-        addYouTubeVideo(videoID);
-    }).on('change', function(){
-        console.log('EVENT DETECTED: <Change>');
-        var videoURL = $(this).val();
-        var videoID = parseYouTubeURL(videoURL);
-        addYouTubeVideo(videoID);
+    /****************************** Image Files *******************************/
+
+    $imageFilesAdd.on('change', function(){
+        var files = $(this)[0].files;
+        $imageFilesPreview.html('');
+        jQuery.each(files, function(i, file){
+            var imageReader = new FileReader();
+            imageReader.onload = function(e){
+                var path = e.target.result;
+                $imageFilesPreview.prepend(Mustache.render($imageFileTemplate, {
+                  imageURL: path,
+                }));
+            }
+            imageReader.readAsDataURL(file);
+        });
     });
 
-    function addYouTubeVideo(id) {
+    /****************************** Image Links *******************************/
+
+    $imageLinksAdd.on('change', function(){
+        var path = $(this).val();
+        $imageTester.attr('src', path);
+    }).on('paste', function(e){
+        var path = e.originalEvent.clipboardData.getData('text');
+        $imageTester.attr('src', path);
+    });
+
+    $imageTester.load(function(){
+        $imageLinksAdd.val('');
+        $imageLinksAdd.parent().removeClass('has-error');
+        $imageLinksAdd.siblings('span').addClass('hidden');
+        var path = $(this).attr('src');
+        $imageLinksPreview.prepend(Mustache.render($imageLinkTemplate, {
+          imageURL: path,
+        }));
+    }).error(function(){
+        if ($(this).data('status') == 0){
+            $(this).data('status', 1);
+        } else {
+            $imageLinksAdd.parent().addClass('has-error');
+            $imageLinksAdd.siblings('span').removeClass('hidden');
+        }
+  	});
+
+    /***************************** YouTube Videos *****************************/
+
+    $youTubeVideosAdd.on('change', function(){
+        var videoID = $(this).val().split('v=')[1];
+        addYouTubeVideo(videoID, $youTubeVideosPreview);
+    }).on('paste', function(e){
+        var videoID = e.originalEvent.clipboardData.getData('text').split('v=')[1];
+        addYouTubeVideo(videoID, $youTubeVideosPreview);
+    });
+
+    function addYouTubeVideo(videoID, $container) {
         $.ajax({
             type: 'GET',
-            url: '../../ytdata/' + id,
-            crossOrigin: true,
+            url: '../../../ytdata/' + videoID,
             success: function(data){
+                $youTubeVideosAdd.val('');
                 $youTubeVideosAdd.parent().removeClass('has-error');
-                console.log('Success: video found');
-                context = {
-                    videoID: id,
-                    thumbnailURL: 'http://img.youtube.com/vi/' + id + '/mqdefault.jpg',
+                $youTubeVideosAdd.siblings('span').addClass('hidden');
+                $container.prepend(Mustache.render($videoTemplate, {
+                    thumbnailURL: 'http://img.youtube.com/vi/' + videoID + '/mqdefault.jpg',
                     videoTitle: data.title,
                     videoAuthor: data.author_name,
                     videoAuthorURL: data.author_url,
-                };
-                $youTubePreview.prepend(Mustache.render(youTubeTemplate, context));
-                $('#youtube-videos-add').val('');
+                    videoID: videoID,
+                }));
             },
-            error: function(xhr, textStatus, errorThrown) {
+            error: function() {
                 $youTubeVideosAdd.parent().addClass('has-error');
-                console.log('Error: no video found');
+                $youTubeVideosAdd.siblings('span').removeClass('hidden');
             }
         });
     }
 
-    function parseYouTubeURL(url) {
-        return url.split('v=')[1];
-    }
-
-    // Image links
-
-    var $imageLinksAdd = $('#image-links-add');
-    var $imageTester = $('#image-tester');
-    var $imageLinksPreview = $('#image-links-preview');
-    var imageLinkTemplate = $('#image-link-template').html();
-    Mustache.parse(imageLinkTemplate);
-
-    $imageLinksAdd.on('paste', function(e){
-        console.log('EVENT DETECTED: <Paste>');
-        var link = e.originalEvent.clipboardData.getData('text');
-        $imageTester.attr('src', link);
-    }).on('change', function(){
-        console.log('EVENT DETECTED: <Change>');
-        var link = $(this).val();
-        $imageTester.attr('src', link);
-    });
-
-    $imageTester.load(function(){
-        $imageLinksAdd.parent().removeClass('has-error');
-        console.log('Success: image loaded');
-        addImageLink($(this).attr('src'));
-    }).error(function(){
-        $imageLinksAdd.parent().addClass('has-error');
-  		  console.log('Error: invalid image url');
-  	});
-
-    function addImageLink(link) {
-        var e = Mustache.render(imageLinkTemplate, {imageURL: link});
-        $(e).prependTo($imageLinksPreview).find('.nailthumb-container > img').load(function(){
-            $(this).parent().nailthumb({preload:false, replaceAnimation:null}).removeClass('hidden');
-        });
-        $imageLinksAdd.val('');
-    }
-
-    // Image files
-
-    var $imageFilesPreview = $('#image-files-preview');
-    var imageFileTemplate = $('#image-file-template').html();
-    Mustache.parse(imageFileTemplate);
-
-    $('#image-files-add').on('change', function(e){
-        var files = e.target.files;
-        $imageFilesPreview.html('');
-        jQuery.each(files, function(i, file){
-            imageFilePreview(file);
-        });
-    });
-
-    function imageFilePreview(f) {
-        var imageReader = new FileReader();
-        imageReader.onload = function(e){
-            var link = e.target.result;
-            var e = Mustache.render(imageFileTemplate, {imageURL: link});
-            $(e).prependTo($imageFilesPreview).find('.nailthumb-container > img').load(function(){
-                $(this).parent().nailthumb({preload:false, replaceAnimation:null}).removeClass('hidden');
-            });
-        }
-        imageReader.readAsDataURL(f);
-    }
 });

@@ -1,4 +1,4 @@
-{% extends "main/base.html" %}
+{% extends "main/base_list.html" %}
 
 {% load static from staticfiles %}
 
@@ -12,60 +12,50 @@
 {% endblock %}
 
 {% block content %}
-  <!-- Category Filter -->
-  <div id="event-filter" class="well">
-    <a href="?"><span class="category label" style="background-color:white; color:black">Show All</span></a>
-    {% for category in categories %}
-      <a href="?category={{ category.pk }}"><span id="{{ category.pk }}" class="category label" style="background-color:{{ category.color }};">{{ category.name }}</span></a>
-    {% endfor %}
-  </div>
-
-  <ul id="events-list" class="data-hidden">
+  <ul id="event-list" hidden>
     {% for event in events %}
-      <li class="event"
-        data-event-name="{{ event.name }}"
-        data-event-date-start="{{ event.date_start|date:'M j' }}"
-        data-event-date-end="{{ event.date_end|date:'M j' }}"
-        data-event-time-start="{{ event.time_start|default_if_none:'' }}"
-        data-event-time-end="{{ event.time_end|default_if_none:'' }}"
-        data-event-is-multi-day="{{ event.is_multi_day }}"
-        data-event-location="{{ event.location|default:'TBA' }}"
-        data-event-details="{{ event.details|default:'TBA' }}"
-        data-event-category="{{ event.category.pk }}">
+      <li data-date-start="{{ event.date_start|date:'M j' }}" data-time-start="{{ event.time_start|default_if_none:'' }}"
+        data-date-end="{{ event.date_end|date:'M j' }}" data-time-end="{{ event.time_end|default_if_none:'' }}"
+        data-is-multi-day="{{ event.is_multi_day }}" data-location="{{ event.location|default:'TBA' }}" data-details="{{ event.details|default:'TBA' }}">
         <a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
-        <div class="event-category-label">
-          <span class="category label" style="background-color:{{ event.category.color }};">{{ event.category }}</span>
-        </div>
+        <span class="label" style="background-color:{{ event.category.color|default:'#222222' }};">{{ event.category|default_if_none:'Everyone' }}</span>
       </li>
     {% endfor %}
   </ul>
-
-  <template id="event-details-template">
-    <li class="event-details"><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
-    <li class="event-details"><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
-    <li class="event-details"><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
-    <li class="event-details"><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
-    <li class="event-details"><b>Category:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
-  </template>
 {% endblock %}
 
 {% block sidebar %}
-    <!-- Todo: Automatically update whenever a user hover's over an event to show that event's details -->
-    <div id="event-list-sidebar">
-      <div class="row">
-        <div class="col-sm-8">
-          <div id="event-details-container" class="well">
-            <h4>Event Details</h4>
-            <div id="event-details">
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-4">
+  {{ block.super }}
+  <!-- Event Info Box -->
+  <div id="event-info-box">
+    <div class="well"><h4>Event Details</h4><div id="event-info"></div></div>
+    <!-- Toggle Show/Hide All -->
+    <button id="toggle-collapse-all" class="btn btn-default" type="button" data-mode="1">Collapse All</button><br/>
+  </div>
+{% endblock %}
 
-        </div>
+{% block templates %}
+  <template id="month-header-template">
+    <li>
+      <div id="month-header-{% templatetag openvariable %} monthIndex {% templatetag closevariable %}" class="month-header">
+        <h2>{% templatetag openvariable %} monthName {% templatetag closevariable %}</h2>
       </div>
-    </div>
-
+      <ul id="month-{% templatetag openvariable %} monthIndex {% templatetag closevariable %}" class="month-wrapper"></ul>
+    </li>
+  </template>
+  <template id="date-header-template">
+    <li>
+      <div class="date-header">{% templatetag openvariable %}{ dateName }{% templatetag closevariable %} - {% templatetag openvariable %} dayName {% templatetag closevariable %}</div>
+      <ul id="date-{% templatetag openvariable %} dateIndex {% templatetag closevariable %}" class="date-wrapper"></ul>
+    </li>
+  </template>
+  <template id="event-info-template">
+    <li><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
+    <li><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
+    <li><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
+    <li><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
+    <li><b>Tags:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
+  </template>
 {% endblock %}
 
 {% block script %}<script src= "{% static 'main/js/event_list.js' %}"></script>{% endblock %}

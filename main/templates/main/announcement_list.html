@@ -1,4 +1,4 @@
-{% extends "main/base.html" %}
+{% extends "main/base_list.html" %}
 
 {% load static from staticfiles %}
 
@@ -12,57 +12,39 @@
 {% endblock %}
 
 {% block content %}
-  <!-- Category Filter -->
-  <div id="announcement-filter" class="well">
-    <a href="?"><span class="category label" style="background-color:white; color:black">Show All</span></a>
-    {% for category in categories %}
-      <a href="?category={{ category.pk }}"><span id="{{ category.pk }}" class="category label" style="background-color:{{ category.color }};">{{ category.name }}</span></a>
-    {% endfor %}
-  </div>
-
   <div id="announcement-list">
     {% for announcement in announcements %}
-      <div id="{{ announcement.pk }}" class="announcement-wrapper">
+      <div class="announcement-wrapper">
         <!-- Announcement Title -->
         <div class="title"><h3><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h3></div>
         <!-- Announcement Signature -->
         <div class="signature">
-          <!-- <i class="fa fa-clock-o"></i> -->
-          <i class="datetime">{{ announcement.date_created|date:'F j' }}, {{ announcement.date_created|time:'P' }}</i> | Tags:
-          <span class="category label" style="background-color:{{ announcement.category.color }}">{{ announcement.category }}</span>
+          <span class="fa fa-clock-o"></span>
+          <span class="datetime">{{ announcement.date_created|date:'F j' }}, {{ announcement.date_created|time:'P' }}</span>
+          | Tags: <span class="label" style="background-color:{{ announcement.category.color|default:'#222222' }}">{{ announcement.category|default_if_none:'Everyone' }}</span>
         </div><br />
         <!-- Announcement Content -->
         <div class="content">{{ announcement.content }}</div><br />
         <!-- Announcement Images -->
-        <div class="image-thumbnail-container">
-          {% for image in announcement.image_files.all %}
-            <a href="{{ image.image_file.url }}" class="image-thumbnail" target="_blank"/>
-              <img class="img-responsive img-hover" src="{{ image.image_file_thumbnail.url }}">
-            </a>
-          {% endfor %}
-          {% for image in announcement.image_links.all %}
-            <a href="{{ image.image_link }}" class="image-thumbnail" target="_blank"/>
-              <img class="img-responsive img-hover" src="{{ image.image_file_thumbnail.url }}">
-            </a>
-          {% endfor %}
+        <div class="image-list">
+          {% for image in announcement.image_files.all %}<div class="image"><a href="{{ image.image_file.url }}" target="_blank"/><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}{% for image in announcement.image_links.all %}<div class="image"><a href="{{ image.image_link }}" target="_blank"/><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}
         </div><br />
+        <!-- Announcement Videos -->
         <div id="collapse-{{ announcement.pk }}" class="collapse">
-          <!-- Announcement Videos -->
           {% for video in announcement.youtube_videos.all %}
-            <div id="{{ video.pk }}" class="embed-responsive embed-responsive-16by9">
-              <iframe class="embed-responsive-item" width="560" height="315" src="https://www.youtube.com/embed/{{ video.youtube_video }}" allowfullscreen></iframe>
-            </div><br />
+            <div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.youtube_video }}" allowfullscreen></iframe></div><br />
           {% endfor %}
         </div>
-        {% if announcement.youtube_videos.all %}
-          <!-- Announcement Show More -->
-          <div class="show-more text-center" data-toggle="collapse" href="#collapse-{{ announcement.pk }}">Show More</div>
-        {% endif %}
+        <!-- Announcement Show More -->
+        {% if announcement.youtube_videos.all %}<div class="text-center toggle-collapse" data-toggle="collapse" href="#collapse-{{ announcement.pk }}">Show More</div>{% endif %}
       </div>
-    {% empty %}
-      <h4> Nothing here yet! </h4>
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block sidebar %}
+  {{ block.super }}
+  <button id="toggle-collapse-all" class="btn btn-default" type="button" data-mode="0">Expand All</button><br/>
 {% endblock %}
 
 {% block script %}<script src="{% static 'main/js/announcement_list.js' %}"></script>{% endblock %}

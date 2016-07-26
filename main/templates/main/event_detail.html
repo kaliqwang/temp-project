@@ -14,20 +14,27 @@
 {% endblock %}
 
 {% block content %}
-  <div>
-    <li class="event-details"><b>What:</b> {{ event.name }}</li>
-    <li id="event-details-when" class="event-details"
-      data-event-date-start="{{ event.date_start|date:'M j' }}"
-      data-event-date-end="{{ event.date_end|date:'M j' }}"
-      data-event-time-start="{{ event.time_start|default_if_none:'' }}"
-      data-event-time-end="{{ event.time_end|default_if_none:'' }}"
-      data-event-is-multi-day="{{ event.is_multi_day }}">
-      <b>When:</b>
+  <div id="event-info"></div>
+
+  <ul id="event-list" hidden>
+    <li data-name="{{ event.name }}" data-date-start="{{ event.date_start|date:'M j' }}" data-time-start="{{ event.time_start|default_if_none:'' }}"
+      data-date-end="{{ event.date_end|date:'M j' }}" data-time-end="{{ event.time_end|default_if_none:'' }}"
+      data-is-multi-day="{{ event.is_multi_day }}" data-location="{{ event.location|default:'TBA' }}" data-details="{{ event.details|default:'TBA' }}">
+      <span class="label" style="background-color:{{ event.category.color|default:'#222222' }}">{{ event.category|default_if_none:'Everyone' }}</span>
     </li>
-    <li class="event-details"><b>Where:</b> {{ event.location|default:'TBA' }}</li>
-    <li class="event-details"><b>Details:</b> {{ event.details|default:'TBA' }}</li>
-    <li class="event-details"><b>Category:</b> <span class="category label" style="background-color:{{ event.category.color }};">{{ event.category }}</span></li>
-  </div>
+  </ul>
 {% endblock %}
+
+{% block templates %}
+  <template id="event-info-template">
+    <li><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
+    <li><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
+    <li><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
+    <li><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
+    <li><b>Tags:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
+  </template>
+{% endblock %}
+
+
 
 {% block script %}<script src= "{% static 'main/js/event_detail.js' %}"></script>{% endblock %}

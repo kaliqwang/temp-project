@@ -43,16 +43,17 @@ grade_levels = (
 )
 
 colors = [
-    '#f2f3f4', '#222222', '#f3c300', '#875692', '#f38400', '#a1caf1', '#be0032',
-    '#c2b280', '#848482', '#008856', '#e68fac', '#0067a5', '#f99379', '#604e97',
-    '#f6a600', '#b3446c', '#dcd300', '#882d17', '#8db600', '#654522', '#e25822',
-    '#2b3d26'
+    '#f2f3f4', '#f3c300', '#875692', '#f38400', '#a1caf1', '#be0032', '#c2b280',
+    '#848482', '#008856', '#e68fac', '#0067a5', '#f99379', '#604e97', '#f6a600',
+    '#b3446c', '#dcd300', '#882d17', '#8db600', '#654522', '#e25822', '#2b3d26',
 ]
 
 ################################################################################
 
-ten_digit_validator = RegexValidator(
-    regex=r'^\d{10}$', message='Please enter a 10 digit value')
+mobile_validator = RegexValidator(
+    regex=r'^\d{10}$', message='Enter a valid phone number')
+student_id_validator = RegexValidator(
+    regex=r'^\d{10}$', message='Enter a valid student id')
 youtube_validator = RegexValidator(
     regex=r'^[a-zA-Z0-9_-]{11}$', message='Invalid YouTube video id')
 
@@ -71,7 +72,7 @@ class GetOrNoneManager(models.Manager):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', null=True)
     mobile = models.CharField("Phone Number", unique=True, max_length=10,
-                              validators=[ten_digit_validator])
+                              validators=[mobile_validator])
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
     objects = GetOrNoneManager()
@@ -82,7 +83,7 @@ class UserProfile(models.Model):
 class StudentProfile(models.Model):
     user_profile = models.OneToOneField(UserProfile, related_name='student_profile', null=True)
     student_id = models.CharField("Student ID", unique=True, max_length=10,
-                                  validators=[ten_digit_validator])
+                                  validators=[student_id_validator])
     grade_level = models.IntegerField("Grade Level", default=FRESHMAN, choices=grade_levels)
     objects = GetOrNoneManager()
 
@@ -100,7 +101,7 @@ class TeacherProfile(models.Model):
 ################################################################################
 
 class Category(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=30)
     color = RGBColorField(unique=True, colors=colors)
 
     objects = GetOrNoneManager()
@@ -135,7 +136,7 @@ class Category(models.Model):
         self.save()
 
 class Announcement(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=50)
     author = models.ForeignKey(UserProfile, related_name="announcements", blank=True, null=True, on_delete=models.SET_NULL)
     date_created = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
@@ -329,36 +330,38 @@ class ImageLink(models.Model):
     announcement = models.ForeignKey(Announcement, related_name='image_links', on_delete=models.CASCADE)
     image_link = models.URLField()
     #TODO: change w, h, and quality settings to settings.py variables
-    image_file = ProcessedImageField(upload_to='main/images/', blank=True, null=True, processors=[ResizeToFit(1280, 720)], format='JPEG', options={'quality': 80})
+    image_file = ProcessedImageField(upload_to='main/images/', null=True, processors=[ResizeToFit(1280, 720)], format='JPEG', options={'quality': 80})
     image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(110, 110)], format='JPEG', options={'quality': 50})
+
+    objects = GetOrNoneManager()
 
     def __str__(self):
         return os.path.basename(self.image_file.path)
 
     def save(self, *args, **kwargs):
-        #TODO: MESSY SOLUTION: clean up all of the code in this method: find a cleaner solution
-        original = ImageLink.objects.get(pk=self.pk)
-        if not self.image_file or self.image_link != original.image_link:
-            # Image Object
-            img = self.download_image()
-            if img is not None:
-                # w, h = img.size
-                # format = img.format
-                # file_size = f.size
-                # Image filename
+        content = self.download_image()
+        if self.pk is None:
+            if content:
                 name = os.path.basename(self.image_link)
-                # Write image contents to temporary file-like object
-                f = StringIO()
-                img.save(f)
-                # Save image to model's ImageField
-                self.image_file.save(name, File(f), save=False)
+                self.image_file.save(name, content, save=False)
                 super(ImageLink, self).save(*args, **kwargs)
+        else:
+            original = ImageLink.objects.get_or_none(pk=self.pk)
+            if not self.image_file or self.image_link != original.image_link:
+                if content:
+                    name = os.path.basename(self.image_link)
+                    original.image_file.delete(save=False)
+                    self.image_file.save(name, content, save=False)
+                    super(ImageLink, self).save(*args, **kwargs)
 
     def download_image(self):
         r = requests.get(self.image_link)
         if r.status_code == 200:
+            img_io = StringIO()
             img = Image.open(StringIO(r.content))
-            return img
+            if img:
+                img.save(img_io, 'JPEG')
+                return ContentFile(img_io.getvalue())
         return None
 
     def image_exists(self):

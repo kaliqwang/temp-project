@@ -1,4 +1,4 @@
-{% extends "main/base.html" %}
+{% extends "main/base_form.html" %}
 
 {% load static from staticfiles %}
 
@@ -12,83 +12,79 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div class="col-sm-8 col-sm-offset-2">
-      <!-- Form -->
-      <form id="category-list-form" action="{% url 'category-list' %}" method="post">{% csrf_token %}
-        <div class="row">
-          <div class="col-xs-8 col-xs-offset-2">
-            <!-- Category List -->
-            <div id="categories" class="form-group">
-              {% for c in categories %}
-                <!-- Category -->
-                <li data-name="{{ c.name }}" data-color="{{ c.color }}" data-pk="{{ c.pk }}"></li>
-                {% if forloop.last %}<div id="initial-count" class="hidden">{{ forloop.counter }}</div>{% endif %}
-              {% endfor %}
-            </div>
-          </div>
-          <!-- Add Button -->
-          <div class="col-xs-2">
-            <button id="category-add" class="btn btn-default" tabindex="-1" title="Add Category" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-plus"></span></button>
-          </div>
-        </div>
-      </form>
-      <!-- Buttons -->
-      <div class="row text-center">
-        <div class="col-sm-4 col-sm-offset-2">
-          <a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
-        </div>
-        <div class="col-sm-4">
-          <button type="button" id="submit-category-list-form" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Publish</button>
-        </div>
-      </div>
+  <form id="category-list-form" action="{% url 'category-list' %}" method="post">{% csrf_token %}
+    <!-- Category List -->
+    <div id="categories" class="form-group">
+      {% for c in categories %}
+        <li data-name="{{ c.name }}" data-color="{{ c.color }}" data-pk="{{ c.pk }}"></li>
+        {% if forloop.last %}<div id="initial-count" hidden>{{ forloop.counter }}</div>{% endif %}
+      {% endfor %}
     </div>
-  </div>
+  </form>
 
   <datalist id="datalist-color-choices">
-    <option>#f2f3f4</option><option>#222222</option><option>#f3c300</option>
-    <option>#875692</option><option>#f38400</option><option>#a1caf1</option>
-    <option>#be0032</option><option>#c2b280</option><option>#848482</option>
-    <option>#008856</option><option>#e68fac</option><option>#0067a5</option>
-    <option>#f99379</option><option>#604e97</option><option>#f6a600</option>
-    <option>#b3446c</option><option>#dcd300</option><option>#882d17</option>
-    <option>#8db600</option><option>#654522</option><option>#e25822</option>
-    <option>#2b3d26</option>
+    <option>#f2f3f4</option><option>#f3c300</option><option>#875692</option>
+    <option>#f38400</option><option>#a1caf1</option><option>#be0032</option>
+    <option>#c2b280</option><option>#848482</option><option>#008856</option>
+    <option>#e68fac</option><option>#0067a5</option><option>#f99379</option>
+    <option>#604e97</option><option>#f6a600</option><option>#b3446c</option>
+    <option>#dcd300</option><option>#882d17</option><option>#8db600</option>
+    <option>#654522</option><option>#e25822</option><option>#2b3d26</option>
   </datalist>
+{% endblock %}
 
+
+{% block morebuttons %}
+  <button id="category-add" class="btn btn-sm btn-default" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Category</button>
+{% endblock %}
+
+{% block submit-button-id %}submit-category-list-form{% endblock %}{% block submit-button-text %}Save{% endblock %}
+
+{% block templates %}
   <template id="old-category-template">
     <div class="input-group-wrapper">
       <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}"/>
-      <div class="input-group">
-        <input required type="text" class="form-control category-name-input"
-          name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
-          value="{% templatetag openvariable %} name {% templatetag closevariable %}"
-          placeholder="Category Name" maxlength="50"/>
-        <span class="input-group-btn"><input required type="color" class="form-control btn btn-default color-input" maxlength="7"
-          list="datalist-color-choices"
-          name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
-          value="{% templatetag openvariable %} color {% templatetag closevariable %}"
-          data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}"/>
-        </span>
-      </div><br />
+      <div class="row">
+        <div class="col-xs-2 col-xs-offset-4 text-center">
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group">
+            <input type="text" class="form-control category-name-input"
+              name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
+              value="{% templatetag openvariable %} name {% templatetag closevariable %}"
+              placeholder="Category Name" maxlength="30" required />
+            <span class="input-group-btn"><input required type="color" class="form-control btn btn-default color-input" maxlength="7"
+              list="datalist-color-choices"
+              name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
+              value="{% templatetag openvariable %} color {% templatetag closevariable %}"
+              data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}"/>
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </template>
-
   <template id="new-category-template">
     <div class="input-group-wrapper">
       <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}"/>
-      <div class="input-group">
-        <span class="input-group-btn"><button type="button" class="btn btn-default remove_field" tabindex="-1"><span class="glyphicon glyphicon-remove"></span></button></span>
-        <input required type="text" class="form-control category-name-input"
-          name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
-          placeholder="Category Name" maxlength="50"/>
-        <span class="input-group-btn"><input required type="color" class="form-control btn btn-default color-input" maxlength="7"
-          list="datalist-color-choices"
-          name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
-          value="{% templatetag openvariable %} color {% templatetag closevariable %}"
-          data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}"/>
-        </span>
-      </div><br />
+      <div class="row">
+        <div class="col-xs-2 col-xs-offset-4 text-center">
+          <button type="button" class="close remove_field" title="Remove" data-toggle="tooltip" data-placement="top"><span>&times;</span></button>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group">
+            <input type="text" class="form-control category-name-input"
+              name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
+              placeholder="Category Name" maxlength="30" required />
+            <span class="input-group-btn"><input required type="color" class="form-control btn btn-default" maxlength="7"
+              list="datalist-color-choices"
+              name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
+              value="{% templatetag openvariable %} color {% templatetag closevariable %}"
+              data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}"/>
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </template>
 {% endblock %}

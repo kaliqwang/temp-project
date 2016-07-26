@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+    /****************************** On Page Load ******************************/
+
     $('.time').timepicker({
         minTime: '6:00am',
         step: 15,
@@ -9,9 +11,9 @@ $(document).ready(function() {
     $('.input-daterange').datepicker({
         inputs: $('.date'),
         format: 'yyyy-mm-dd',
-        maxViewMode: 2,
         todayBtn: "linked",
-        toggleActive: true
+        toggleActive: true,
+        maxViewMode: 2,
     });
 
 });

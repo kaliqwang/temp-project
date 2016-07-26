@@ -1,4 +1,4 @@
-{% extends "main/base.html" %}
+{% extends "main/base_list.html" %}
 
 {% load static from staticfiles %}
 
@@ -15,14 +15,6 @@
   <div class="alert alert-warning alert-dismissible">
     <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
     <b>Note:</b> This page is incomplete.
-  </div>
-
-  <!-- Category Filter -->
-  <div id="poll-filter" class="well">
-    <a href="?"><span class="category label" style="background-color:white; color:black">Show All</span></a>
-    {% for category in categories %}
-      <a href="?category={{ category.pk }}"><span id="{{ category.pk }}" class="category label" style="background-color:{{ category.color }};">{{ category.name }}</span></a>
-    {% endfor %}
   </div>
 
   <!-- Media tabs -->
@@ -49,9 +41,9 @@
           <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
           <!-- Poll Signature -->
           <div class="signature">
-            <!-- <i class="fa fa-clock-o"></i> -->
-            <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
-            <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
+            <span class="fa fa-clock-o"></span>
+            <span class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</span>
+            | Tags: <span class="label" style="background-color:{{ poll.category.color|default:'#222222' }}">{{ poll.category|default_if_none:'Everyone' }}</span>
           </div>
           <!-- Poll Choices -->
           <div class="poll-choices">
@@ -270,7 +262,6 @@
       {% endfor %}
     </div>
   </template>
-
 {% endblock %}
 
 {% block script %}<script src="{% static 'main/js/poll_list.js' %}"></script>{% endblock %}

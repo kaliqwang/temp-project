@@ -1,4 +1,4 @@
-{% extends "main/base.html" %}
+{% extends "main/base_form.html" %}
 
 {% load static from staticfiles %}
 
@@ -13,88 +13,103 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div class="col-sm-10 col-sm-offset-1">
-      <form id="announcement-create-form" action="{% url 'announcement-create' %}" enctype="multipart/form-data" method="post" >{% csrf_token %}
-        <!-- Announcement Title -->
-        <div class="{% if form.subject.errors %}has-error{% endif %}">{{ form.title }}</div><br />
-        <!-- Announcement Content -->
-        <div class="{% if form.content.errors %}has-error{% endif %}">{{ form.content }}</div><br />
-        <!-- Media tabs -->
+  <form id="announcement-create-form" action="{% url 'announcement-create' %}" enctype="multipart/form-data" method="post" >{% csrf_token %}
+    <!-- Announcement Title -->
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Title</div></div>
+      <div class="col-sm-9"><div class="validate-required">{{ form.title }}</div></div>
+    </div><br/>
+    <!-- Announcement Content -->
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Content</div></div>
+      <div class="col-sm-9"><div class="validate-required">{{ form.content }}</div></div>
+    </div><br/>
+    <!-- Announcement Category -->
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Category</div></div>
+      <div class="col-sm-9"><div>{{ form.category }}</div></div>
+    </div><br/>
+    <!-- Announcement Media Tabs -->
+    <div class="row">
+      <div class="col-sm-3"><div class="form-label">Media</div></div>
+      <div class="col-sm-9">
         <ul class="nav nav-tabs" role="tablist">
           <li class="active"><a href="#image-files" data-toggle="tab">Image Files</a></li>
           <li><a href="#image-links" data-toggle="tab">Image Links</a></li>
           <li><a href="#youtube-videos" data-toggle="tab">YouTube Videos</a></li>
-        </ul><br />
-        <!-- Media tab panes -->
+        </ul>
+      </div>
+    </div><br/>
+    <!-- Announcement Media Tab Panes -->
+    <div class="row">
+      <div class="col-sm-9 col-sm-offset-3">
         <div class="tab-content">
           <!-- Image Files -->
           <div id="image-files" class="tab-pane fade in active">
-            <input id="image-files-add" type="file" name="image-files" accept="image/*" multiple/><br />
-            <div id="image-files-preview" class="row"></div>
+            <div class="text-center">
+              <label class="btn btn-default" for="image-files-add">Upload Image(s)</label>
+              <input id="image-files-add" class="hidden" type="file" name="image-files" accept="image/*" multiple/>
+            </div><br />
+            <div class="image-list form"><span id="image-files-preview"></span></div>
           </div>
           <!-- Image Links -->
           <div id="image-links" class="tab-pane fade">
-            <input id="image-links-add" type="url" class="form-control" name="image-links" placeholder="Paste your image URL here"><br />
-            <div id="image-links-preview" class="row"></div>
+            <div class="has-feedback">
+              <input id="image-links-add" type="url" class="form-control" name="image-links" placeholder="Paste your image URL here">
+              <span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+            </div><br />
+            <div class="image-list form"><span id="image-links-preview"></span></div>
           </div>
           <!-- YouTube Videos -->
           <div id="youtube-videos" class="tab-pane fade">
-            <input id="youtube-videos-add" type="url" class="form-control" name="youtube-videos" placeholder="https://www.youtube.com/watch?v=" pattern="https://www.youtube.com/watch?v=[a-zA-Z0-9_-]{11}"><br />
+            <div class="has-feedback">
+              <input id="youtube-videos-add" type="url" class="form-control" name="youtube-videos" placeholder="https://www.youtube.com/watch?v=" pattern="https://www.youtube.com/watch?v=[a-zA-Z0-9_-]{11}">
+              <span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+            </div><br />
             <div id="youtube-videos-preview"></div>
           </div>
         </div><hr />
-        <!-- Announcement Category -->
-        <div class="input-group {% if form.category.errors %}has-error{% endif %}">
-          <span class="input-group-addon">Category:</span>{{ form.category }}
-        </div><br />
-      </form><br />
-      <!-- Buttons -->
-      <div class="row text-center">
-        <div class="col-sm-4 col-sm-offset-2">
-          <a class="btn btn-default" href="{% url 'announcement-list' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Cancel</a>
-        </div>
-        <div class="col-sm-4">
-          <button type="button" id="submit-announcement-create-form" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Publish</button>
-        </div>
       </div>
     </div>
-  </div>
+  </form>
 
-  <!-- Templates -->
+  <img id="image-tester" src="#" data-status="0" hidden>
+{% endblock %}
 
-  <img id="image-tester" class="hidden" src="https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300">
+{% block submit-button-id %}submit-announcement-create-form{% endblock %}
 
+{% block templates %}
   <template id="image-file-template">
-    <div class="col-xs-4 col-sm-3 image-thumbnail">
-      <div class="nailthumb-container"><img class="img-responsive img-hover image" src="{% templatetag openvariable %} imageURL {% templatetag closevariable %}"></div>
+    <div class="image">
+      <a href="{% templatetag openvariable %} imageURL {% templatetag closevariable %}" target="_blank"/>
+        <div class="image-thumbnail" style="background-image: url('{% templatetag openvariable %} imageURL {% templatetag closevariable %}')"></div>
+      </a>
     </div>
   </template>
-
   <template id="image-link-template">
-    <div class="col-xs-4 col-sm-3 image-thumbnail">
-      <a href="{% templatetag openvariable %} imageURL {% templatetag closevariable %}" target="_blank"/><div class="nailthumb-container hidden"><img class="img-responsive img-hover" src="{% templatetag openvariable %} imageURL {% templatetag closevariable %}"></div></a>
-      <input required type="hidden" name="image-links" value="{% templatetag openvariable %} imageURL {% templatetag closevariable %}">
-    </div>
+    <div class="image">
+      <a href="{% templatetag openvariable %} imageURL {% templatetag closevariable %}" target="_blank"/>
+        <div class="image-thumbnail" style="background-image: url('{% templatetag openvariable %} imageURL {% templatetag closevariable %}')"></div>
+      </a>
+    </div><input name="image-links" value="{% templatetag openvariable %} imageURL {% templatetag closevariable %}" required hidden>
   </template>
-
   <template id="youtube-video-template">
     <div class="row">
-      <div class="col-xs-5 youtube-video-thumbnail">
+      <div class="col-xs-4 youtube-video-thumbnail">
         <!-- Thumbnail -->
         <a href="https://www.youtube.com/watch?v={% templatetag openvariable %} videoID {% templatetag closevariable %}" target="_blank"><img src="{% templatetag openvariable %} thumbnailURL {% templatetag closevariable %}"></a>
       </div>
-      <div class="col-xs-7 youtube-video-details">
+      <div class="col-xs-8 youtube-video-details">
         <!-- Title -->
-        <div class="youtube-video-title">
-          <b><a href="https://www.youtube.com/watch?v={% templatetag openvariable %} videoID {% templatetag closevariable %}" target="_blank">{% templatetag openvariable %} videoTitle {% templatetag closevariable %} <span class="glyphicon glyphicon-new-window"></span></a></b>
+        <div class="title">
+          <b><a href="https://www.youtube.com/watch?v={% templatetag openvariable %} videoID {% templatetag closevariable %}" target="_blank"><div>{% templatetag openvariable %} videoTitle {% templatetag closevariable %} <span class="glyphicon glyphicon-new-window"></span></div></a></b>
         </div>
         <!-- Author (Channel Name) -->
-        <div class="youtube-video-author">
-          <a class="youtube-video-author" href="{% templatetag openvariable %} videoAuthorURL {% templatetag closevariable %}" target="_blank">{% templatetag openvariable %} videoAuthor {% templatetag closevariable %} <span class="glyphicon glyphicon-new-window"></span></a>
+        <div class="author">
+          <a href="{% templatetag openvariable %} videoAuthorURL {% templatetag closevariable %}" target="_blank">{% templatetag openvariable %} videoAuthor {% templatetag closevariable %} <span class="glyphicon glyphicon-new-window"></span></a>
         </div>
       </div>
-      <input required type="hidden" name="youtube-videos" value="{% templatetag openvariable %} videoID {% templatetag closevariable %}" maxlength="11">
+      <input name="youtube-videos" value="{% templatetag openvariable %} videoID {% templatetag closevariable %}" maxlength="11" required hidden>
     </div><br />
   </template>
 {% endblock %}

@@ -54,6 +54,9 @@ $(document).ready(function() {
                 color: randomColor,
                 pk: 'new',
             }));
+            $('#categories > .input-group-wrapper').last().find('[data-toggle="tooltip"]').tooltip({
+                animation: false,
+            });
             removeColor(randomColor);
             count++;
             i++;
@@ -63,10 +66,10 @@ $(document).ready(function() {
     // Manage color list
     $categories.on('click', '.remove_field', function(e){
         e.preventDefault();
-        addColor($(this).parent().siblings('span').children('.color-input').val());
+        addColor($(this).parent().siblings().find('div > span > input[type="color"]').val());
         $(this).closest('.input-group-wrapper').remove();
         count--;
-    }).on('change', '.color-input', function(e){
+    }).on('change', 'input[type="color"]', function(e){
         e.preventDefault();
         addColor($(this).data('old-value'));
         removeColor($(this).val());

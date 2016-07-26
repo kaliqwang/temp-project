@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+    /********************** CSRF Protection Boilerplate ***********************/
+
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {
@@ -16,7 +18,6 @@ $(document).ready(function() {
         return cookieValue;
     }
 
-    // CSRF protection
     var csrftoken = getCookie('csrftoken');
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
@@ -31,55 +32,27 @@ $(document).ready(function() {
         }
     });
 
+    /****************************** On Page Load ******************************/
+
     // Activate tooltips
-    $('[data-toggle="tooltip"]').tooltip();
-
-    // Render square thumbnails
-    $('.nailthumb-container').nailthumb({preload:false, replaceAnimation:null});
-    $('.nailthumb-container').removeClass('hidden');
-
-    // Form submit buttons
-
-    $('#submit-login-form').click(function(e){
-        e.preventDefault();
-        $("#login-form").submit();
+    $('[data-toggle="tooltip"]').tooltip({
+        animation: false,
     });
 
-    $("#submit-student-register-form").click(function(e){
-        e.preventDefault();
-        var error = false;
-        if(!$("#student-register-form")[0].checkValidity()) {
-            $("input.form-control, textarea.form-control").each(function() {
-                if($(this).val().length == 0){
-                    $(this).parent().addClass('has-error');
-                    $(this).siblings().children().css('border-color', '#a94442');
-                    error = true;
-                } else {
-                    $(this).parent().removeClass('has-error');
-                    $(this).siblings().children().css('border-color', '#ccc');
-                }
-            });
-        }
-        if(!error){
-            $("#student-register-form").submit();
-        }
-    });
+    /***************************** Event Handlers *****************************/
 
-    $('#submit-announcement-create-form').click(function(e){
-        e.preventDefault();
+    // Announcement Create
+    $('#submit-announcement-create-form').click(function(e){e.preventDefault();
         var error = false;
-        if(!$('#announcement-create-form')[0].checkValidity()) {
-            $('input.form-control, textarea.form-control').each(function() {
-                if ($(this).val().trim() == '') {
-                    $(this).parent().addClass('has-error');
-                    $(this).siblings().children().css('border-color', '#a94442');
-                    error = true;
-                } else {
-                    $(this).parent().removeClass('has-error');
-                    $(this).siblings().children().css('border-color', '#ccc');
-                }
-            });
-        }
+        $('.validate-required > input,textarea').each(function() {
+            if ($(this).val().trim() == '') {
+                error = true;
+                $(this).parent().addClass('has-error');
+            } else {
+                $(this).parent().removeClass('has-error');
+            }
+        });
+        console.log('Error: ' + error);
         if (!error) {
             $('#image-links-add').remove();
             $('#youtube-videos-add').remove();
@@ -87,39 +60,62 @@ $(document).ready(function() {
         }
     });
 
-    $('#submit-announcement-update-form').click(function(e){
-        e.preventDefault();
+    // Announcement Update
+    $('#submit-announcement-update-form').click(function(e){e.preventDefault();
         var error = false;
-        if(!$('#announcement-update-form')[0].checkValidity()) {
-            $('input.form-control, textarea.form-control').each(function() {
-                if ($(this).val().trim() == '') {
-                    $(this).parent().addClass('has-error');
-                    $(this).siblings().children().css('border-color', '#a94442');
-                    error = true;
-                } else {
-                    $(this).parent().removeClass('has-error');
-                    $(this).siblings().children().css('border-color', '#ccc');
-                }
-            });
-        }
+        $('.validate-required > input,textarea').each(function() {
+            if ($(this).val().trim() == '') {
+                error = true;
+                $(this).parent().addClass('has-error');
+            } else {
+                $(this).parent().removeClass('has-error');
+            }
+        });
+        console.log('Error: ' + error);
         if (!error) {
             $('#image-links-add').remove();
             $('#youtube-videos-add').remove();
-            $('#image-links-existing').remove();
             $('#youtube-videos-existing').remove();
             $('#announcement-update-form').submit();
         }
     });
 
-    $('#submit-event-create-form').click(function(e){
-        e.preventDefault();
+    // Event Create
+    $('#submit-event-create-form').click(function(e){e.preventDefault();
         $('#event-create-form').submit()
     });
 
-    $('#submit-event-update-form').click(function(e){
-        e.preventDefault();
+    // Event Update
+    $('#submit-event-update-form').click(function(e){e.preventDefault();
         $('#event-update-form').submit()
     });
+
+    /**************************** To Test / Debug *****************************/
+
+    $('#submit-login-form').click(function(e){e.preventDefault();
+        $("#login-form").submit();
+    });
+
+    $("#submit-student-register-form").click(function(e){e.preventDefault();
+        var error = false;
+        // if(!$("#student-register-form")[0].checkValidity()) {
+        //     $("input.form-control, textarea.form-control").each(function() {
+        //         if($(this).val().length == 0){
+        //             $(this).parent().addClass('has-error');
+        //             $(this).siblings().children().css('border-color', '#a94442');
+        //             error = true;
+        //         } else {
+        //             $(this).parent().removeClass('has-error');
+        //             $(this).siblings().children().css('border-color', '#ccc');
+        //         }
+        //     });
+        // }
+        if(!error){
+            $("#student-register-form").submit();
+        }
+    });
+
+
 
     $("#submit-poll-create-form").click(function(e){
         e.preventDefault();

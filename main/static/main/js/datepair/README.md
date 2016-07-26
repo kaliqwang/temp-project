@@ -97,7 +97,7 @@ Unbind the datepair functionality from a set of inputs.
 
 	```javascript
 	datepair.remove();
-	``` 
+	```
 
 ## Events
 
