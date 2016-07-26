@@ -9,7 +9,18 @@ $(document).ready(function() {
 
     // Variables
     var $imageFilesAdd = $('#image-files-add');
+    var $imageFilesClear = $('#image-files-clear');
     var $imageFilesPreview = $('#image-files-preview');
+    var $imageFilesFilenames = $('#image-files-filenames');
+
+    var $imageFilesBadge = $imageFilesAdd.siblings().find('span.badge');
+    var $imageFilesCount = $imageFilesBadge.find('.count');
+    var $imageFilesLoading = $imageFilesBadge.find('.glyphicon-refresh');
+    var $imageFilesOk = $imageFilesBadge.find('.glyphicon-ok');
+
+    var filenames = '';
+    var processedCount = 0;
+    var totalCount = 0;
 
     var $imageLinksAdd = $('#image-links-add');
     var $imageLinksPreview = $('#image-links-preview');
@@ -21,8 +32,12 @@ $(document).ready(function() {
     /****************************** Image Files *******************************/
 
     $imageFilesAdd.on('change', function(){
-        var files = $(this)[0].files;
+        $imageFilesLoading.show(0);
+        $imageFilesOk.hide(0);
         $imageFilesPreview.html('');
+        $imageFilesClear.addClass('hidden');
+        var files = $(this)[0].files;
+        totalCount = files.length;
         jQuery.each(files, function(i, file){
             var imageReader = new FileReader();
             imageReader.onload = function(e){
@@ -30,10 +45,39 @@ $(document).ready(function() {
                 $imageFilesPreview.prepend(Mustache.render($imageFileTemplate, {
                   imageURL: path,
                 }));
+                updateFilenames(file, path);
             }
             imageReader.readAsDataURL(file);
         });
     });
+
+    $imageFilesClear.on('click', function() {
+        $imageFilesBadge.addClass('hidden');
+        $imageFilesFilenames.html('');
+        $imageFilesPreview.html('');
+        $imageFilesClear.addClass('hidden');
+        var filenames = '';
+        var processedCount = 0;
+        var totalCount = 0;
+        $imageFilesAdd.wrap('<form>').closest('form')[0].reset();
+        $imageFilesAdd.unwrap();
+    });
+
+    function updateFilenames(file, path) {
+        processedCount++;
+        $imageFilesCount.html(processedCount);
+        $imageFilesBadge.removeClass('hidden');
+        filenames += '<a href="' + path + '" class="no-underline" target="_blank"><span class="label label-default">' + file.name + ' (' + bytesToSize(file.size) + ')</span></a> ';
+        $imageFilesFilenames.html(filenames);
+        if (processedCount == totalCount) {
+            $imageFilesLoading.hide(0);
+            $imageFilesOk.show(0);
+            filenames = '';
+            processedCount = 0;
+            totalCount = 0;
+            $imageFilesClear.removeClass('hidden');
+        }
+    }
 
     /****************************** Image Links *******************************/
 
@@ -95,4 +139,12 @@ $(document).ready(function() {
         });
     }
 
+    /**************************** Helper Functions ****************************/
+
+    function bytesToSize(bytes) {
+       var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+       if (bytes == 0) return '0 Bytes';
+       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+       return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    }
 });

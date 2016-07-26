@@ -8,6 +8,12 @@ li {
     list-style: none;
 }
 
+.inline-block {
+    display: inline-block;
+    vertical-align: top;
+    padding: 6px 8px;
+}
+
 .label {
     font-weight: normal;
 }
@@ -50,6 +56,9 @@ li {
 }
 
 /* announcement_create / announcement_update */
+#image-files-filenames {
+    /*padding: 0px 0px 0px 30px;*/
+}
 .youtube-video-thumbnail {
     padding-right: 0px;
 }
