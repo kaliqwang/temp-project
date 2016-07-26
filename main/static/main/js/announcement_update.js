@@ -93,7 +93,7 @@ $(document).ready(function() {
     $imageTester.load(function(){
         $imageLinksAdd.val('');
         $imageLinksAdd.parent().removeClass('has-error');
-        $imageLinksAdd.siblings('span').hide(0);
+        $imageLinksAdd.siblings('span').addClass('hidden');
         var path = $(this).attr('src');
         $imageLinksPreview.prepend(Mustache.render($imageLinkTemplate, {
           imageURL: path,
@@ -103,7 +103,7 @@ $(document).ready(function() {
             $(this).data('status', 1);
         } else {
             $imageLinksAdd.parent().addClass('has-error');
-            $imageLinksAdd.siblings('span').show(0);
+            $imageLinksAdd.siblings('span').removeClass('hidden');;
         }
   	});
 
@@ -129,7 +129,7 @@ $(document).ready(function() {
             success: function(data){
                 $youTubeVideosAdd.val('');
                 $youTubeVideosAdd.parent().removeClass('has-error');
-                $youTubeVideosAdd.siblings('span').hide(0);
+                $youTubeVideosAdd.siblings('span').addClass('hidden');;
                 $container.prepend(Mustache.render($videoTemplate, {
                     thumbnailURL: 'http://img.youtube.com/vi/' + videoID + '/mqdefault.jpg',
                     videoTitle: data.title,
@@ -140,7 +140,7 @@ $(document).ready(function() {
             },
             error: function() {
                 $youTubeVideosAdd.parent().addClass('has-error');
-                $youTubeVideosAdd.siblings('span').show(0);
+                $youTubeVideosAdd.siblings('span').removeClass('hidden');
             }
         });
     }
@@ -148,9 +148,9 @@ $(document).ready(function() {
     /**************************** Helper Functions ****************************/
 
     function bytesToSize(bytes) {
-       var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-       if (bytes == 0) return '0 Bytes';
-       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-       return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return '0 Bytes';
+        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
     }
 });
