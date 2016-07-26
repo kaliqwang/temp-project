@@ -46,6 +46,11 @@
         <div class="tab-content">
           <!-- Image Files -->
           <div id="image-files" class="tab-pane fade in active">
+            <!-- Temporary Alert to User-->
+            <div class="alert alert-info alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+              <strong>Note:</strong> Image preview opens a new tab <span class="glyphicon glyphicon-new-window"></span>
+            </div>
             <!-- Hidden Multi-file Input -->
             <input id="image-files-add" class="hidden" type="file" name="image-files" accept="image/*" multiple/>
             <div class="text-center">
@@ -63,11 +68,6 @@
                 <button type="button" id="image-files-clear" class="close hidden" title="Clear" data-toggle="tooltip" data-placement="top"><span>&times;</span></button>
               </div>
             </div><br />
-            <!-- Temporary Alert to User-->
-            <div class="alert alert-info alert-dismissible" role="alert">
-              <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-              <strong>Note:</strong> Image preview opens a new tab <span class="glyphicon glyphicon-new-window"></span>
-            </div>
             <!-- Image Labels (filename/size) -->
             <div id="image-files-filenames" class="text-center"></div><br />
             <!-- Image Preview -->
@@ -75,6 +75,11 @@
           </div>
           <!-- Image Links -->
           <div id="image-links" class="tab-pane fade">
+            <!-- Temporary Alert to User-->
+            <div class="alert alert-info alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+              <strong>Note:</strong> Image preview opens a new tab <span class="glyphicon glyphicon-new-window"></span>
+            </div>
             <!-- Image URL Input -->
             <div class="has-feedback">
               <input id="image-links-add" type="url" class="form-control" name="image-links" placeholder="Paste your image URL here">
@@ -82,26 +87,21 @@
             </div><br />
             <!-- Hidden Image Tester -->
             <img id="image-tester" src="#" data-status="0" hidden>
-            <!-- Temporary Alert to User-->
-            <div class="alert alert-info alert-dismissible" role="alert">
-              <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-              <strong>Note:</strong> Image preview opens a new tab <span class="glyphicon glyphicon-new-window"></span>
-            </div>
             <!-- Image Preview (new then existing) -->
             <div class="image-list form"><span id="image-links-preview"></span></div>
           </div>
           <!-- YouTube Videos -->
           <div id="youtube-videos" class="tab-pane fade">
-            <!-- YouTube Video URL Input -->
-            <div class="has-feedback">
-              <input id="youtube-videos-add" type="url" class="form-control" name="youtube-videos" placeholder="https://www.youtube.com/watch?v=" pattern="https://www.youtube.com/watch?v=[a-zA-Z0-9_-]{11}">
-              <span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
-            </div><br />
             <!-- Temporary Alert to User-->
             <div class="alert alert-info alert-dismissible" role="alert">
               <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
               <strong>Note:</strong> Video preview opens a new tab <span class="glyphicon glyphicon-new-window"></span>
             </div>
+            <!-- YouTube Video URL Input -->
+            <div class="has-feedback">
+              <input id="youtube-videos-add" type="url" class="form-control" name="youtube-videos" placeholder="https://www.youtube.com/watch?v=" pattern="https://www.youtube.com/watch?v=[a-zA-Z0-9_-]{11}">
+              <span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+            </div><br />
             <!-- YouTube Video Preview -->
             <div id="youtube-videos-preview"></div>
           </div>
