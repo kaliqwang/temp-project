@@ -112,7 +112,7 @@ class ChoiceSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('content', 'poll')
 
 class VoteSerializer(serializers.HyperlinkedModelSerializer):
-    voter = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    voter = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all())
     choice = serializers.PrimaryKeyRelatedField(queryset=Choice.objects.all())
     poll = serializers.PrimaryKeyRelatedField(queryset=Poll.objects.all())
 

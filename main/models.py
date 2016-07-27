@@ -247,14 +247,14 @@ class Poll(models.Model):
         return reverse('poll-detail', args=[str(self.pk)])
 
     def vote_count(self):
-        count = {c.pk : c.vote_count() for c in self.choices}
+        count = {c.pk : c.vote_count() for c in self.choices.all()}
         for v in count.values():
             total += v
         count['total'] = total
         return count
 
     def get_vote(self, user_profile_pk):
-        for c in self.choices:
+        for c in self.choices.all():
             vote = UserProfile.objects.get(pk=user_profile_pk).votes.get_or_none(choice_id=c.pk)
             if vote:
                 return vote
@@ -303,7 +303,6 @@ class Vote(models.Model):
 
     class Meta:
         ordering = ('poll', 'choice')
-        unique_together = ('voter', 'poll')
 
     def __str__(self):
         return "%s - %s" %(self.choice, self.voter)
