@@ -17,8 +17,8 @@
       <li data-date-start="{{ event.date_start|date:'M j' }}" data-time-start="{{ event.time_start|default_if_none:'' }}"
         data-date-end="{{ event.date_end|date:'M j' }}" data-time-end="{{ event.time_end|default_if_none:'' }}"
         data-is-multi-day="{{ event.is_multi_day }}" data-location="{{ event.location|default:'TBA' }}" data-details="{{ event.details|default:'TBA' }}">
-        <a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
-        <span class="label" style="background-color:{{ event.category.color|default:'#222222' }};">{{ event.category|default_if_none:'Everyone' }}</span>
+        <div class="hidden"><span class="label" style="background-color:{{ event.category.color|default:'#222222' }};">{{ event.category|default_if_none:'Everyone' }}</span></div>
+        <div class="dot" style="background-color:{{ event.category.color|default:'#222222' }};"></div>&nbsp;&nbsp;<a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
       </li>
     {% endfor %}
   </ul>

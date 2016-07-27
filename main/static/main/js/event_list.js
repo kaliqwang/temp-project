@@ -23,7 +23,7 @@ $(document).ready(function() {
     /****************************** On Page Load ******************************/
 
     // Render event calender (nested months -> dates -> events structure)
-    $eventList.children().each(function() {
+    $eventList.children('li').each(function() {
         var newDate = new Date($(this).data('date-start'));
         // If month change
         if (currentMonth != newDate.getMonth()) {
@@ -81,7 +81,8 @@ $(document).ready(function() {
         var isMultiDay = $(this).data('is-multi-day');
         var location = $(this).data('location');
         var details = $(this).data('details');
-        var category = $(this).find('span.label')[0].outerHTML;
+        var category = $(this).find('div.hidden').html();
+        console.log(category);
 
         var dateTime = dateTimeToString(isMultiDay, dateStart, timeStart, dateEnd, timeEnd);
 

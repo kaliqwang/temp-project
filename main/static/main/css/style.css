@@ -32,6 +32,15 @@ li {
     text-align: right;
 }
 
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    padding: 2px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 /******************************* Announcements ********************************/
 
 /* announcement_list / announcement_detail */
