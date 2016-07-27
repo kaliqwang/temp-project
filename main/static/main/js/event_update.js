@@ -10,7 +10,7 @@ $(document).ready(function() {
 
     $('.input-daterange').datepicker({
         inputs: $('.date'),
-        format: 'yyyy-mm-dd',
+        format: 'mm-dd-yyyy',
         todayBtn: "linked",
         toggleActive: true,
         maxViewMode: 2,

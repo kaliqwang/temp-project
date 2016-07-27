@@ -37,10 +37,10 @@ class EventForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Add a short, clear name'}),
             'location': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Include a place or address'}),
-            'date_start': forms.TextInput(attrs={'class':'form-control date start', 'placeholder':'Date'}),
-            'time_start': forms.TextInput(attrs={'class':'form-control time start', 'placeholder':'Time'}),
-            'date_end': forms.TextInput(attrs={'class':'form-control date end', 'placeholder':'Date'}),
-            'time_end': forms.TextInput(attrs={'class':'form-control time end', 'placeholder':'Time'}),
+            'date_start': forms.TextInput(attrs={'class':'form-control date start', 'placeholder':'mm-dd-yyyy'}),
+            'time_start': forms.TextInput(attrs={'class':'form-control time start'}),
+            'date_end': forms.TextInput(attrs={'class':'form-control date end', 'placeholder':'mm-dd-yyyy'}),
+            'time_end': forms.TextInput(attrs={'class':'form-control time end'}),
             'details': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Tell people more about the event', 'rows':'6'}),
         }
 
