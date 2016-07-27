@@ -238,8 +238,8 @@ def unpin_poll(request, pk):
     p = Poll.objects.get(pk=pk)
     p.unpin()
     return redirect('poll-list')
-
-@staff_member_required()
+    
+@login_required
 def get_vote(request, poll_pk):
     poll = Poll.objects.get_or_none(pk=poll_pk)
     if poll:

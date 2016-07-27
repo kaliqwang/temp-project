@@ -35,8 +35,6 @@ $(document).ready(function() {
                     url: '/api/votes/',
                     data: vote,
                     success: function() {
-                        $submit_button.addClass('hidden');
-                        $submit_button.next().removeClass('hidden');
                         if ($poll.hasClass('submitted')) {
                             $prev_choice = $poll.find('.picked');
                             $prev_choice.removeClass('picked');
@@ -46,13 +44,15 @@ $(document).ready(function() {
                             $total_vote_count = parseInt($poll.attr('data-votes'),10) + 1;
                             $poll.attr('data-votes', $total_vote_count);
                             $poll.addClass('submitted');
-                            $choice.addClass('picked');
+
                         }
                         //Sets progress bars, shows progress bars, hides choices
-
+                        $choice.addClass('picked');
                         $.when(addVote($choice)).then(setWidths($poll));
                         $poll.find('.progress-bars').removeClass('hidden');
                         $poll.find('.poll-choices').addClass('hidden');
+                        $submit_button.addClass('hidden');
+                        $submit_button.next().removeClass('hidden');
                     },
                 });
             } catch(err) {
@@ -63,9 +63,6 @@ $(document).ready(function() {
             }
         }
     });
-    $pollList.on('click', 'resubmit-poll', function(e) {
-        e.preventDefault();
-    })
     //Shows correct choices and buttons, hides progress bars
     $pollList.on('click', '.change-vote', function(e) {
         e.preventDefault();
@@ -74,7 +71,10 @@ $(document).ready(function() {
         if (checkClosed($poll) == false) {
             ($poll).find('.alert-danger').removeClass('hide').delay(5000).fadeOut();
         } else {
-            prefillVote($poll);
+            //If there is no choice with class picked, find previous vote and add class picked
+            if (!$poll.find('.picked').attr('class')) {
+                prefillVote($poll);
+            }
             $submit_button.removeClass('hidden');
             $submit_button.next().addClass('hidden');
             $poll.find('.progress-bars').addClass('hidden');
@@ -85,11 +85,12 @@ $(document).ready(function() {
     //calculates and sets widths of progress bars
     function setWidths(poll) {
         totalVotes = poll.attr('data-votes');
-        $bars = poll.find('.progress-bars').children('.progress').children();
+        $bars = poll.find('.progress-bars').children('.progress-bar-wrapper').children('.bar-wrapper').children('.progress').children();
 
         $bars.each(function() {
             votes = $(this).attr('data-votes')
             $(this).css("width", votes/totalVotes*100 + "%");
+            $(this).html(votes/totalVotes*100 + "%");
         });
     }
     //sets widths of all closed and voted progress bars
@@ -108,19 +109,15 @@ $(document).ready(function() {
     function addVote($new_choice) {
         $progress_bar = $('#progress-' + $new_choice.attr('id').substring(7));
         $vote_count = parseInt($progress_bar.attr('data-votes'), 10) + 1;
-        $label = $progress_bar.parent().prev();
-
         $progress_bar.attr('data-votes', $vote_count);
-        $label.html($new_choice.attr('value') + ' | ' + $vote_count);
+        $progress_bar.attr('data-original-title', $vote_count);
     }
     //Adjusts progress-bar and label of previous choice
     function subtractVote($prev_choice) {
         $progress_bar = $('#progress-' + $prev_choice.attr('id').substring(7));
         $vote_count = parseInt($progress_bar.attr('data-votes'), 10) - 1;
-        $label = $progress_bar.parent().prev();
-
         $progress_bar.attr('data-votes', $vote_count);
-        $label.html($prev_choice.attr('value') + ' | ' + $vote_count);
+        $progress_bar.attr('data-original-title', $vote_count);
     }
     //Finds choice previously chosen by user. Needed to adjust progress bars in voted poll.
     function prefillVote($poll) {
@@ -133,11 +130,7 @@ $(document).ready(function() {
                     url: '/api/votes/' + votepk,
                     success: function(vote) {
                         $choice=$poll.find('input[id = choice-' + vote.choice + ']');
-                        $choice.attr('checked', true);
-                        //to handle when user changes vote of voted poll because there are no choices with class picked
-                        if (!$choice.hasClass('picked')){
-                            $choice.addClass('picked');
-                        }
+                        $choice.addClass('picked');
                     }
                 });
             }
