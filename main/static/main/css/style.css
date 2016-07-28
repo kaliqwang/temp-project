@@ -1,5 +1,18 @@
 /************************************ All *************************************/
 
+.btn-custom:hover, .btn-custom:focus, .btn-custom:active, .btn-custom:active:focus {
+    color: #fff;
+    background-color: #666;
+    border-color: #666;
+    outline: none;
+}
+
+.btn-custom {
+    color: #fff;
+    background-color: #888;
+    border-color: #888;
+}
+
 textarea {
     resize: vertical;
 }
@@ -80,6 +93,7 @@ form:not(#login-form) {
 }
 .announcement-wrapper a:hover {
     color: #1e18cc;
+    text-decoration: underline;
 }
 
 /* announcement_create / announcement_update */
