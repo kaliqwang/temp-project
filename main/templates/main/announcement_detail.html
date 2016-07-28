@@ -4,35 +4,46 @@
 
 {% block title %}Announcement Detail{% endblock %}
 
-{% block header %}Announcement Detail{% endblock %}
+{% block masthead-announcements %}selected{% endblock %}
 
-{% block breadcrumb %}
-  <li><a href="{% url 'index' %}">Home</a></li>
-  <li><a href="{% url 'announcement-list' %}">Announcements</a></li>
-  <li class="active">{{ announcement }}</li>
-  <li><a href="{% url 'announcement-update' announcement.pk %}">Update</a></li>
+{% block sidebar-announcements %}selected{% endblock %}
+
+{% block sidebar-extra %}
+  <hr />
+  <ul id="section-admin-announcement">
+    <a href="#" class="sidebar-section-header">Announcement Tools</a>
+    <!-- <span class="glyphicon glyphicon-tags"> -->
+    <li><a href="{% url 'announcement-update' announcement.pk %}"><span class="glyphicon glyphicon-pencil"></span><span class="text-label">Make Changes</span></a></li>
+    <li><a href="#"><span class="glyphicon glyphicon-remove"></span><span class="text-label">Remove</span></a></li>
+  </ul>
 {% endblock %}
 
 {% block content %}
-  <div class="announcement-wrapper">
-    <!-- Announcement Title -->
-    <div class="title"><h3>{{ announcement.title }}</h3></div>
-    <!-- Announcement Signature -->
-    <div class="signature">
-      <span class="fa fa-clock-o"></span>
-      <span class="datetime">{{ announcement.date_created|date:'F j' }}, {{ announcement.date_created|time:'P' }}</span>
-      | Tags: <span class="label" style="background-color:{{ announcement.category.color|default:'#222222' }}">{{ announcement.category|default_if_none:'Everyone' }}</span>
-    </div><br />
-    <!-- Announcement Content -->
-    <div class="content">{{ announcement.content }}</div><br />
-    <!-- Announcement Images -->
-    <div class="image-list">
-      {% for image in announcement.image_files.all %}<div class="image"><a href="{{ image.image_file.url }}" target="_blank"/><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}{% for image in announcement.image_links.all %}<div class="image"><a href="{{ image.image_link }}" target="_blank"/><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}
-    </div><br />
-    <!-- Announcement Videos -->
-    {% for video in announcement.youtube_videos.all %}
-      <div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.youtube_video }}" allowfullscreen></iframe></div><br />
-    {% endfor %}
+  <div class="container-white">
+    <div class="announcement-wrapper">
+      <!-- Announcement Title -->
+      <div class="title"><h4><a href="{% url 'announcement-list' %}"><div>{{ announcement.title }}</div></a></h4></div>
+      <!-- Announcement Signature -->
+      <div class="signature">
+        <span class="fa fa-clock-o"></span>
+        <span class="datetime">{{ announcement.date_created|date:'F j' }}, {{ announcement.date_created|time:'P' }}</span>
+        | Tags: <span class="label" style="background-color:{{ announcement.category.color|default:'#222222' }}">{{ announcement.category|default_if_none:'Everyone' }}</span>
+      </div>
+      <!-- Announcement Content -->
+      <div class="content">{{ announcement.content }}</div>
+      <!-- Announcement Images -->
+      <div class="image-list">
+        {% for image in announcement.image_files.all %}<div class="image"><a href="{{ image.image_file.url }}" target="_blank"/><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}{% for image in announcement.image_links.all %}<div class="image"><a href="{{ image.image_link }}" target="_blank"/><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}
+      </div>
+      <!-- Announcement Videos -->
+      <div class="row row-compact">
+        {% for video in announcement.youtube_videos.all %}
+          <div class="col-sm-6 col-compact">
+            <div class="embed-responsive embed-responsive-16by9 video"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.youtube_video }}" allowfullscreen></iframe></div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 {% endblock %}
 

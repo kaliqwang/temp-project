@@ -4,16 +4,29 @@
 
 {% block title %}Poll Detail{% endblock %}
 
-{% block header %}Poll Detail{% endblock %}
+{% block masthead-polls %}selected{% endblock %}
 
-{% block breadcrumb %}
+{% block sidebar-polls %}selected{% endblock %}
+
+{% block sidebar-extra %}
+  <hr />
+  <ul id="section-admin-poll">
+    <a href="#" class="sidebar-section-header">Poll Tools</a>
+    <!-- <span class="glyphicon glyphicon-tags"> -->
+    <li><a href="{% url 'poll-update' poll.pk %}"><span class="glyphicon glyphicon-pencil"></span><span class="text-label">Make Changes</span></a></li>
+    <li><a href="{% url 'poll-list' %}"><span class="glyphicon glyphicon-remove"></span><span class="text-label">Remove</span></a></li>
+  </ul>
+{% endblock %}
+
+<!-- {% block breadcrumb %}
   <li><a href="{% url 'index' %}">Home</a></li>
   <li><a href="{% url 'poll-list' %}">Polls</a></li>
   <li class="active">{{ poll }}</li>
   <li><a href="{% url 'poll-update' poll.pk %}">Update</a></li>
-{% endblock %}
+{% endblock %} -->
 
 {% block content %}
+  <!-- Temporary Alert -->
   <div class="alert alert-warning alert-dismissible">
     <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
     <b>Note:</b> This page is incomplete.

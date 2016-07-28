@@ -15,6 +15,7 @@ $(document).ready(function() {
     var $toggleCollapseAll = $('#toggle-collapse-all');
     var $eventList = $('#event-list');
     var $eventInfo = $('#event-info');
+    var $eventInfoBox = $('#event-info-box');
     var $monthWrapper = $();
     var $dateWrapper = $();
     var currentDate = -1;
@@ -71,8 +72,24 @@ $(document).ready(function() {
         $month.slideToggle(250);
     });
 
+    // Vertically align info box with cursor height
+    var viewPortHeight = $(window).height();
+    $eventList.on('mousemove', function(e){
+        var height = e.clientY - 100;
+        var boxHeight = $eventInfoBox.height();
+        if (height < 105) {
+            $eventInfoBox.css('top', 105);
+        } else if (height + boxHeight + 141 > viewPortHeight) {
+            $eventInfoBox.css('top', '');
+            $eventInfoBox.css('bottom', 141);
+        } else {
+            $eventInfoBox.css('top', height);
+            $eventInfoBox.css('bottom', '');
+        }
+    });
+
     // Display event info in info box (on hover)
-    $eventList.on('mouseenter', 'li', function() {
+    $eventList.on('mouseenter', 'li', function(e) {
         var name = $(this).children('a').text();
         var dateStart = $(this).data('date-start');
         var timeStart = $(this).data('time-start').replace(/\./g, '');
@@ -82,7 +99,6 @@ $(document).ready(function() {
         var location = $(this).data('location');
         var details = $(this).data('details');
         var category = $(this).find('div.hidden').html();
-        console.log(category);
 
         var dateTime = dateTimeToString(isMultiDay, dateStart, timeStart, dateEnd, timeEnd);
 

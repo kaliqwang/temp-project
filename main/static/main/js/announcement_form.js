@@ -129,7 +129,7 @@ $(document).ready(function() {
             success: function(data){
                 $youTubeVideosAdd.val('');
                 $youTubeVideosAdd.parent().removeClass('has-error');
-                $youTubeVideosAdd.siblings('span').addClass('hidden');;
+                $youTubeVideosAdd.siblings('span').addClass('hidden');
                 $container.prepend(Mustache.render($videoTemplate, {
                     thumbnailURL: 'http://img.youtube.com/vi/' + videoID + '/mqdefault.jpg',
                     videoTitle: data.title,

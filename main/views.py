@@ -16,6 +16,10 @@ from django.utils import timezone
 from models import *
 from forms import *
 
+################################################################################
+#################################### INDEX #####################################
+################################################################################
+
 def index(request):
     return render(request, 'main/index.html')
 
@@ -110,6 +114,16 @@ def unpin_announcement(request, pk):
     a = Announcement.objects.get(pk=pk)
     a.unpin()
     return redirect('announcement-list')
+
+@staff_member_required
+def ytdata(request, video_id):
+    try:
+        json_string = urllib2.urlopen('https://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=' + video_id + '&format=json').read()
+        data = json.loads(json_string)
+        return JsonResponse(data)
+    except urllib2.HTTPError as e:
+        print('YouTube data error code: ' + e.code())
+        raise Http404()
 
 ################################################################################
 #################################### EVENTS ####################################
@@ -238,7 +252,7 @@ def unpin_poll(request, pk):
     p = Poll.objects.get(pk=pk)
     p.unpin()
     return redirect('poll-list')
-    
+
 @login_required
 def get_vote(request, poll_pk):
     poll = Poll.objects.get_or_none(pk=poll_pk)
@@ -256,7 +270,7 @@ def get_vote_count(request, choice_pk):
     return HttpResponse(-1)
 
 ################################################################################
-#################################### OTHER #####################################
+################################## CATEGORIES ##################################
 ################################################################################
 
 @staff_member_required()
@@ -279,33 +293,14 @@ def category_list(request):
     categories = Category.objects.all()
     return render(request, 'main/category_list.html', {'categories': categories})
 
-def student_register(request):
+
+################################################################################
+################################ AUTHENTICATION ################################
+################################################################################
+
+def parent_register(request):
     userForm = UserForm(request.POST or None)
     userProfileForm = UserProfileForm(request.POST or None)
-    studentProfileForm = StudentProfileForm(request.POST or None)
-
-    if userForm.is_valid() and userProfileForm.is_valid() and studentProfileForm.is_valid():
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = userForm.save(commit=False)
-        user.set_password(password)
-        user.save()
-        userProfile = userProfileForm.save(commit=False)
-        userProfile.user = user
-        userProfile.save()
-        studentProfile = studentProfileForm.save(commit=False)
-        studentProfile.user_profile = userProfile
-        studentProfile.save()
-        user = authenticate(username=username, password=password)
-        auth_login(request, user)
-        return redirect('index')
-
-    return render(request, 'main/student_register.html', {'userForm': userForm, 'userProfileForm': userProfileForm, 'studentProfileForm': studentProfileForm})
-
-def register(request):
-    userForm = UserForm(request.POST or None)
-    userProfileForm = UserProfileForm(request.POST or None)
-
     if userForm.is_valid() and userProfileForm.is_valid():
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -318,27 +313,67 @@ def register(request):
         user = authenticate(username=username, password=password)
         auth_login(request, user)
         return redirect('index')
-    return render(request, 'main/register.html', {'userForm': userForm, 'userProfileForm': userProfileForm})
+    return render(request, 'main/parent_register.html', {'userForm': userForm, 'userProfileForm': userProfileForm})
+
+def student_register(request):
+    userForm = UserForm(request.POST or None)
+    userProfileForm = UserProfileForm(request.POST or None)
+    studentProfileForm = StudentProfileForm(request.POST or None)
+    if userForm.is_valid() and userProfileForm.is_valid() and studentProfileForm.is_valid():
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = userForm.save(commit=False)
+        user.set_password(password)
+        user.save()
+        userProfile = userProfileForm.save(commit=False)
+        userProfile.user = user
+        userProfile.is_student = True
+        userProfile.save()
+        studentProfile = studentProfileForm.save(commit=False)
+        studentProfile.user_profile = userProfile
+        studentProfile.save()
+        user = authenticate(username=username, password=password)
+        auth_login(request, user)
+        return redirect('index')
+    return render(request, 'main/student_register.html', {'userForm': userForm, 'userProfileForm': userProfileForm, 'studentProfileForm': studentProfileForm})
+
+def teacher_register(request):
+    userForm = UserForm(request.POST or None)
+    userProfileForm = UserProfileForm(request.POST or None)
+    teacherProfileForm = TeacherProfileForm(request.POST or None)
+    if userForm.is_valid() and userProfileForm.is_valid() and teacherProfileForm.is_valid():
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = userForm.save(commit=False)
+        user.set_password(password)
+        user.save()
+        userProfile = userProfileForm.save(commit=False)
+        userProfile.user = user
+        userProfile.is_teacher = true
+        userProfile.save()
+        teacherProfile = teacherProfileForm.save(commit=False)
+        teacherProfile.user_profile = userProfile
+        teacherProfile.save()
+        user = authenticate(username=username, password=password)
+        auth_login(request, user)
+        return redirect('index')
+    return render(request, 'main/teacher_register.html', {'userForm': userForm, 'userProfileForm': userProfileForm, 'teacherProfileForm': teacherProfileForm})
 
 def login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
+    target_url = request.GET.get('next')
+    print(request.GET)
+    print(request.POST)
     user = authenticate(username=username, password=password)
     if user:
         auth_login(request, user)
-    return render(request, 'main/index.html')
+        print(target_url)
+        if target_url:
+            return redirect(target_url)
+    return render(request, 'main/login.html')
 
 @login_required
 def logout(request):
     auth_logout(request)
     return redirect('index')
-
-@staff_member_required
-def ytdata(request, video_id):
-    try:
-        json_string = urllib2.urlopen('https://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=' + video_id + '&format=json').read()
-        data = json.loads(json_string)
-        return JsonResponse(data)
-    except urllib2.HTTPError as e:
-        print('YouTube data error code: ' + e.code())
-        raise Http404()

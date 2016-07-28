@@ -1,11 +1,11 @@
 /************************************ All *************************************/
 
-img {
-    background-color: black;
+textarea {
+    resize: vertical;
 }
 
-li {
-    list-style: none;
+h4 {
+    margin-top: 15px;
 }
 
 .inline-block {
@@ -41,42 +41,64 @@ li {
     vertical-align: middle;
 }
 
+.row-compact {
+    margin: 0px -8px;
+}
+
+.col-compact {
+    padding: 0px 8px;
+}
+
+/*********************************** Forms ************************************/
+
+form:not(#login-form) {
+    padding: 20px;
+}
+
 /******************************* Announcements ********************************/
 
 /* announcement_list / announcement_detail */
 .announcement-wrapper {
-    border: 12px solid #f5f5f5;
-    border-radius: 4px;
-    padding: 8px 32px;
-    margin-bottom: 20px;
-
-}
-.announcement-wrapper .title {
-    color: #337ab7;
+    border: 1px solid #e8e8e8;
+    padding: 4px 20px;
+    margin-bottom: 10px;
 }
 .announcement-wrapper .toggle-collapse {
-    color: grey;
-    border-top: 1px solid #eee;
-    padding-top: 5px;
+    color: #888;
+    border-top: 1px solid #e8e8e8;
+    padding-top: 4px;
 }
 .announcement-wrapper .toggle-collapse:hover {
-    color: black;
+    color: #444;
     cursor: pointer;
+}
+.announcement-wrapper .signature,.content,.image-list,.video {
+    margin-bottom: 15px;
+}
+.announcement-wrapper a {
+    color: #444;
+}
+.announcement-wrapper a:hover {
+    color: #1e18cc;
 }
 
 /* announcement_create / announcement_update */
 #image-files-filenames {
     /*padding: 0px 0px 0px 30px;*/
 }
-.youtube-video-thumbnail {
-    padding-right: 0px;
+
+.youtube-video-preview-wrapper {
+    padding-top: 10px;
 }
 .youtube-video-thumbnail img {
     width: 100%;
     height: auto;
 }
 .youtube-video-details {
-    padding-left: 10px;
+    padding-right: 10px;
+}
+.youtube-video-details .title {
+    font-weight: 500;
 }
 .youtube-video-details .author {
     font-size: .9em;
@@ -84,24 +106,24 @@ li {
 
 /* images */
 .image-list {
-    margin-right: -9px;
+    margin-right: -4px;
     line-height: 0px;
 }
 .image-list.form {
-    padding: 0px 30px;
+    padding: 0px 32px;
 }
 .image-list .image {
     display: inline-block;
-    padding-right: 9px;
-    padding-bottom: 9px;
+    padding-right: 1px;
+    padding-bottom: 1px;
     vertical-align: middle;
 }
 .image-list .image:hover {
     opacity: 0.8;
 }
 .image-list .image-thumbnail {
-    width: 110px;
-    height: 110px;
+    width: 127px;
+    height: 127px;
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-size: cover;
@@ -110,27 +132,47 @@ li {
 /*********************************** Events ***********************************/
 
 /* event_list / event_detail */
+#event-list {
+    padding: 15px 30px;
+    color: #444;
+}
 #event-list .month-header {
-    color: #337ab7;
-    border-bottom: 2px solid #337ab7;
+    color: inherit;
+    border-bottom: 2px solid;
+    border-color: inherit;
 }
 #event-list .month-header:hover {
-    color: #23527c;
-    border-color: #23527c;
+    color: #1e18cc;
+    border-color: #1e18cc;
     cursor: pointer;
 }
 #event-list .date-header {
     padding-top: 20px;
 }
-#event-list li > a {
-    color: black;
+#event-list li a {
+    color: inherit;
+}
+#event-list a:hover {
+    text-decoration: underline;
 }
 #event-info-box {
     position: fixed;
-    width: 555px;
+    /*top: 105px;*/
+    width: 400px;
+    margin-left: -401px;
 }
-#event-info > li {
-    padding-top: 10px;
+#event-info ul {
+    padding: 0px;
+    padding: 15px 20px;
+}
+#event-info ul li {
+    padding: 5px;
+}
+#event-info-footer {
+    padding: 10px;
+}
+#event-info-wrapper hr {
+    margin: 0px -10px;
 }
 
 /*********************************** Polls ************************************/
@@ -178,7 +220,7 @@ li {
     text-decoration: underline;
 }
 
-/******************************* category_list ********************************/
+/**************************** category_list *****************************/
 
 #categories input[type="color"] {
     width: 100px;
@@ -191,4 +233,10 @@ li {
 
 #categories .input-group-wrapper .remove_field {
     padding: 6px 0px;
+}
+
+/*************************** student-register ***************************/
+
+.register-form .row-compact {
+    padding: 4px 0px;
 }

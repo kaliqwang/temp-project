@@ -4,15 +4,21 @@
 
 {% block title %}Polls{% endblock %}
 
-{% block header %}Polls{% endblock %}
+{% block masthead-polls %}selected{% endblock %}
 
-{% block breadcrumb %}
+{% block sidebar-polls %}selected{% endblock %}
+
+<!-- {% block breadcrumb %}
   <li><a href="{% url 'index' %}">Home</a></li>
   <li class="active">Polls</li>
-{% endblock %}
+{% endblock %} -->
 
 {% block content %}
-<div id="alert-danger" class="alert alert-danger hidden" style="position:fixed; width:100%;top:50px;left:0; z-index:1"><b>Error:</b> Something went wrong :(</div>
+  <!-- Temporary Alert -->
+  <div class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+    <b>Note:</b> This page is incomplete.
+  </div>
   <!-- Media tabs -->
   <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#polls-unvoted" data-toggle="tab">New</a></li>

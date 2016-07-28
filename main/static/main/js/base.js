@@ -34,9 +34,24 @@ $(document).ready(function() {
 
     /****************************** On Page Load ******************************/
 
+    // Activate Toggle Sidebar Button
+    var $sidebar = $('#sidebar');
+    var $sidebarToggle = $('#toggle-sidebar');
+    $sidebarToggle.on('click', function(e){e.preventDefault();
+        $('body').toggleClass('show-sidebar');
+    });
+
     // Activate tooltips
     $('[data-toggle="tooltip"]').tooltip({
         animation: false,
+    });
+
+    // Autoresize Textareas
+    autosize($('textarea'));
+
+    // Autofocus on username input
+    $('#login-modal').on('shown.bs.modal', function(){
+        $('#login-form').find('input[name="username"]').focus();
     });
 
     /***************************** Event Handlers *****************************/

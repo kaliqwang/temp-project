@@ -1,56 +1,20 @@
-{% extends "main/base_form.html" %}
+{% extends "main/event_form.html" %}
 
 {% load static from staticfiles %}
 
 {% block title %}Update Event{% endblock %}
 
-{% block header %}Update Event{% endblock %}
-
-{% block breadcrumb %}
-  <li><a href="{% url 'index' %}">Home</a></li>
-  <li><a href="{% url 'event-list' %}">Events</a></li>
-  <li class="active"><a href="{{ event.get_absolute_url }}">{{ event }}</a></li>
-  <li class="active">Update</li>
+{% block sidebar-extra %}
+  <hr />
+  <ul id="section-admin-event">
+    <a href="#" class="sidebar-section-header">Event Tools</a>
+    <!-- <span class="glyphicon glyphicon-tags"> -->
+    <li><a href="{% url 'event-update' event.pk %}" class="selected"><span class="glyphicon glyphicon-pencil"></span><span class="text-label">Make Changes</span></a></li>
+    <li><a href="{% url 'event-list' %}"><span class="glyphicon glyphicon-remove"></span><span class="text-label">Remove</span></a></li>
+  </ul>
 {% endblock %}
 
-{% block content %}
-  <form id="event-update-form" action="{% url 'event-update' event.pk %}" method="post">{% csrf_token %}
-    <!-- Event Name -->
-    <div class="row">
-      <div class="col-sm-3"><div class="form-label">Name</div></div>
-      <div class="col-sm-9"><div class="{% if form.name.errors %}has-error{% endif %}">{{ form.name }}</div></div>
-    </div><br/>
-    <!-- Event Location -->
-    <div class="row">
-      <div class="col-sm-3"><div class="form-label">Location</div></div>
-      <div class="col-sm-9"><div class="{% if form.location.errors %}has-error{% endif %}">{{ form.location }}</div></div>
-    </div><br/>
-    <!-- Event Date/Time -->
-    <div class="input-daterange">
-      <div class="row">
-        <div class="col-sm-3"><div class="form-label">Start</div></div>
-        <div class="col-sm-4"><div class="has-feedback {% if form.date_start.errors %}has-error{% endif %}">{{ form.date_start }}<span class="glyphicon glyphicon-calendar form-control-feedback"></span></div></div>
-        <div class="col-sm-3"><div class="has-feedback {% if form.time_start.errors %}has-error{% endif %}">{{ form.time_start }}<span class="glyphicon glyphicon-time form-control-feedback"></div></div>
-      </div><br />
-      <div class="row">
-        <div class="col-sm-3"><div class="form-label">End</div></div>
-        <div class="col-sm-4"><div class="has-feedback {% if form.date_start.errors %}has-error{% endif %}">{{ form.date_end }}<span class="glyphicon glyphicon-calendar form-control-feedback"></span></div></div>
-        <div class="col-sm-3"><div class="has-feedback {% if form.time_start.errors %}has-error{% endif %}">{{ form.time_end }}<span class="glyphicon glyphicon-time form-control-feedback"></div></div>
-      </div><br />
-    </div>
-    <!-- Event Details -->
-    <div class="row">
-      <div class="col-sm-3"><div class="form-label">Details</div></div>
-      <div class="col-sm-9">{{ form.details }}</div>
-    </div><br/>
-    <!-- Event Category -->
-    <div class="row">
-      <div class="col-sm-3"><div class="form-label">Category</div></div>
-      <div class="col-sm-9"><div class="{% if form.category.errors %}has-error{% endif %}">{{ form.category }}</div></div>
-    </div><br/>
-  </form><br />
-{% endblock %}
-
-{% block submit-button-id %}submit-event-update-form{% endblock %}
-
-{% block script %}<script src= "{% static 'main/js/event_update.js' %}"></script>{% endblock %}
+{% block form_id %}event-update-form{% endblock %}{% block form_url %}
+{% url 'event-update' event.pk %}{% endblock %}
+{% block cancel_button_target_url %}{% url 'event-detail' event.pk %}{% endblock %}
+{% block submit_button_id %}submit-event-update-form{% endblock %}

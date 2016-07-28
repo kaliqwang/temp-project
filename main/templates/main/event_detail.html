@@ -4,18 +4,32 @@
 
 {% block title %}Event Detail{% endblock %}
 
-{% block header %}Event Detail{% endblock %}
+{% block masthead-events %}selected{% endblock %}
 
-{% block breadcrumb %}
+{% block sidebar-events %}selected{% endblock %}
+
+{% block sidebar-extra %}
+  <hr />
+  <ul id="section-admin-event">
+    <a href="#" class="sidebar-section-header">Event Tools</a>
+    <!-- <span class="glyphicon glyphicon-tags"> -->
+    <li><a href="{% url 'event-update' event.pk %}"><span class="glyphicon glyphicon-pencil"></span><span class="text-label">Make Changes</span></a></li>
+    <li><a href="#"><span class="glyphicon glyphicon-remove"></span><span class="text-label">Remove</span></a></li>
+  </ul>
+{% endblock %}
+
+<!-- {% block breadcrumb %}
   <li><a href="{% url 'index' %}">Home</a></li>
   <li><a href="{% url 'event-list' %}">Events</a></li>
   <li class="active">{{ event }}</li>
   <li><a href="{% url 'event-update' event.pk %}">Update</a></li>
-{% endblock %}
+{% endblock %} -->
 
 {% block content %}
-  <div id="event-info"></div>
-
+  <div id="event-info-wrapper" class="container-white">
+    <div id="event-info"></div><hr />
+    <div id="event-info-footer" class="text-right"><a href="{% url 'event-list' %}" class="btn btn-sm btn-default">Back to Calendar</a></div>
+  </div>
   <ul id="event-list" hidden>
     <li data-name="{{ event.name }}" data-date-start="{{ event.date_start|date:'M j' }}" data-time-start="{{ event.time_start|default_if_none:'' }}"
       data-date-end="{{ event.date_end|date:'M j' }}" data-time-end="{{ event.time_end|default_if_none:'' }}"
@@ -28,11 +42,13 @@
 {% block templates %}
   <!-- Event Info Template -->
   <template id="event-info-template">
-    <li><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
-    <li><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
-    <li><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
-    <li><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
-    <li><b>Tags:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
+    <ul>
+      <li><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
+      <li><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
+      <li><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
+      <li><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
+      <li><b>Tags:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
+    </ul>
   </template>
 {% endblock %}
 

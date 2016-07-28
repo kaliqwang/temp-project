@@ -25,7 +25,7 @@ class AnnouncementForm(forms.ModelForm):
         fields = ('title', 'category', 'content')
         widgets = {
             'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Add a short, clear title', 'required':'required'}),
-            'content': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Put the body of your announcement here', 'rows':'6', 'required':'required'}),
+            'content': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Put the body of your announcement here', 'rows':'4', 'required':'required'}),
         }
 
 class EventForm(forms.ModelForm):
@@ -37,11 +37,11 @@ class EventForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Add a short, clear name'}),
             'location': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Include a place or address'}),
-            'date_start': forms.TextInput(attrs={'class':'form-control date start', 'placeholder':'mm-dd-yyyy'}),
+            'date_start': forms.TextInput(attrs={'class':'form-control date start', 'placeholder':'mm/dd/yyyy'}),
             'time_start': forms.TextInput(attrs={'class':'form-control time start'}),
-            'date_end': forms.TextInput(attrs={'class':'form-control date end', 'placeholder':'mm-dd-yyyy'}),
+            'date_end': forms.TextInput(attrs={'class':'form-control date end', 'placeholder':'mm/dd/yyyy'}),
             'time_end': forms.TextInput(attrs={'class':'form-control time end'}),
-            'details': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Tell people more about the event', 'rows':'6'}),
+            'details': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Tell people more about the event', 'rows':'4'}),
         }
 
 class PollForm(forms.ModelForm):
@@ -84,4 +84,13 @@ class StudentProfileForm(forms.ModelForm):
         widgets = {
             'student_id': forms.TextInput(attrs={'class':'form-control', 'placeholder':'1100987654'}),
             'grade_level': forms.Select(attrs={'class':'form-control', 'placeholder':'Grade Level'}),
+        }
+
+class TeacherProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = TeacherProfile
+        fields = ('room',)
+        widgets = {
+            'room': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Room Number'}),
         }

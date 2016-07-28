@@ -96,7 +96,7 @@ class TeacherProfile(models.Model):
     objects = GetOrNoneManager()
 
     def __str__(self):
-        return self.user_profile  + ' - teacher profile'
+        return '%s - teacher profile' % self.user_profile
 
 ################################################################################
 
@@ -201,13 +201,16 @@ class Event(models.Model):
         # Set end date if needed
         if self.date_end is None:
             self.date_end = self.date_start
+            print('End date set')
         # Check if end date comes before start date
         elif self.date_end < self.date_start:
             raise ValidationError(_('Invalid end date'))
+            print('End date came before start date')
         # Check if both end time comes before start time if both are on the same day
         elif self.date_end == self.date_start and self.time_start and self.time_end:
             if self.time_end < self.time_start:
                 raise ValidationError(_('Invalid end time'))
+                print('End time came before start time')
 
     def save(self, *args, **kwargs):
         if self.date_start < self.date_end:
@@ -320,7 +323,7 @@ class ImageFile(models.Model):
     announcement = models.ForeignKey(Announcement, related_name='image_files', on_delete=models.CASCADE)
     #TODO: change w, h, and quality settings to settings.py variables
     image_file = ProcessedImageField(upload_to='main/images/', blank=True, null=True, processors=[ResizeToFit(1280, 720)], format='JPEG', options={'quality': 80})
-    image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(110, 110)], format='JPEG', options={'quality': 100})
+    image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(127, 127)], format='JPEG', options={'quality': 100})
 
     def __str__(self):
         return os.path.basename(self.image_file.path)
@@ -330,7 +333,7 @@ class ImageLink(models.Model):
     image_link = models.URLField()
     #TODO: change w, h, and quality settings to settings.py variables
     image_file = ProcessedImageField(upload_to='main/images/', null=True, processors=[ResizeToFit(1280, 720)], format='JPEG', options={'quality': 80})
-    image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(110, 110)], format='JPEG', options={'quality': 50})
+    image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(127, 127)], format='JPEG', options={'quality': 50})
 
     objects = GetOrNoneManager()
 

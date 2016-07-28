@@ -1,55 +1,11 @@
-{% extends "main/base_form.html" %}
+{% extends "main/event_form.html" %}
 
 {% load static from staticfiles %}
 
 {% block title %}Create Event{% endblock %}
 
-{% block header %}Create Event{% endblock %}
+{% block sidebar-event-create %}selected{% endblock %}
 
-{% block breadcrumb %}
-  <li><a href="{% url 'index' %}">Home</a></li>
-  <li><a href="{% url 'event-list' %}">Events</a></li>
-  <li class="active">New</li>
-{% endblock %}
-
-{% block content %}
-  <form id="event-create-form" action="{% url 'event-create' %}" method="post">{% csrf_token %}
-    <!-- Event Name -->
-    <div class="row">
-      <div class="col-sm-3"><div class="form-label">Name</div></div>
-      <div class="col-sm-9"><div class="{% if form.name.errors %}has-error{% endif %}">{{ form.name }}</div></div>
-    </div><br/>
-    <!-- Event Location -->
-    <div class="row">
-      <div class="col-sm-3"><div class="form-label">Location</div></div>
-      <div class="col-sm-9"><div class="{% if form.location.errors %}has-error{% endif %}">{{ form.location }}</div></div>
-    </div><br/>
-    <!-- Event Date/Time -->
-    <div class="input-daterange">
-      <div class="row">
-        <div class="col-sm-3"><div class="form-label">Start</div></div>
-        <div class="col-sm-4"><div class="has-feedback {% if form.date_start.errors %}has-error{% endif %}">{{ form.date_start }}<span class="glyphicon glyphicon-calendar form-control-feedback"></span></div></div>
-        <div class="col-sm-3"><div class="has-feedback {% if form.time_start.errors %}has-error{% endif %}">{{ form.time_start }}<span class="glyphicon glyphicon-time form-control-feedback"></div></div>
-      </div><br />
-      <div class="row">
-        <div class="col-sm-3"><div class="form-label">End</div></div>
-        <div class="col-sm-4"><div class="has-feedback {% if form.date_start.errors %}has-error{% endif %}">{{ form.date_end }}<span class="glyphicon glyphicon-calendar form-control-feedback"></span></div></div>
-        <div class="col-sm-3"><div class="has-feedback {% if form.time_start.errors %}has-error{% endif %}">{{ form.time_end }}<span class="glyphicon glyphicon-time form-control-feedback"></div></div>
-      </div><br />
-    </div>
-    <!-- Event Details -->
-    <div class="row">
-      <div class="col-sm-3"><div class="form-label">Details</div></div>
-      <div class="col-sm-9">{{ form.details }}</div>
-    </div><br/>
-    <!-- Event Category -->
-    <div class="row">
-      <div class="col-sm-3"><div class="form-label">Category</div></div>
-      <div class="col-sm-9"><div class="{% if form.category.errors %}has-error{% endif %}">{{ form.category }}</div></div>
-    </div><br/>
-  </form><br />
-{% endblock %}
-
-{% block submit-button-id %}submit-event-create-form{% endblock %}
-
-{% block script %}<script src= "{% static 'main/js/event_create.js' %}"></script>{% endblock %}
+{% block form_id %}event-create-form{% endblock %}
+{% block form_url %}{% url 'event-create' %}{% endblock %}
+{% block submit_button_id %}submit-event-create-form{% endblock %}

@@ -1,0 +1,211 @@
+/****************************** Temporary Fixes *******************************/
+
+a:focus {
+    outline: none;
+    color: inherit;
+}
+
+/******************************** Everywhere **********************************/
+
+body {
+    font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+    background-color: #f1f1f1;
+    padding-top: 97px;
+}
+/* Lists - No Bullet Points */
+ul {
+    list-style: none;
+    margin: 0px;
+}
+/* Links - No Underline */
+a:hover, a:focus {
+    text-decoration: none;
+}
+
+/***************************** Section 1: Navbar ******************************/
+
+#masthead {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    border-top: 5px solid #1e18cc; /* Top Border */
+    background-color: #fff; /* Background color */
+    color: #888; /* Font Color */
+    font-weight: 400; /* Font Weight */
+    z-index: 99;
+}
+#masthead .masthead-section {
+    border-bottom: 1px solid #e8e8e8; /* Navbar divider (top/bottom)*/
+}
+#masthead ul {
+    padding: 0px;
+}
+#masthead li, a {
+    display: inline-block;  /* Links fit side-by-side */
+    vertical-align: middle;  /* Links centered vertically */
+    color: inherit;
+}
+#masthead li {
+    margin: 0px 15px; /* 30px horizontal space between links */
+}
+#masthead a.selected {
+    font-weight: 500; /* Selected links are bold */
+    color: #444; /* Selected links dark */
+}
+
+/********************************** Top Nav ***********************************/
+
+#masthead-top {
+    min-height: 50px;
+    padding: 10px 15px; /* All elements have height 30px */
+}
+#masthead-top a {
+    line-height: 30px;
+}
+#masthead-top-right { /* Right section (login button) */
+    text-align: right;
+}
+#masthead-top-left { /* Left section (logo) */
+    float: left;
+}
+#toggle-sidebar > span { /* Toggle Sidebar Button */
+    padding: 0px 15px;
+    line-height: 30px;
+    color: #bbb;
+}
+#toggle-sidebar:hover > span {
+    color: #888;
+}
+#site-logo-icon { /* Site Logo */
+    height: 30px;
+    margin-right: 8px;
+}
+#site-logo-text {
+    height: 22px;
+    vertical-align: middle;
+}
+
+/********************************* Bottom Nav *********************************/
+
+#masthead-bottom {
+    min-height: 40px;
+    text-align: center;
+}
+.show-sidebar #masthead-bottom {
+    margin-left: 229px; /* Width of sidebar */
+}
+#masthead-bottom a {
+    height: 40px; /* Restricts height to 40px (including border) */
+    line-height: 40px; /* Centers text within 40px height */
+}
+#masthead-bottom a:hover, a.selected {
+    border-bottom: 3px solid #1e18cc;
+}
+
+/***************************** Section 2: Sidebar *****************************/
+
+#sidebar {
+    position: fixed;
+    top: 56px; /* Height of top nav (50px) + top border (5px)+ bottom border (1px) */
+    bottom: 0px;
+    width: 229px; /* Width of sidebar + right border (1px) */
+    padding: 13px 22px; /* Each link has width 184px */
+    background-color: #fff; /* Background Color */
+    color: #888;
+    border-right: 1px solid #e8e8e8;
+    display: none;
+    z-index: 99;
+}
+#sidebar ul {
+    padding: 0px;
+}
+.show-sidebar #sidebar {
+    display: block;
+}
+#sidebar hr { /* Section Divider */
+    margin: 8px 0px;
+}
+#sidebar .sidebar-section-header { /* Section Header */
+    padding: 4px 0px;
+    color: inherit;
+    display: block;
+}
+#sidebar .sidebar-section-header:hover { /* Section Header Hover */
+    text-decoration: underline;
+}
+#sidebar li a { /* Link */
+    width: 184px;
+    height: 28px;
+    line-height: 28px;
+}
+#sidebar li a:hover { /* Link Hover */
+    background-color: #444;
+    color: #fff;
+}
+#sidebar li a.selected { /* Link Selected */
+    background-color: #1e18cc;
+    color: #fff;
+    font-weight: 500;
+}
+#sidebar li a span { /* Link icon + text */
+    line-height: 20px;
+    color: inherit;
+    display: inline-block;
+}
+#sidebar li a span.glyphicon { /* Link icon */
+    padding: 0px 15px; /* 15px of space between icon and text */
+    color: inherit;
+    vertical-align: text-bottom;
+}
+
+/************************** Section 3: Main Content ***************************/
+
+#main-content {
+    position: static;
+}
+.show-sidebar #main-content {
+    margin-left: 229px;
+}
+
+/*************************** Section 4: Site Footer ***************************/
+
+#site-footer {
+    margin-top: 40px;
+    min-height: 100px;
+    background-color: #fff; /* Background Color */
+    color: #888;
+    border-top: 1px solid #e8e8e8;
+}
+.show-sidebar #site-footer {
+    margin-left: 229px; /* Width of sidebar */
+}
+#site-copyright {
+    line-height: 100px;
+}
+
+/********************************* Login Form *********************************/
+
+.login-form-footer { /* Align Submit Login Button */
+    text-align: right;
+}
+#submit-login-form { /* Submit Login Button Color */
+    background-color: #888;
+    border-color: #888;
+}
+#submit-login-form:hover { /* Submit Login Button Hover Color */
+    background-color: #666;
+    border-color: #666;
+}
+
+/*********************************** Other ************************************/
+
+.container { /* Main Content */
+    margin-top: 8px;
+    min-height: 1440px;
+    width: 1262px;
+}
+
+.container-white { /* Main Content */
+    background-color: #fff;
+}

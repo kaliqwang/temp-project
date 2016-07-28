@@ -4,42 +4,49 @@
 
 {% block title %}Events{% endblock %}
 
-{% block header %}Events{% endblock %}
+{% block masthead-events %}selected{% endblock %}
 
-{% block breadcrumb %}
+{% block sidebar-events %}selected{% endblock %}
+
+<!-- {% block breadcrumb %}
   <li><a href="{% url 'index' %}">Home</a></li>
   <li class="active">Events</li>
-{% endblock %}
+{% endblock %} -->
 
 {% block content %}
-  <ul id="event-list" hidden>
-    {% for event in events %}
-      <li class="event-wrapper" data-date-start="{{ event.date_start|date:'M j' }}" data-time-start="{{ event.time_start|default_if_none:'' }}"
-        data-date-end="{{ event.date_end|date:'M j' }}" data-time-end="{{ event.time_end|default_if_none:'' }}"
-        data-is-multi-day="{{ event.is_multi_day }}" data-location="{{ event.location|default:'TBA' }}" data-details="{{ event.details|default:'TBA' }}">
-        <div class="hidden"><span class="label" style="background-color:{{ event.category.color|default:'#222222' }};">{{ event.category|default_if_none:'Everyone' }}</span></div>
-        <div class="dot" style="background-color:{{ event.category.color|default:'#222222' }};"></div>&nbsp;&nbsp;<a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
-      </li>
-    {% endfor %}
-  </ul>
-{% endblock %}
-
-{% block sidebar %}
-  {{ block.super }}
-  <!-- Event Info Box -->
-  <div id="event-info-box">
-    <div class="well"><h4>Event Details</h4><div id="event-info"></div></div>
-    <!-- Toggle Show/Hide All -->
-    <button id="toggle-collapse-all" class="btn btn-default" type="button" data-mode="1">Collapse All</button><br/>
+  <div class="row">
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="container-white">
+        <ul id="event-list" hidden>
+          {% for event in events %}
+            <li class="event-wrapper" data-date-start="{{ event.date_start|date:'M j' }}" data-time-start="{{ event.time_start|default_if_none:'' }}"
+              data-date-end="{{ event.date_end|date:'M j' }}" data-time-end="{{ event.time_end|default_if_none:'' }}"
+              data-is-multi-day="{{ event.is_multi_day }}" data-location="{{ event.location|default:'TBA' }}" data-details="{{ event.details|default:'TBA' }}">
+              <div class="hidden"><span class="label" style="background-color:{{ event.category.color|default:'#222222' }};">{{ event.category|default_if_none:'Everyone' }}</span></div>
+              <div class="dot" style="background-color:{{ event.category.color|default:'#222222' }};"></div>&nbsp;&nbsp;<a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- Event Info Box -->
+      <div id="event-info-box" class="container-white"><div id="event-info"></div></div>
+    </div>
   </div>
 {% endblock %}
+
+{% block content-right %}
+
+{% endblock %}
+
+<!-- Toggle Show/Hide All -->
+<!-- <button id="toggle-collapse-all" class="btn btn-default" type="button" data-mode="1">Collapse All</button><br/> -->
 
 {% block templates %}
   <!-- Month Header Template -->
   <template id="month-header-template">
     <li>
       <div id="month-header-{% templatetag openvariable %} monthIndex {% templatetag closevariable %}" class="month-header">
-        <h2>{% templatetag openvariable %} monthName {% templatetag closevariable %}</h2>
+        <h4>{% templatetag openvariable %} monthName {% templatetag closevariable %}</h4>
       </div>
       <ul id="month-{% templatetag openvariable %} monthIndex {% templatetag closevariable %}" class="month-wrapper"></ul>
     </li>
@@ -53,11 +60,13 @@
   </template>
   <!-- Event Info Template -->
   <template id="event-info-template">
-    <li><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
-    <li><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
-    <li><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
-    <li><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
-    <li><b>Tags:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
+    <ul>
+      <li><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
+      <li><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
+      <li><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
+      <li><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
+      <li><b>Tags:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
+    </ul>
   </template>
 {% endblock %}
 

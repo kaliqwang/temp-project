@@ -1,46 +1,68 @@
-{% extends "main/base_form.html" %}
+{% extends "main/base.html" %}
 
 {% load static from staticfiles %}
 
 {% block title %}Update Poll{% endblock %}
 
-{% block header %}Update Poll{% endblock %}
+{% block masthead-polls %}selected{% endblock %}
 
-{% block breadcrumb %}
+{% block sidebar-extra %}
+  <hr />
+  <ul id="section-admin-poll">
+    <a href="#" class="sidebar-section-header">Poll Tools</a>
+    <!-- <span class="glyphicon glyphicon-tags"> -->
+    <li><a href="{% url 'poll-update' poll.pk %}" class="selected"><span class="glyphicon glyphicon-pencil"></span><span class="text-label">Make Changes</span></a></li>
+    <li><a href="{% url 'poll-list' %}"><span class="glyphicon glyphicon-remove"></span><span class="text-label">Remove</span></a></li>
+  </ul>
+{% endblock %}
+
+<!-- {% block breadcrumb %}
   <li><a href="{% url 'index' %}">Home</a></li>
   <li><a href="{% url 'poll-list' %}">Polls</a></li>
   <li><a href="{{ poll.get_absolute_url }}">{{ poll }}</a></li>
   <li class="active">Update</li>
-{% endblock %}
+{% endblock %} -->
 
 {% block content %}
-  <form id="poll-update-form" action="{% url 'poll-update' poll.pk %}" method="post">{% csrf_token %}
-    <div class="alert alert-warning alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-      <b>Note:</b> This page is incomplete.
-    </div>
-    <!-- Poll Content -->
-    <div class="row">
-      <div class="col-xs-10">
-        <div id="poll-content" class="{% if form.content.errors %}has-error{% endif %}" contenteditable="true">
-          {{ form.content }}
+  <div class="container-white">
+    <form id="poll-update-form" action="{% url 'poll-update' poll.pk %}" method="post">{% csrf_token %}
+      <!-- Temporary Alert -->
+      <div class="alert alert-warning alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        <b>Note:</b> This page is incomplete.
+      </div>
+      <!-- Poll Content -->
+      <div class="row row-compact">
+        <div class="col-sm-1 col-compact"><div class="form-label">Title</div></div>
+        <div class="col-sm-11 col-compact"><div class="{% if form.content.errors %}has-error{% endif %}">{{ form.content }}</div></div>
+      </div><br/>
+      <!-- Poll Choices -->
+      <div class="row row-compact">
+        <div class="col-sm-1 col-compact"><div class="form-label">Choices</div></div>
+        <div class="col-sm-11 col-compact">
+          <div id="poll-choices-existing">{% for choice in poll.choices.all %}<li data-content="{{ choice.content }}" data-pk="{{ choice.pk }}"></li>{% endfor %}</div>
+          <div id="choice-container" class="form-group"></div>
+        </div>
+      </div><br/>
+      <!-- Poll Category -->
+      <div class="row row-compact">
+        <div class="col-sm-1 col-compact"><div class="form-label">Category</div></div>
+        <div class="col-sm-11 col-compact"><div class="{% if form.category.errors %}has-error{% endif %}">{{ form.category }}</div><hr /></div>
+      </div>
+      <!-- Buttons -->
+      <div class="row">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-5">
+          {% block morebuttons %}<button id="poll-choice-add" class="btn btn-sm btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Choice</button>{% endblock %}
+        </div>
+        <div class="col-xs-6 text-right">
+          <a class="btn btn-sm btn-default" href="{% block cancel-button-target-url %}{% url 'poll-detail' poll.pk %}{% endblock %}">Cancel</a>
+          <button id="{% block submit-button-id %}submit-poll-create-form{% endblock %}" class="btn btn-sm btn-primary" type="button">{% block submit-button-text %}Publish{% endblock %}</button>
         </div>
       </div>
-      <div class="col-xs-2">
-        <button id="poll-choice-add" class="btn btn-default" type="button" title="Add Choice" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-plus"></span></button>
-      </div>
-    </div><br />
-    <!-- Poll Choices -->
-    <div id="poll-choices-existing">{% for choice in poll.choices.all %}<li data-content="{{ choice.content }}" data-pk="{{ choice.pk }}"></li>{% endfor %}</div>
-    <div id="choice-container" class="form-group"></div><br />
-    <!-- Poll Category -->
-    <div id="poll-category" class="input-group {% if form.category.errors %}has-error{% endif %}">
-      <span class="input-group-addon">Category:</span>{{ form.category }}
-    </div><br />
-  </form><br />
+    </form>
+  </div>
 {% endblock %}
-
-{% block submit-button-id %}submit-poll-update-form{% endblock %}
 
 {% block templates %}
   <template id="choice-input-template">

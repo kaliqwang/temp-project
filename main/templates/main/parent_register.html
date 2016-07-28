@@ -1,0 +1,24 @@
+{% extends "main/base_register.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Parent Registration{% endblock %}
+
+{% block header %}Parent Registration{% endblock %}
+
+{% block masthead %}
+  {{ block.super }}
+  <li><a href="#" class="selected">Parent Registration</a></li>
+{% endblock %}
+
+{% block sidebar-parent-register %}selected{% endblock %}
+
+<!-- {% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li class="active">Student Registration</li>
+{% endblock %} -->
+
+{% block register-form-id %}parent-register-form{% endblock %}
+{% block register-form-url %}{% url 'parent-register' %}{% endblock %}
+{% block submit-button-id %}submit-parent-register-form{% endblock %}
+{% block submit-button-text %}Create Parent Account{% endblock %}

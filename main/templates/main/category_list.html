@@ -1,4 +1,4 @@
-{% extends "main/base_form.html" %}
+{% extends "main/base.html" %}
 
 {% load static from staticfiles %}
 
@@ -6,22 +6,49 @@
 
 {% block header %}Categories{% endblock %}
 
-{% block breadcrumb %}
-  <li><a href="{% url 'index' %}">Home</a></li>
-  <li class="active">Categories</li>
+{% block masthead %}
+  <li><a href="{% url 'index' %}">Trending</a></li>
+  <li><a href="{% url 'announcement-list' %}">Announcements</a></li>
+  <li><a href="{% url 'event-list' %}">Events</a></li>
+  <li><a href="{% url 'poll-list' %}">Polls</a></li>
 {% endblock %}
 
-{% block content %}
-  <form id="category-list-form" action="{% url 'category-list' %}" method="post">{% csrf_token %}
-    <!-- Category List -->
-    <div id="categories" class="form-group">
-      {% for c in categories %}
-        <li data-name="{{ c.name }}" data-color="{{ c.color }}" data-pk="{{ c.pk }}"></li>
-        {% if forloop.last %}<div id="initial-count" hidden>{{ forloop.counter }}</div>{% endif %}
-      {% endfor %}
-    </div>
-  </form>
+{% block sidebar-category-list %}selected{% endblock %}
 
+<!-- {% block breadcrumb %}
+  <li><a href="{% url 'index' %}">Home</a></li>
+  <li class="active">Categories</li>
+{% endblock %} -->
+
+{% block content %}
+  <div class="row">
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="container-white">
+        <form id="category-list-form" action="{% url 'category-list' %}" method="post">{% csrf_token %}
+          <!-- Category List -->
+          <div id="categories" class="form-group">
+            {% for c in categories %}
+              <li data-name="{{ c.name }}" data-color="{{ c.color }}" data-pk="{{ c.pk }}" hidden></li>
+              {% if forloop.last %}<div id="initial-count" hidden>{{ forloop.counter }}</div>{% endif %}
+            {% endfor %}
+          </div><hr />
+          <!-- Buttons -->
+          <div class="row row-compact">
+            <div class="col-xs-1 col-compact"></div>
+            <div class="col-xs-5 col-compact">
+              {% block morebuttons %}<button id="category-add" class="btn btn-sm btn-default" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Category</button>{% endblock %}
+            </div>
+            <div class="col-xs-6 col-compact text-right">
+              <a class="btn btn-sm btn-default" href="{% block cancel-button-target-url %}{% url 'index' %}{% endblock %}">Cancel</a>
+              <button id="{% block submit-button-id %}submit-category-list-form{% endblock %}" class="btn btn-sm btn-primary" type="button">{% block submit-button-text %}Save{% endblock %}</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color Choices -->
   <datalist id="datalist-color-choices">
     <option>#f2f3f4</option><option>#f3c300</option><option>#875692</option>
     <option>#f38400</option><option>#a1caf1</option><option>#be0032</option>
@@ -33,21 +60,14 @@
   </datalist>
 {% endblock %}
 
-
-{% block morebuttons %}
-  <button id="category-add" class="btn btn-sm btn-default" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Category</button>
-{% endblock %}
-
-{% block submit-button-id %}submit-category-list-form{% endblock %}{% block submit-button-text %}Save{% endblock %}
-
 {% block templates %}
   <template id="old-category-template">
     <div class="input-group-wrapper">
       <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}"/>
-      <div class="row">
-        <div class="col-xs-2 col-xs-offset-4 text-center">
+      <div class="row row-compact">
+        <div class="col-xs-1 col-compact">
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-11 col-compact">
           <div class="input-group">
             <input type="text" class="form-control category-name-input"
               name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
@@ -67,11 +87,11 @@
   <template id="new-category-template">
     <div class="input-group-wrapper">
       <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}"/>
-      <div class="row">
-        <div class="col-xs-2 col-xs-offset-4 text-center">
+      <div class="row row-compact">
+        <div class="col-xs-1 col-compact">
           <button type="button" class="close remove_field" title="Remove" data-toggle="tooltip" data-placement="top"><span>&times;</span></button>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-11 col-compact">
           <div class="input-group">
             <input type="text" class="form-control category-name-input"
               name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
