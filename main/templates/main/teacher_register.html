@@ -11,17 +11,14 @@
   <li><a href="#" class="selected">Teacher Registration</a></li>
 {% endblock %}
 
-{% block sidebar-teacher-register %}selected{% endblock %}
+{% block sidebar_teacher_register %}selected{% endblock %}
 
-<!-- {% block breadcrumb %}
-  <li><a href="{% url 'index' %}">Home</a></li>
-  <li class="active">Student Registration</li>
-{% endblock %} -->
+{% block register_form_id %}teacher-register-form{% endblock %}
+{% block register_form_url %}{% url 'teacher-register' %}{% endblock %}
+{% block submit_button_id %}submit-teacher-register-form{% endblock %}
+{% block submit_button_text %}Create Teacher Account{% endblock %}
 
-{% block register-form-id %}teacher-register-form{% endblock %}
-{% block register-form-url %}{% url 'teacher-register' %}{% endblock %}
-
-{% block register-form-extra-fields %}
+{% block register_form_extra_fields %}
   <div class="row row-compact">
     <div class="col-sm-2 col-compact"><div class="form-label">Room Number</div></div>
     <div class="col-sm-10 col-compact">
@@ -33,6 +30,3 @@
     </div>
   </div>
 {% endblock %}
-
-{% block submit-button-id %}submit-teacher-register-form{% endblock %}
-{% block submit-button-text %}Create Teacher Account{% endblock %}

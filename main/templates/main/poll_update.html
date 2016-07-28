@@ -4,9 +4,9 @@
 
 {% block title %}Update Poll{% endblock %}
 
-{% block masthead-polls %}selected{% endblock %}
+{% block masthead_polls %}selected{% endblock %}
 
-{% block sidebar-extra %}
+{% block sidebar_extra %}
   <hr />
   <ul id="section-admin-poll">
     <a href="#" class="sidebar-section-header">Poll Tools</a>
@@ -15,13 +15,6 @@
     <li><a href="{% url 'poll-list' %}"><span class="glyphicon glyphicon-remove"></span><span class="text-label">Remove</span></a></li>
   </ul>
 {% endblock %}
-
-<!-- {% block breadcrumb %}
-  <li><a href="{% url 'index' %}">Home</a></li>
-  <li><a href="{% url 'poll-list' %}">Polls</a></li>
-  <li><a href="{{ poll.get_absolute_url }}">{{ poll }}</a></li>
-  <li class="active">Update</li>
-{% endblock %} -->
 
 {% block content %}
   <div class="container-white">

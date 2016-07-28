@@ -33,8 +33,6 @@
     <link href="{% static 'main/css/base.css' %}" rel="stylesheet">
     <link href="{% static 'main/css/style.css' %}" rel="stylesheet">
 
-    {% block extrahead %}{% endblock %}
-
     <title>{% block title %}Centennial High School{% endblock %}</title>
 
   </head>
@@ -64,10 +62,10 @@
       <div id="masthead-bottom" class="masthead-section">
         <ul>
           {% block masthead %}
-          <li><a href="{% url 'index' %}" class="{% block masthead-trending %}{% endblock %}">Trending</a></li>
-          <li><a href="{% url 'announcement-list' %}" class="{% block masthead-announcements %}{% endblock %}">Announcements</a></li>
-          <li><a href="{% url 'event-list' %}" class="{% block masthead-events %}{% endblock %}">Events</a></li>
-          <li><a href="{% url 'poll-list' %}" class="{% block masthead-polls %}{% endblock %}">Polls</a></li>
+          <li><a href="{% url 'index' %}" class="{% block masthead_trending %}{% endblock %}">Trending</a></li>
+          <li><a href="{% url 'announcement-list' %}" class="{% block masthead_announcements %}{% endblock %}">Announcements</a></li>
+          <li><a href="{% url 'event-list' %}" class="{% block masthead_events %}{% endblock %}">Events</a></li>
+          <li><a href="{% url 'poll-list' %}" class="{% block masthead_polls %}{% endblock %}">Polls</a></li>
           {% endblock %}
         </ul>
       </div>
@@ -78,37 +76,37 @@
       <div class="sidebar-content">
         <ul id="section-1">
           {% if user.is_authenticated %}
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span><span class="text-label">My Account</span></a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-fire"></span><span class="text-label">Trending</span></a></li>
+            <li><a href="#" class="{% block sidebar_account %}{% endblock %}"><span class="glyphicon glyphicon-user"></span><span class="text-label">My Account</span></a></li>
+            <li><a href="{% url 'index' %}" class="{% block sidebar_trending %}{% endblock %}"><span class="glyphicon glyphicon-fire"></span><span class="text-label">Trending</span></a></li>
             <!-- <span class="glyphicon glyphicon-bullhorn"> -->
             <!-- <span class="glyphicon glyphicon-bell"> -->
-            <li><a href="{% url 'announcement-list' %}" class="{% block sidebar-announcements %}{% endblock %}"><span class="glyphicon glyphicon-comment"></span><span class="text-label">Announcements</span></a></li>
-            <li><a href="{% url 'event-list' %}" class="{% block sidebar-events %}{% endblock %}"><span class="glyphicon glyphicon-calendar"></span><span class="text-label">Events</span></a></li>
-            <li><a href="{% url 'poll-list' %}" class="{% block sidebar-polls %}{% endblock %}"><span class="glyphicon glyphicon-stats"></span><span class="text-label">Polls</span></a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-education"></span><span class="text-label">Teachers</span></a></li>
+            <li><a href="{% url 'announcement-list' %}" class="{% block sidebar_announcements %}{% endblock %}"><span class="glyphicon glyphicon-comment"></span><span class="text-label">Announcements</span></a></li>
+            <li><a href="{% url 'event-list' %}" class="{% block sidebar_events %}{% endblock %}"><span class="glyphicon glyphicon-calendar"></span><span class="text-label">Events</span></a></li>
+            <li><a href="{% url 'poll-list' %}" class="{% block sidebar_polls %}{% endblock %}"><span class="glyphicon glyphicon-stats"></span><span class="text-label">Polls</span></a></li>
+            <li><a href="#" class="{% block sidebar_teachers %}{% endblock %}"><span class="glyphicon glyphicon-education"></span><span class="text-label">Teachers</span></a></li>
             <!-- <span class="glyphicon glyphicon-bookmark"> -->
             <!-- <span class="glyphicon glyphicon-flag"> -->
             <!-- <span class="glyphicon glyphicon-star-empty"> -->
-            <li><a href="#"><span class="glyphicon glyphicon-star"></span><span class="text-label">Saved for Later</span></a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-cog"></span><span class="text-label">Settings</span></a></li>
+            <li><a href="#" class="{% block sidebar_saved %}{% endblock %}"><span class="glyphicon glyphicon-star"></span><span class="text-label">Saved for Later</span></a></li>
+            <li><a href="#" class="{% block sidebar_settings %}{% endblock %}"><span class="glyphicon glyphicon-cog"></span><span class="text-label">Settings</span></a></li>
           {% else %}
             <a href="#" class="sidebar-section-header">Registration</a>
-            <li><a href="{% url 'parent-register' %}" class="{% block sidebar-parent-register %}{% endblock %}"><span class="glyphicon glyphicon-user"></span><span class="text-label">Parent</span></a></li>
-            <li><a href="{% url 'student-register' %}" class="{% block sidebar-student-register %}{% endblock %}"><span class="glyphicon glyphicon-user"></span><span class="text-label">Student</span></a></li>
-            <li><a href="{% url 'teacher-register' %}" class="{% block sidebar-teacher-register %}{% endblock %}"><span class="glyphicon glyphicon-user"></span><span class="text-label">Teacher</span></a></li>
+            <li><a href="{% url 'parent-register' %}" class="{% block sidebar_parent_register %}{% endblock %}"><span class="glyphicon glyphicon-user"></span><span class="text-label">Parent</span></a></li>
+            <li><a href="{% url 'student-register' %}" class="{% block sidebar_student_register %}{% endblock %}"><span class="glyphicon glyphicon-user"></span><span class="text-label">Student</span></a></li>
+            <li><a href="{% url 'teacher-register' %}" class="{% block sidebar_teacher_register %}{% endblock %}"><span class="glyphicon glyphicon-user"></span><span class="text-label">Teacher</span></a></li>
           {% endif %}
         </ul>
         {% if user.is_superuser %}
         <hr />
         <ul id="section-admin">
           <a href="#" class="sidebar-section-header">Admin Tools</a>
-          <li><a href="{% url 'announcement-create' %}" class="{% block sidebar-announcement-create %}{% endblock %}"><span class="glyphicon glyphicon-comment"></span><span class="text-label">New Announcement</span></a></li>
-          <li><a href="{% url 'event-create' %}" class="{% block sidebar-event-create %}{% endblock %}"><span class="glyphicon glyphicon-calendar"></span><span class="text-label">New Event</span></a></li>
-          <li><a href="{% url 'poll-create' %}" class="{% block sidebar-poll-create %}{% endblock %}"><span class="glyphicon glyphicon-stats"></span><span class="text-label">New Poll</span></a></li>
+          <li><a href="{% url 'announcement-create' %}" class="{% block sidebar_announcement_create %}{% endblock %}"><span class="glyphicon glyphicon-comment"></span><span class="text-label">New Announcement</span></a></li>
+          <li><a href="{% url 'event-create' %}" class="{% block sidebar_event_create %}{% endblock %}"><span class="glyphicon glyphicon-calendar"></span><span class="text-label">New Event</span></a></li>
+          <li><a href="{% url 'poll-create' %}" class="{% block sidebar_poll_create %}{% endblock %}"><span class="glyphicon glyphicon-stats"></span><span class="text-label">New Poll</span></a></li>
           <li><a href="{% url 'index' %}"><span class="glyphicon glyphicon-fire"></span><span class="text-label">Trending</span></a></li>
-          <li><a href="#"><span class="glyphicon glyphicon-pushpin"></span><span class="text-label">Pinned</span></a></li>
+          <li><a href="#" class="{% block sidebar_pinned %}{% endblock %}"><span class="glyphicon glyphicon-pushpin"></span><span class="text-label">Pinned</span></a></li>
           <!-- <span class="glyphicon glyphicon-tag"> -->
-          <li><a href="{% url 'category-list' %}" class="{% block sidebar-category-list %}{% endblock %}"><span class="glyphicon glyphicon-tags"></span><span class="text-label">Tags</span></a></li>
+          <li><a href="{% url 'category-list' %}" class="{% block sidebar_category_list %}{% endblock %}"><span class="glyphicon glyphicon-tags"></span><span class="text-label">Tags</span></a></li>
         </ul>
         <ul id="section-admin-advanced">
           <a href="#" class="sidebar-section-header">Advanced</a>
@@ -120,25 +118,18 @@
           <li><a href="{% url 'admin:index' %}" target="_blank"><span class="glyphicon glyphicon-hdd"></span><span class="text-label">Database</span></a></li>
         </ul>
         {% endif %}
-        {% block sidebar-extra %}{% endblock %}
+        {% block sidebar_extra %}{% endblock %}
       </div>
     </div>
 
     <!-- Main Content -->
     <div id="main-content">
       <div class="container">
-        <!-- <ol class="breadcrumb">
-          {% block breadcrumb %}
-            <li class="active">Home</li>
-          {% endblock %}
-        </ol> -->
-        {% block content-left %}{% endblock %}
         <div class="row">
           <div class="col-md-8 col-md-offset-2">
             {% block content %}{% endblock %}
           </div>
         </div>
-        {% block content-right %}{% endblock %}
       </div>
     </div>
 

@@ -13,14 +13,9 @@
   <li><a href="{% url 'poll-list' %}">Polls</a></li>
 {% endblock %}
 
-<!-- {% block breadcrumb %}
-  <li><a href="{% url 'index' %}">Home</a></li>
-  <li class="active">Student Registration</li>
-{% endblock %} -->
-
 {% block content %}
   <div class="container-white">
-    <form id="{% block register-form-id %}{% endblock %}" class="register-form" action="{% block register-form-url %}{% endblock %}" method="post">{% csrf_token %}
+    <form id="{% block register_form_id %}{% endblock %}" class="register-form" action="{% block register_form_url %}{% endblock %}" method="post">{% csrf_token %}
       <div class="row row-compact">
         <div class="col-sm-2 col-compact"><div class="form-label">Username</div></div>
         <div class="col-sm-10 col-compact">
@@ -81,15 +76,15 @@
           </div>
         </div>
       </div>
-      {% block register-form-extra-fields %}{% endblock %}<hr />
+      {% block register_form_extra_fields %}{% endblock %}<hr />
       <!-- Buttons -->
       <div class="row">
         <div class="col-sm-2 col-sm-offset-6">
           {% block morebuttons %}{% endblock %}
         </div>
         <div class="col-sm-4 text-right">
-          <a class="btn btn-sm btn-default" href="{% block cancel-button-target-url %}{% url 'index' %}{% endblock %}">Cancel</a>
-          <button id="{% block submit-button-id %}{% endblock %}" class="btn btn-sm btn-primary" type="button">{% block submit-button-text %}Create Account{% endblock %}</button>
+          <a class="btn btn-sm btn-default" href="{% block cancel_button_target_url %}{% url 'index' %}{% endblock %}">Cancel</a>
+          <button id="{% block submit_button_id %}{% endblock %}" class="btn btn-sm btn-primary" type="button">{% block submit_button_text %}Create Account{% endblock %}</button>
         </div>
     </form>
   </div>

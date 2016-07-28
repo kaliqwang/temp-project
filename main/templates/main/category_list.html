@@ -13,12 +13,7 @@
   <li><a href="{% url 'poll-list' %}">Polls</a></li>
 {% endblock %}
 
-{% block sidebar-category-list %}selected{% endblock %}
-
-<!-- {% block breadcrumb %}
-  <li><a href="{% url 'index' %}">Home</a></li>
-  <li class="active">Categories</li>
-{% endblock %} -->
+{% block sidebar_category_list %}selected{% endblock %}
 
 {% block content %}
   <div class="row">
@@ -39,8 +34,8 @@
               {% block morebuttons %}<button id="category-add" class="btn btn-sm btn-default" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Category</button>{% endblock %}
             </div>
             <div class="col-xs-6 col-compact text-right">
-              <a class="btn btn-sm btn-default" href="{% block cancel-button-target-url %}{% url 'index' %}{% endblock %}">Cancel</a>
-              <button id="{% block submit-button-id %}submit-category-list-form{% endblock %}" class="btn btn-sm btn-primary" type="button">{% block submit-button-text %}Save{% endblock %}</button>
+              <a class="btn btn-sm btn-default" href="{% block cancel_button_target_url %}{% url 'index' %}{% endblock %}">Cancel</a>
+              <button id="{% block submit_button_id %}submit-category-list-form{% endblock %}" class="btn btn-sm btn-primary" type="button">{% block submit_button_text %}Save{% endblock %}</button>
             </div>
           </div>
         </form>
