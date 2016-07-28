@@ -59,12 +59,12 @@
             <br />
             {% for choice in poll.choices.all %}
             <div class="row progress-bar-wrapper">
-              <div class="col-xs-2 text-right">
+              <div class="col-xs-3 text-right">
                 <label>{{ choice.content }}</label>
               </div>
-              <div class="col-xs-10 bar-wrapper">
+              <div class="col-xs-9 bar-wrapper">
                 <div class="progress">
-                  <div id="progress-{{ choice.pk }}" class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}" data-toggle="tooltip" title="{{ choice.votes.count }}" data-placement="right">
+                  <div id="progress-{{ choice.pk }}" class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}" data-toggle="tooltip" title="{{ choice.votes.count }}" data-placement="top">
                   </div>
                 </div>
               </div>
@@ -78,7 +78,7 @@
               <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
               <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
             </div>
-            <div class="col-sm-5 col-sm-offset-2">
+            <div class="col-sm-5 col-sm-offset-2 text-right">
               <button type="button" class="btn btn-primary btn-sm submit-poll">Submit</button>
               <button type="button" class="btn btn-default btn-sm change-vote hidden">Change Vote</button>
             </div>
@@ -124,12 +124,12 @@
             <br />
             {% for choice in poll.choices.all %}
               <div class="row progress-bar-wrapper">
-                <div class="col-xs-2 text-right">
+                <div class="col-xs-3 text-right">
                   <label>{{ choice.content }}</label>
                 </div>
-                <div class="col-xs-10 bar-wrapper">
+                <div class="col-xs-9 bar-wrapper">
                   <div class="progress">
-                    <div id="progress-{{ choice.pk }}" class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}" data-toggle="tooltip" title="{{ choice.votes.count }}" data-placement="right">
+                    <div id="progress-{{ choice.pk }}" class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}" data-toggle="tooltip" title="{{ choice.votes.count }}" data-placement="top">
                     </div>
                   </div>
                 </div>
@@ -142,7 +142,7 @@
               <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
               <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
             </div>
-            <div class="col-sm-5 col-sm-offset-2">
+            <div class="col-sm-5 col-sm-offset-2 text-right">
               <button type="button" class="btn btn-primary btn-sm submit-poll hidden">Submit</button>
               <button type="button" class="btn btn-default btn-sm change-vote">Change Vote</button>
             </div>
@@ -175,17 +175,14 @@
             <br />
             {% for choice in poll.choices.all %}
             <div class="row progress-bar-wrapper">
-              <div class="col-xs-2 text-right">
+              <div class="col-xs-3 text-right">
                 <label>{{ choice.content }}</label>
               </div>
-              <div class="col-xs-8 bar-wrapper">
+              <div class="col-xs-9 bar-wrapper">
                 <div class="progress">
-                  <div id="progress-{{ choice.pk }}" class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}" data-toggle="tooltip" title="{{ choice.votes.count }}" data-placement="right">
+                  <div id="progress-{{ choice.pk }}" class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}" data-toggle="tooltip" title="{{ choice.votes.count }}" data-placement="top">
                   </div>
                 </div>
-              </div>
-              <div class="col-xs-2">
-                <label>{{ choice.votes.count }}</label>
               </div>
             </div>
             {% endfor %}
@@ -265,7 +262,7 @@
           <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
           <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
         </div>
-        <div class="col-sm-5 col-sm-offset-2">
+        <div class="col-sm-5 col-sm-offset-2 text-right">
           <button type="button" class="btn btn-default btn-sm show-results">Show Results</button>
           <button type="button" class="btn btn-primary btn-sm submit-poll">Submit</button>
           <button type="button" class="btn btn-default btn-sm hidden">Change Vote</button>
