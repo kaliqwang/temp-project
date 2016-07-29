@@ -110,10 +110,12 @@ a:hover, a:focus {
     top: 56px; /* Height of top nav (50px) + top border (5px)+ bottom border (1px) */
     bottom: 0px;
     width: 229px; /* Width of sidebar + right border (1px) */
+    height: auto;
+    overflow-y: scroll;
     padding: 13px 22px; /* Each link has width 184px */
-    background-color: #fff; /* Background Color */
-    color: #888;
     border-right: 1px solid #e8e8e8;
+    background-color: #fff; /* Background Color */
+    color: #888; /* Text Color */
     display: none;
     z-index: 99;
 }
@@ -157,6 +159,18 @@ a:hover, a:focus {
     padding: 0px 15px; /* 15px of space between icon and text */
     color: inherit;
     vertical-align: text-bottom;
+}
+#sidebar-container ::-webkit-scrollbar { /* Custom Scrollbar */
+    width: 9px;
+    height: 9px;
+    /*width: 0px; Remove scroll bar by setting zero width */
+    /*background: transparent;  Remove scroll bar by making it invisible */
+}
+#sidebar-container ::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+#sidebar-container:hover ::-webkit-scrollbar-thumb {
+    background: #ccc;
 }
 
 /************************** Section 3: Main Content ***************************/
