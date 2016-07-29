@@ -65,11 +65,18 @@ h4 {
     padding: 0px 8px;
 }
 
+/* Links - No Underline */
+a:hover, a:focus {
+    outline: none;
+    color: inherit;
+}
+
 /*********************************** Forms ************************************/
 
 form:not(#login-form) {
     padding: 20px;
 }
+#login-form-footer {text-align:right}
 
 /******************************* Announcements ********************************/
 

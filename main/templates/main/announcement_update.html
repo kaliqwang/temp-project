@@ -7,7 +7,7 @@
 {% block form_id %}announcement-update-form{% endblock %}{% block form_url %}{% url 'announcement-update' announcement.pk %}{% endblock %}
 
 {% block sidebar_extra %}
-  <hr />
+  <hr>
   <ul id="section-admin-announcement">
     <a href="#" class="sidebar-section-header">Announcement Tools</a>
     <!-- <span class="glyphicon glyphicon-tags"> -->
@@ -20,7 +20,7 @@
   <!-- Image Preview (new then existing) -->
   <div class="image-list form">
     <span id="image-files-preview"></span><span id="image-files-existing">{% for image in announcement.image_files.all %}<div class="image">
-      <a href="{{ image.image_file.url }}" target="_blank" title="Click to open in new tab"/><img src="{{ image.image_file_thumbnail.url }}"></a>
+      <a href="{{ image.image_file.url }}" target="_blank" title="Click to open in new tab"><img src="{{ image.image_file_thumbnail.url }}"></a>
     </div>{% endfor %}</span>
   </div>
 {% endblock %}
@@ -29,7 +29,7 @@
   <!-- Image Preview (new then existing) -->
   <div class="image-list form">
     <span id="image-links-preview"></span><span id="image-links-existing">{% for image in announcement.image_links.all %}<div class="image">
-      <a href="{{ image.image_link }}" target="_blank" title="Click to open in new tab"/><img src="{{ image.image_file_thumbnail.url }}"></a>
+      <a href="{{ image.image_link }}" target="_blank" title="Click to open in new tab"><img src="{{ image.image_file_thumbnail.url }}"></a>
     </div>{% endfor %}</span>
   </div>
 {% endblock %}

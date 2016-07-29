@@ -25,7 +25,7 @@
           <div class="content">{{ announcement.content }}</div>
           <!-- Announcement Images -->
           <div class="image-list">
-            {% for image in announcement.image_files.all %}<div class="image"><a href="{{ image.image_file.url }}" target="_blank" title="Click to open in new tab"/><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}{% for image in announcement.image_links.all %}<div class="image"><a href="{{ image.image_link }}" target="_blank" title="Click to open in new tab"/><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}
+            {% for image in announcement.image_files.all %}<div class="image"><a href="{{ image.image_file.url }}" target="_blank" title="Click to open in new tab"><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}{% for image in announcement.image_links.all %}<div class="image"><a href="{{ image.image_link }}" target="_blank" title="Click to open in new tab"><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}
           </div>
           <!-- Announcement Videos -->
           <div id="collapse-{{ announcement.pk }}" class="collapse">
@@ -45,6 +45,6 @@
   </div>
 {% endblock %}
 
-<!-- <button id="toggle-collapse-all" class="btn btn-default" type="button" data-mode="0">Expand All</button><br/> -->
+<!-- <button id="toggle-collapse-all" class="btn btn-default" type="button" data-mode="0">Expand All</button><br> -->
 
 {% block script %}<script src="{% static 'main/js/announcement_list.js' %}"></script>{% endblock %}

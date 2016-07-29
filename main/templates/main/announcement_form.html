@@ -11,17 +11,17 @@
       <div class="row row-compact">
         <div class="col-sm-1 col-compact"><div class="form-label">Title</div></div>
         <div class="col-sm-11 col-compact"><div class="validate-required">{{ form.title }}</div></div>
-      </div><br/>
+      </div><br>
       <!-- Announcement Content -->
       <div class="row row-compact">
         <div class="col-sm-1 col-compact"><div class="form-label">Content</div></div>
         <div class="col-sm-11 col-compact"><div class="validate-required">{{ form.content }}</div></div>
-      </div><br/>
+      </div><br>
       <!-- Announcement Category -->
       <div class="row row-compact">
         <div class="col-sm-1 col-compact"><div class="form-label">Tag</div></div>
         <div class="col-sm-11 col-compact">{{ form.category }}</div>
-      </div><br/>
+      </div><br>
       <!-- Announcement Media Tabs -->
       <div class="row row-compact">
         <div class="col-sm-1 col-compact"><div class="form-label">Media</div></div>
@@ -32,7 +32,7 @@
             <li><a href="#youtube-videos" data-toggle="tab">YouTube Videos</a></li>
           </ul>
         </div>
-      </div><br/>
+      </div><br>
       <!-- Announcement Media Tab Panes -->
       <div class="row row-compact">
         <div class="col-sm-1 col-compact">
@@ -48,7 +48,7 @@
                 <strong>Note:</strong> Image preview opens a new tab <span class="glyphicon glyphicon-new-window"></span>
               </div>
               <!-- Hidden Multi-file Input -->
-              <input id="image-files-add" class="hidden" type="file" name="image-files" accept="image/*" multiple/>
+              <input id="image-files-add" class="hidden" type="file" name="image-files" accept="image/*" multiple>
               <div class="text-center">
                 <!-- Add Button-->
                 <label class="btn btn-custom" for="image-files-add">
@@ -63,7 +63,7 @@
                 <div class="inline-block">
                   <button type="button" id="image-files-clear" class="close hidden" title="Clear" data-toggle="tooltip" data-placement="top"><span>&times;</span></button>
                 </div>
-              </div><br />
+              </div><br>
               <!-- Image Labels (filename/size) -->
               <div id="image-files-filenames" class="text-center"></div>
               {% block image_file_preview %}{% endblock %}
@@ -79,7 +79,7 @@
               <div class="has-feedback">
                 <input id="image-links-add" type="url" class="form-control" name="image-links" placeholder="Paste your image URL here">
                 <span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
-              </div><br />
+              </div><br>
               <!-- Hidden Image Tester -->
               <img id="image-tester" src="#" data-status="0" hidden>
               {% block image_link_preview %}{% endblock %}
@@ -95,10 +95,10 @@
               <div class="has-feedback">
                 <input id="youtube-videos-add" type="url" class="form-control" name="youtube-videos" placeholder="https://www.youtube.com/watch?v=" pattern="https://www.youtube.com/watch?v=[a-zA-Z0-9_-]{11}">
                 <span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
-              </div><br />
+              </div><br>
               {% block youtube_video_preview %}{% endblock %}
             </div>
-          </div><hr />
+          </div><hr>
         </div>
       </div>
       <!-- Buttons -->
@@ -114,7 +114,7 @@
   <!-- Image File Template -->
   <template id="image-file-template">
     <div class="image">
-      <a href="{% templatetag openvariable %} imageURL {% templatetag closevariable %}" target="_blank" title="Click to open in new tab"/>
+      <a href="{% templatetag openvariable %} imageURL {% templatetag closevariable %}" target="_blank" title="Click to open in new tab">
         <div class="image-thumbnail" style="background-image: url('{% templatetag openvariable %} imageURL {% templatetag closevariable %}')"></div>
       </a>
     </div>
@@ -122,7 +122,7 @@
   <!-- Image Link Template -->
   <template id="image-link-template">
     <div class="image">
-      <a href="{% templatetag openvariable %} imageURL {% templatetag closevariable %}" target="_blank" title="Click to open in new tab"/>
+      <a href="{% templatetag openvariable %} imageURL {% templatetag closevariable %}" target="_blank" title="Click to open in new tab">
         <div class="image-thumbnail" style="background-image: url('{% templatetag openvariable %} imageURL {% templatetag closevariable %}')"></div>
       </a>
     </div><input name="image-links" value="{% templatetag openvariable %} imageURL {% templatetag closevariable %}" required hidden>

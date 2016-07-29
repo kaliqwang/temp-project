@@ -6,7 +6,7 @@
 
 {% block header %}Registration{% endblock %}
 
-{% block masthead %}
+{% block masthead_bottom %}
   <li><a href="{% url 'index' %}">Trending</a></li>
   <li><a href="{% url 'announcement-list' %}">Announcements</a></li>
   <li><a href="{% url 'event-list' %}">Events</a></li>
@@ -76,7 +76,7 @@
           </div>
         </div>
       </div>
-      {% block register_form_extra_fields %}{% endblock %}<hr />
+      {% block register_form_extra_fields %}{% endblock %}<hr>
       <!-- Buttons -->
       <div class="row">
         <div class="col-sm-2 col-sm-offset-6">

@@ -1,13 +1,21 @@
 {% extends "main/base.html" %}
 
 {% block sidebar_extra %}
-  <hr />
-  <ul id="section-filter">
-    <a href="#" class="sidebar-section-header">Tag Filter</a>
-    <!-- <span class="glyphicon glyphicon-tags"> -->
-    <li><a href="?"><span class="glyphicon glyphicon-th-list"></span><span class="text-label">Show All</span></a></li>
+  <hr class="sidebar-divider">
+  <ul id="sidebar-filter">
+    <a href="#" class="sidebar-header">Filter</a>
+    <a href="#" id="sidebar-filter-button">
+      <span class="icon-container"><span class="glyphicon glyphicon-option-vertical"></span></span>
+    </a>
+    <li><a href="?">
+      <span class="icon-container"><span class="glyphicon glyphicon-th"></span></span>
+      <span class="display-name">Show All</span>
+    </a></li>
     {% for category in categories %}
-      <li><a href="?category={{ category.pk }}"><span class="glyphicon glyphicon-tag" style="color:{{ category.color }}"></span><span class="text-label">{{ category.name }}</span></a></li>
+      <li><a href="?category={{ category.pk }}">
+        <span class="icon-container" style="color:{{ category.color }}"><span class="glyphicon glyphicon-tag"></span></span>
+        <span class="display-name">{{ category.name }}</span>
+      </a></li>
     {% endfor %}
   </ul>
 {% endblock %}

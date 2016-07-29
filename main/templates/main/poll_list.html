@@ -21,7 +21,7 @@
     <li class="active"><a href="#polls-unvoted" data-toggle="tab">New</a></li>
     <li><a href="#polls-voted" data-toggle="tab">Voted</a></li>
     <li><a href="#polls-closed" data-toggle="tab">Closed</a></li>
-  </ul><br />
+  </ul><br>
   <!-- Media tab panes -->
   <div id="poll-list" class="tab-content" data-user="{{ user.pk }}">
     <!-- Unvoted Polls -->
@@ -59,7 +59,7 @@
             </div>
             <!-- Progress Bars -->
             <div class="progress-bars hidden">
-              <br />
+              <br>
               {% for choice in poll.choices.all %}
               <div class="row progress-bar-wrapper">
                 <div class="col-xs-3 text-right">
@@ -125,7 +125,7 @@
             </div>
             <!-- Progress Bars -->
             <div class="progress-bars">
-              <br />
+              <br>
               {% for choice in poll.choices.all %}
                 <div class="row progress-bar-wrapper">
                   <div class="col-xs-3 text-right">
@@ -176,7 +176,7 @@
             </div>
             <!-- Progress Bars -->
             <div class="progress-bars">
-              <br />
+              <br>
               {% for choice in poll.choices.all %}
               <div class="row progress-bar-wrapper">
                 <div class="col-xs-3 text-right">
@@ -247,7 +247,7 @@
         <!-- <i class="fa fa-clock-o"></i> -->
         <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
         <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
-      </div><br />
+      </div><br>
       <!-- Poll Choices -->
       <div class="poll-choices">
         {% for choice in poll.choices.all %}
@@ -260,7 +260,7 @@
             </div>
           </div>
         {% endfor %}
-      </div><br />
+      </div><br>
       <!-- Buttons -->
       <div class="row poll-bottom">
         <div class="col-sm-5">
@@ -284,12 +284,10 @@
           <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}">
           </div>
         </div>
-        <br />
+        <br>
       {% endfor %}
     </div>
   </template>
 {% endblock %}
-{% block sidebar %}
-  {{ block.super }}
-{% endblock %}
+
 {% block script %}<script src="{% static 'main/js/poll_list.js' %}"></script>{% endblock %}

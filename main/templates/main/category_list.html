@@ -6,7 +6,7 @@
 
 {% block header %}Categories{% endblock %}
 
-{% block masthead %}
+{% block masthead_bottom %}
   <li><a href="{% url 'index' %}">Trending</a></li>
   <li><a href="{% url 'announcement-list' %}">Announcements</a></li>
   <li><a href="{% url 'event-list' %}">Events</a></li>
@@ -26,7 +26,7 @@
               <li data-name="{{ c.name }}" data-color="{{ c.color }}" data-pk="{{ c.pk }}" hidden></li>
               {% if forloop.last %}<div id="initial-count" hidden>{{ forloop.counter }}</div>{% endif %}
             {% endfor %}
-          </div><hr />
+          </div><hr>
           <!-- Buttons -->
           <div class="row row-compact">
             <div class="col-xs-1 col-compact"></div>
@@ -58,7 +58,7 @@
 {% block templates %}
   <template id="old-category-template">
     <div class="input-group-wrapper">
-      <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}"/>
+      <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}">
       <div class="row row-compact">
         <div class="col-xs-1 col-compact">
         </div>
@@ -67,12 +67,12 @@
             <input type="text" class="form-control category-name-input"
               name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
               value="{% templatetag openvariable %} name {% templatetag closevariable %}"
-              placeholder="Category Name" maxlength="30" required />
+              placeholder="Category Name" maxlength="30" required>
             <span class="input-group-btn"><input required type="color" class="form-control btn btn-default color-input" maxlength="7"
               list="datalist-color-choices"
               name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
               value="{% templatetag openvariable %} color {% templatetag closevariable %}"
-              data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}"/>
+              data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}">
             </span>
           </div>
         </div>
@@ -81,7 +81,7 @@
   </template>
   <template id="new-category-template">
     <div class="input-group-wrapper">
-      <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}"/>
+      <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}">
       <div class="row row-compact">
         <div class="col-xs-1 col-compact">
           <button type="button" class="close remove_field" title="Remove" data-toggle="tooltip" data-placement="top"><span>&times;</span></button>
@@ -90,12 +90,12 @@
           <div class="input-group">
             <input type="text" class="form-control category-name-input"
               name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
-              placeholder="Category Name" maxlength="30" required />
+              placeholder="Category Name" maxlength="30" required>
             <span class="input-group-btn"><input required type="color" class="form-control btn btn-default" maxlength="7"
               list="datalist-color-choices"
               name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
               value="{% templatetag openvariable %} color {% templatetag closevariable %}"
-              data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}"/>
+              data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}">
             </span>
           </div>
         </div>

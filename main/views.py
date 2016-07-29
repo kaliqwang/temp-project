@@ -313,7 +313,7 @@ def parent_register(request):
         user = authenticate(username=username, password=password)
         auth_login(request, user)
         return redirect('index')
-    return render(request, 'main/parent_register.html', {'userForm': userForm, 'userProfileForm': userProfileForm})
+    return render(request, 'main/register_parent.html', {'userForm': userForm, 'userProfileForm': userProfileForm})
 
 def student_register(request):
     userForm = UserForm(request.POST or None)
@@ -335,7 +335,7 @@ def student_register(request):
         user = authenticate(username=username, password=password)
         auth_login(request, user)
         return redirect('index')
-    return render(request, 'main/student_register.html', {'userForm': userForm, 'userProfileForm': userProfileForm, 'studentProfileForm': studentProfileForm})
+    return render(request, 'main/register_student.html', {'userForm': userForm, 'userProfileForm': userProfileForm, 'studentProfileForm': studentProfileForm})
 
 def teacher_register(request):
     userForm = UserForm(request.POST or None)
@@ -357,7 +357,7 @@ def teacher_register(request):
         user = authenticate(username=username, password=password)
         auth_login(request, user)
         return redirect('index')
-    return render(request, 'main/teacher_register.html', {'userForm': userForm, 'userProfileForm': userProfileForm, 'teacherProfileForm': teacherProfileForm})
+    return render(request, 'main/register_teacher.html', {'userForm': userForm, 'userProfileForm': userProfileForm, 'teacherProfileForm': teacherProfileForm})
 
 def login(request):
     username = request.POST.get('username')
