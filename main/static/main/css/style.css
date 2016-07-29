@@ -2,15 +2,18 @@
 
 .btn-custom:hover, .btn-custom:focus, .btn-custom:active, .btn-custom:active:focus {
     color: #fff;
-    background-color: #666;
-    border-color: #666;
+    background-color: #126db3;
+    border-color: #126db3;
     outline: none;
 }
-
 .btn-custom {
     color: #fff;
-    background-color: #888;
-    border-color: #888;
+    background-color: #0778c8;
+    border-color: #0778c8;
+}
+.badge {
+    color: #0778c8;
+    background-color: #fff;
 }
 
 textarea {
