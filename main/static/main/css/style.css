@@ -57,14 +57,6 @@ h4 {
     vertical-align: middle;
 }
 
-.row-compact {
-    margin: 0px -8px;
-}
-
-.col-compact {
-    padding: 0px 8px;
-}
-
 /* Links - No Underline */
 a:hover, a:focus {
     outline: none;
@@ -172,6 +164,9 @@ form:not(#login-form) {
 }
 #event-list .date-header {
     padding-top: 20px;
+}
+#event-list ul {
+    padding-left: 40px;
 }
 #event-list li a {
     color: inherit;

@@ -31,7 +31,7 @@
           <div class="row row-compact">
             <div class="col-xs-1 col-compact"></div>
             <div class="col-xs-5 col-compact">
-              {% block morebuttons %}<button id="category-add" class="btn btn-sm btn-default" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Category</button>{% endblock %}
+              {% block morebuttons %}<button id="category-add" class="btn btn-sm btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Category</button>{% endblock %}
             </div>
             <div class="col-xs-6 col-compact text-right">
               <a class="btn btn-sm btn-default" href="{% block cancel_button_target_url %}{% url 'index' %}{% endblock %}">Cancel</a>

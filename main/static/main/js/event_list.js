@@ -77,8 +77,8 @@ $(document).ready(function() {
     $eventList.on('mousemove', function(e){
         var height = e.clientY - 100;
         var boxHeight = $eventInfoBox.height();
-        if (height < 105) {
-            $eventInfoBox.css('top', 105);
+        if (height < 98) {
+            $eventInfoBox.css('top', 98);
         } else if (height + boxHeight + 141 > viewPortHeight) {
             $eventInfoBox.css('top', '');
             $eventInfoBox.css('bottom', 141);
