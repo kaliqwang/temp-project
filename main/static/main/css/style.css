@@ -196,29 +196,10 @@ form:not(#login-form) {
 
 /* poll_list */
 .poll-wrapper {
-    border: 12px solid #f5f5f5;
     border-radius: 4px;
     padding: 8px 32px;
-    margin-bottom: 20px;
-}
-
-.poll-wrapper .edit {
-    display:none;
-}
-.poll-wrapper.edit .edit {
-    display: initial;
-}
-.poll-wrapper.edit .noedit {
-    display:none;
-}
-.poll-wrapper .resubmit {
-    display:none;
-}
-.poll-wrapper.resubmit .resubmit {
-    display:initial;
-}
-.poll-wrapper.resubmit .noresubmit {
-    display:none;
+    margin-bottom: 10px;
+    border: 1px solid #e8e8e8;
 }
 .poll-choices {
     padding: 16px;

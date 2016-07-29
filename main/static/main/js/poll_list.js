@@ -56,14 +56,14 @@ $(document).ready(function() {
                     },
                 });
             } catch(err) {
-                // $('#alert-danger').removeClass('hidden').delay(4000).fadeOut(function() {
-                //     $(this).addClass('hidden');
-                //     $(this).show();
-                $poll.find('.signature').append("<div class='alert alert-danger' style='margin-top:10px; margin-bottom:0px;'><b>Error:</b> Please select a choice.</div>");
-                $poll.find('.alert-danger').delay(4000).fadeOut(function() {
-                  $(this).remove();
-                });
-
+                $('#alert-danger').removeClass('hidden').delay(4000).fadeOut(function() {
+                    $(this).addClass('hidden');
+                    $(this).show();
+                // $poll.find('.signature').append("<div class='alert alert-danger' style='margin-top:10px; margin-bottom:0px;'><b>Error:</b> Please select a choice.</div>");
+                // $poll.find('.alert-danger').delay(4000).fadeOut(function() {
+                //   $(this).remove();
+                //});
+              });
             }
         }
     });
