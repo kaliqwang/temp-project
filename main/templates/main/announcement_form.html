@@ -9,23 +9,23 @@
     <form id="{% block form_id %}{% endblock %}" action="{% block form_url %}{% endblock %}" enctype="multipart/form-data" method="post" >{% csrf_token %}
       <!-- Announcement Title -->
       <div class="row">
-        <div class="col-xs-1"><div class="form-label">Title</div></div>
-        <div class="col-xs-11"><div class="validate-required">{{ form.title }}</div></div>
+        <div class="col-sm-1"><div class="form-label">Title</div></div>
+        <div class="col-sm-11"><div class="validate-required">{{ form.title }}</div></div>
       </div><br>
       <!-- Announcement Content -->
       <div class="row">
-        <div class="col-xs-1"><div class="form-label">Content</div></div>
-        <div class="col-xs-11"><div class="validate-required">{{ form.content }}</div></div>
+        <div class="col-sm-1"><div class="form-label">Content</div></div>
+        <div class="col-sm-11"><div class="validate-required">{{ form.content }}</div></div>
       </div><br>
       <!-- Announcement Category -->
       <div class="row">
-        <div class="col-xs-1"><div class="form-label">Tag</div></div>
-        <div class="col-xs-11">{{ form.category }}</div>
+        <div class="col-sm-1"><div class="form-label">Tag</div></div>
+        <div class="col-sm-11">{{ form.category }}</div>
       </div><br>
       <!-- Announcement Media Tabs -->
       <div class="row">
-        <div class="col-xs-1"><div class="form-label">Media</div></div>
-        <div class="col-xs-11">
+        <div class="col-sm-1"><div class="form-label">Media</div></div>
+        <div class="col-sm-11">
           <ul class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#image-files" data-toggle="tab">Image Files</a></li>
             <li><a href="#image-links" data-toggle="tab">Image Links</a></li>
@@ -35,10 +35,10 @@
       </div><br>
       <!-- Announcement Media Tab Panes -->
       <div class="row">
-        <div class="col-xs-1">
+        <div class="col-sm-1">
 
         </div>
-        <div class="col-xs-11">
+        <div class="col-sm-11">
           <div class="tab-content">
             <!-- Image Files -->
             <div id="image-files" class="tab-pane fade in active">
@@ -130,11 +130,11 @@
   <!-- YouTube Video Template -->
   <template id="youtube-video-template">
     <div class="row youtube-video-preview-wrapper">
-      <div class="col-xs-3 youtube-video-thumbnail">
+      <div class="col-sm-3 youtube-video-thumbnail">
         <!-- Thumbnail -->
         <a href="https://www.youtube.com/watch?v={% templatetag openvariable %} videoID {% templatetag closevariable %}" target="_blank"><img src="{% templatetag openvariable %} thumbnailURL {% templatetag closevariable %}"></a>
       </div>
-      <div class="col-xs-9 youtube-video-details">
+      <div class="col-sm-9 youtube-video-details">
         <!-- Title -->
         <div class="title">
           <a href="https://www.youtube.com/watch?v={% templatetag openvariable %} videoID {% templatetag closevariable %}" target="_blank"><div>{% templatetag openvariable %} videoTitle {% templatetag closevariable %}</div></a>

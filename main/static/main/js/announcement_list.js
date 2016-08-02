@@ -17,7 +17,7 @@ $(document).ready(function() {
     var $announcementItems = $('.announcement-wrapper');
     var $itemsCollapse = $('.start-hidden');
 
-    var pageSize = 36;
+    var pageSize = 40;
     var pageCount = 1;
     var $paginatorSimple = $('#paginator-simple');
     var $paginatorShowMore = $('#paginator-show-more');
@@ -351,12 +351,16 @@ $(document).ready(function() {
 
     // Render announcement HTML and add to announcementListHTML string
     function renderAnnouncement(data, index) {
+        if (index % 4 == 0) {
+          announcementListHTML += '<div class="clearfix visible-xxl-block"></div>';
+        }
         if (index % 3 == 0) {
-          announcementListHTML += '<div class="clearfix visible-lg-block"></div>';
+          announcementListHTML += '<div class="clearfix visible-xl-block"></div>';
         }
         if (index % 2 == 0) {
-          announcementListHTML += '<div class="clearfix visible-sm-block"></div>';
+          announcementListHTML += '<div class="clearfix visible-lg-block"></div>';
         }
+          announcementListHTML += '<div class="clearfix visible-sm-block"></div>';
         announcementListHTML += Mustache.render($announcementItemTemplate, {
             pk: data.pk,
             absoluteURL: data.absoluteURL,

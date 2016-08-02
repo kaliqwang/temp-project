@@ -36,11 +36,11 @@
     </div>
     <!-- Buttons -->
     <div class="row">
-      <div class="col-xs-1"></div>
-      <div class="col-xs-5">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-5">
         {% block morebuttons %}<button id="poll-choice-add" class="btn btn-sm btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Choice</button>{% endblock %}
       </div>
-      <div class="col-xs-6 text-right">
+      <div class="col-sm-6 text-right">
         <a class="btn btn-sm btn-default" href="{% block cancel-button-target-url %}{% url 'poll-list' %}{% endblock %}">Cancel</a>
         <button id="{% block submit_button_id %}{% endblock %}" class="btn btn-sm btn-custom" type="button">{% block submit-button-text %}Publish{% endblock %}</button>
       </div>

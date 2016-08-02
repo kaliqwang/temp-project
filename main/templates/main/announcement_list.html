@@ -31,11 +31,7 @@
 
 {% block data %}<div id="page-size" data-page-size="{{ page_size }}" hidden></div>{% endblock %}
 {% block content %}
-  <div id="announcement-list">
-    <div class="row">
-
-    </div>
-  </div>
+  <div id="announcement-list" class="row"></div>
 {% endblock %}
 
 {% block paginator_bottom %}
@@ -47,7 +43,7 @@
 {% block templates %}
   <!-- Announcement Item Template -->
   <template id="announcement-item-template">
-    <div class="col-md-6 col-lg-4" style="float:both">
+    <div class="col-lg-6 col-xl-4 col-xxl-3" style="float:both">
       <div class="announcement-wrapper container-white" data-category-pk="{% templatetag openvariable %} categoryPK {% templatetag closevariable %}">
         <!-- Announcement Title -->
         <div class="title"><h4><a href="{% templatetag openvariable %} absoluteURL {% templatetag closevariable %}"><div>{% templatetag openvariable %} title {% templatetag closevariable %}</div></a></h4></div>
