@@ -1,50 +1,12 @@
-{% extends "main/base.html" %}
+{% extends "main/poll_form.html" %}
 
 {% load static from staticfiles %}
 
 {% block title %}Create Poll{% endblock %}
 
-{% block masthead_polls %}selected{% endblock %}
-
 {% block sidebar_poll_create %}selected{% endblock %}
 
-{% block content %}
-<div class="container-white">
-  <form id="poll-create-form" action="{% url 'poll-create' %}" method="post">{% csrf_token %}
-    <!-- Temporary Alert -->
-    <div class="alert alert-warning alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-      <b>Note:</b> This page is incomplete.
-    </div>
-    <!-- Poll Content -->
-    <div class="row">
-      <div class="col-xs-1"><div class="form-label">Title</div></div>
-      <div class="col-xs-11"><div class="{% if form.content.errors %}has-error{% endif %}">{{ form.content }}</div></div>
-    </div><br>
-    <!-- Poll Choices -->
-    <div class="row">
-      <div class="col-xs-1"><div class="form-label">Choices</div></div>
-      <div class="col-xs-11"><div id="choice-container" class="form-group"></div></div>
-    </div><br>
-    <!-- Poll Category -->
-    <div class="row">
-      <div class="col-xs-1"><div class="form-label">Category</div></div>
-      <div class="col-xs-11"><div class="{% if form.category.errors %}has-error{% endif %}">{{ form.category }}</div><hr></div>
-    </div>
-    <!-- Buttons -->
-    <div class="row">
-      <div class="col-xs-1"></div>
-      <div class="col-xs-5">
-        {% block morebuttons %}<button id="poll-choice-add" class="btn btn-sm btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Choice</button>{% endblock %}
-      </div>
-      <div class="col-xs-6 text-right">
-        <a class="btn btn-sm btn-default" href="{% block cancel_button_target_url %}{% url 'poll-list' %}{% endblock %}">Cancel</a>
-        <button id="{% block submit_button_id %}submit-poll-create-form{% endblock %}" class="btn btn-sm btn-custom" type="button">{% block submit_button_text %}Publish{% endblock %}</button>
-      </div>
-    </div>
-  </form>
-</div>
-{% endblock %}
+{% block form_id %}poll-create-form{% endblock %}{% block form_url %}{% url 'poll-create' %}{% endblock %}
 
 {% block templates %}
   <template id="choice-input-template">
@@ -58,5 +20,5 @@
     </div>
   </template>
 {% endblock %}
-
+{% block submit_button_id %}submit-poll-create-form{% endblock %}
 {% block script %}<script src="{% static 'main/js/poll_create.js' %}"></script>{% endblock%}

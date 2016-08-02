@@ -1,79 +1,24 @@
-{% extends "main/base.html" %}
+{% extends "main/poll_form.html" %}
 
 {% load static from staticfiles %}
 
 {% block title %}Update Poll{% endblock %}
 
-{% block masthead_polls %}selected{% endblock %}
+{% block form_id %}poll-update-form{% endblock %}
+{% block form_url %}{% url 'poll-update' poll.pk %}{% endblock %}
 
 {% block sidebar_extra %}
-  <hr class="sidebar-divider">
-  <ul id="sidebar-admin-poll">
-    <a href="#" class="sidebar-header">Poll Tools</a>
-    <li><a href="{% url 'poll-update' poll.pk %}" class="selected">
-      <span class="icon-container"><span class="glyphicon glyphicon-pencil"></span></span>
-      <span class="display-name">Make Changes</span>
-    </a></li>
-    <li><a href="#">
-      <span class="icon-container"><span class="glyphicon glyphicon-remove"></span></span>
-      <span class="display-name">Delete</span>
-    </a></li>
+  <hr>
+  <ul id="section-admin-poll">
+    <a href="#" class="sidebar-section-header">Poll Tools</a>
+    <!-- <span class="glyphicon glyphicon-tags"> -->
+    <li><a href="{% url 'poll-update' poll.pk %}" class="selected"><span class="icon-container"><span class="glyphicon glyphicon-pencil"></span></span>
+      <span class="display-name">Make Changes</span></a></li>
+    <li><a href="{% url 'poll-list' %}"><span class="icon-container"><span class="glyphicon glyphicon-remove"></span></span>
+      <span class="display-name">Remove</span></a></li>
   </ul>
 {% endblock %}
 
-{% block content %}
-  <div class="container-white">
-    <form id="poll-update-form" action="{% url 'poll-update' poll.pk %}" method="post">{% csrf_token %}
-      <!-- Temporary Alert -->
-      <div class="alert alert-warning alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-        <b>Note:</b> This page is incomplete.
-      </div>
-      <!-- Poll Content -->
-      <div class="row">
-        <div class="col-xs-1"><div class="form-label">Title</div></div>
-        <div class="col-xs-11"><div class="{% if form.content.errors %}has-error{% endif %}">{{ form.content }}</div></div>
-      </div><br>
-      <!-- Poll Choices -->
-      <div class="row">
-        <div class="col-xs-1"><div class="form-label">Choices</div></div>
-        <div class="col-xs-11">
-          <div id="poll-choices-existing">{% for choice in poll.choices.all %}<li data-content="{{ choice.content }}" data-pk="{{ choice.pk }}"></li>{% endfor %}</div>
-          <div id="choice-container" class="form-group"></div>
-        </div>
-      </div><br>
-      <!-- Poll Category -->
-      <div class="row">
-        <div class="col-xs-1"><div class="form-label">Category</div></div>
-        <div class="col-xs-11"><div class="{% if form.category.errors %}has-error{% endif %}">{{ form.category }}</div><hr></div>
-      </div>
-      <!-- Buttons -->
-      <div class="row">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-5">
-          {% block morebuttons %}<button id="poll-choice-add" class="btn btn-sm btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Choice</button>{% endblock %}
-        </div>
-        <div class="col-xs-6 text-right">
-          <a class="btn btn-sm btn-default" href="{% block cancel-button-target-url %}{% url 'poll-detail' poll.pk %}{% endblock %}">Cancel</a>
-          <button id="{% block submit-button-id %}submit-poll-create-form{% endblock %}" class="btn btn-sm btn-custom" type="button">{% block submit-button-text %}Publish{% endblock %}</button>
-        </div>
-      </div>
-    </form>
-  </div>
-{% endblock %}
-
-{% block templates %}
-  <template id="choice-input-template">
-    <div class="input-group choice-input-wrapper">
-      <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}">
-      <input required type="text" class="form-control choice-input" name="choice[]" value="{% templatetag openvariable %} content {% templatetag closevariable %}" placeholder="{% templatetag openvariable %} placeholder {% templatetag closevariable %}" maxlength="200">
-      <span class="input-group-btn" tabindex="-1">
-        <button type="button" class="btn btn-default remove-input" data-flavor="{% templatetag openvariable %} placeholder {% templatetag closevariable %}">
-          <span class="glyphicon glyphicon-remove"></span>
-        </button>
-      </span>
-    </div>
-  </template>
-{% endblock %}
-
+{% block cancel_button_target_url %}{% url 'poll-detail' poll.pk %}{% endblock %}
+{% block submit_button_id %}submit-poll-update-form{% endblock %}
 {% block script %}<script src="{% static 'main/js/poll_update.js' %}"></script>{% endblock%}
