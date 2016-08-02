@@ -211,19 +211,14 @@ def poll_update(request, pk):
     #TODO: restrict access to either the original author or a superuser admin
     poll = Poll.objects.get(pk=pk)
     form = PollForm(request.POST or None, instance=poll)
-    # if form.is_valid():
-    #     p = form.save()
-    #
-    #     old_choices = p.choices.all()
-    #     for choice in old_choices:
-    #         choice.delete()
-    #
-    #     new_choices = request.POST.getlist('choice[]')
-    #     for choice in new_choices:
-    #         c = Choice(content=choice, poll=p)
-    #         c.save()
-    #
-    #     return redirect(poll)
+    #New Stuff
+    if form.is_valid():
+        p = form.save()
+        new_choices = request.POST.getlist('new-choice[]')
+        for choice in new_choices:
+            c = Choice(content=choice, poll=p)
+            c.save()
+        return redirect(poll)
     return render(request, 'main/poll_update.html', {'form': form, 'poll': poll})
 
 @staff_member_required()
