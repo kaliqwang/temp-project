@@ -12,19 +12,20 @@ body.show-sidebar #site-footer {margin-left:230px}
 /* Fixed elements */
 #masthead, #sidebar-container {position:fixed; z-index:99}
 /* Inline block elements */
-#masthead li, #toggle-sidebar, a {display:inline-block}
+#masthead li, #toggle-sidebar, #sidebar-filter-feedback, a {display:inline-block}
 /* Remove default styling */
 a, a:hover, a:focus {color:inherit; text-decoration:none; outline:none}
+button:focus {outline: none}
 ul {list-style:none; margin:0px; padding:0px}
 /* Foreground color */
 #masthead,
 #sidebar-container,
 #site-footer,
-#main-page-content .container-white {background-color:#fff}
+.container-white {background-color:#fff}
 /* Text color */
 #masthead, #sidebar-container, #site-footer {color:#888}
 /* Glyphicon positioning */
-.icon-container {display:inline-block; height:16px; line-height:16px; vertical-align:middle}
+.icon-container {display:inline-block; height:16px; line-height:16px; padding: 0px 12px; vertical-align:middle}
 
 /***************************** Section 1: Navbar ******************************/
 
@@ -32,15 +33,15 @@ ul {list-style:none; margin:0px; padding:0px}
 #masthead-top, #masthead-bottom {border-bottom:1px solid #e8e8e8}
 /* Top Navbar */
 #masthead-top {height:50px; padding:10px 30px 9px} /* Spacing */
-#masthead-top-left {float:left} /* Left (logo) */
+#masthead-top-left {float:left;} /* Left (logo) */
 #masthead-top-right {padding-left:199px; text-align:right} /* Right (links) */
 #masthead-top-right a {line-height: 30px}
-#toggle-sidebar {line-height:30px; margin-left:-9px; padding:0px 12px; color:#bbb}
+#toggle-sidebar {line-height:30px; margin-left:-12px; color:#bbb}
 #masthead:hover #toggle-sidebar {color:#888}
 /* Bottom Navbar */
 #masthead-bottom {height:40px; text-align:center} /* Spacing */
 #masthead-bottom a {height:40px; line-height:40px; margin:0px 15px}
-#masthead-bottom a:hover,a.selected {border-bottom:3px solid #1e18cc} /* Border (selected items) */
+#masthead-bottom a:hover, #masthead-bottom a.selected {border-bottom:3px solid #1e18cc} /* Border (selected items) */
 #masthead-bottom a.selected {color:#444; font-weight:500} /* Font (selected items) */
 
 /***************************** Section 2: Sidebar *****************************/
@@ -56,20 +57,25 @@ ul {list-style:none; margin:0px; padding:0px}
 #sidebar-container ::-webkit-scrollbar-thumb {background:transparent}
 #sidebar-container:hover ::-webkit-scrollbar-thumb {background:#ccc}
 /* Sidebar */
-#sidebar {width:230px; height:100%; overflow-y:overlay; padding: 13px 22px}
-#sidebar hr.sidebar-divider {margin:8px 0px}
-#sidebar a.sidebar-header {padding:4px 0px; display:inline-block}
-#sidebar a.sidebar-header:hover {text-decoration:underline; color:inherit}
+#sidebar {width:230px; height:100%; overflow-y:overlay; padding: 13px 22px;}
 /* Sidebar links */
-#sidebar ul li a {height:28px; line-height: 28px; width:100%}
-#sidebar ul li a:hover {background-color:#444; color:#fff}
-#sidebar ul li a.selected {background-color:#1e18cc; color: #fff; font-weight:500}
-/* Sidebar links (icon / label) */
-#sidebar ul li a .icon-container,.display-name {display:inline-block; margin-left:10px}
-#sidebar ul li a .display-name {height:20px; line-height:20px; width: 140px}
+#sidebar li a {height:28px; line-height: 28px; width:100%}
+#sidebar li a:hover {background-color:#444; color:#fff}
+#sidebar li a.selected {background-color:#1e18cc; color: #fff; font-weight:500}
+#sidebar .display-name {height:20px; line-height:20px; width: 140px}
+/* Sidebar sections */
+#sidebar .sidebar-divider {margin:8px 0px}
+#sidebar .sidebar-header {padding:4px 0px; width:auto}
+#sidebar .sidebar-header a:hover {text-decoration:underline}
 /* Sidebar Filter Button */
-#sidebar #sidebar-filter-button {float:right; visibility:hidden}
-#sidebar-filter:hover #sidebar-filter-button {visibility:visible}
+#sidebar-filter-show-more {padding-left:41px}
+#sidebar-filter-hover-button, #sidebar-filter-apply {float:right; text-align:center; visibility:hidden}
+#sidebar-filter:hover #sidebar-filter-hover-button,
+#sidebar-filter:hover #sidebar-filter-apply {visibility:visible}
+/* Sidebar Feedback */
+#sidebar-filter-apply, #sidebar-filter-feedback {display:none; padding:0px 3px}
+#sidebar-filter-feedback {float:right; text-align:center}
+#sidebar-filter-feedback .icon-container {padding:0px}
 
 /**************************** Section 3: Main Page ****************************/
 
@@ -81,12 +87,7 @@ ul {list-style:none; margin:0px; padding:0px}
 
 /***************************** Bootstrap Override *****************************/
 
-.container {
-  padding-right: 10px;
-  padding-left: 10px;
-}
-
-@media (max-width: 1200px) {
+@media (max-width: 1800px) {
   body.show-sidebar #masthead-bottom,
   body.show-sidebar #main-page,
   body.show-sidebar #site-footer {margin-left:0px}
@@ -103,7 +104,7 @@ ul {list-style:none; margin:0px; padding:0px}
 }
 @media (min-width: 1200px) {
   .container {
-    width: 970px;
+    width: 1170px;
   }
 }
 @media (min-width: 1800px) {
@@ -116,20 +117,43 @@ ul {list-style:none; margin:0px; padding:0px}
     width: 2170px;
   }
 }
+
+.container {
+  padding-right: 5px;
+  padding-left: 5px;
+}
 .container-fluid {
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 .row {
-  margin-right: -10px;
-  margin-left: -10px;
+  margin-right: -5px;
+  margin-left: -5px;
 }
 .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 
 /****************************** Temporary Fixes *******************************/
 
-/*#main-page-content {min-height:1440px; width:1262px}*/
+#main-page-content {min-height:1440px}
 #site-copyright {line-height:100px}
+
+.filter-applied {opacity: .4}
+.filter-applied .display-name {text-decoration: line-through}
+
+/********************************* Paginator **********************************/
+
+#paginator-standard, #paginator-simple, #info-bar-top {height:40px; line-height:40px; margin:8px 0px; clear:both}
+
+.paginator-link {height: 40px; line-height: 40px;padding: 0px 15px; color: #888}
+.paginator-link:hover {background-color:#444; color:#fff}
+.paginator-link.selected {background-color:#1e18cc; color: #fff; font-weight:500}
+
+#info-bar-top {color:#888; display:none}
+#info-bar-top li {display:inline-block}
+#info-bar-top-dismiss {height:40px; line-height:40px; padding:0px 15px; vertical-align:middle}
+
+/*.paginator-link:hover, .paginator-link.selected {border-bottom:3px solid #1e18cc}
+.paginator-link.selected {color:#444; font-weight:500}*/

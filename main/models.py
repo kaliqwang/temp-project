@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
+
 ################################################################################
 
 from __future__ import unicode_literals
 
 import os
+
+import math
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -14,6 +18,7 @@ from django.core.urlresolvers import reverse
 from colorful.fields import RGBColorField
 from django.utils import timezone
 from datetime import datetime, date, time, timedelta
+import pytz
 import requests
 import urllib2
 import json
@@ -24,11 +29,22 @@ from imagekit.processors import ResizeToFill, ResizeToFit
 from django.core.files.images import ImageFile
 from django.core.files.base import ContentFile
 from django.core.files import File
-from StringIO import StringIO
+
 from PIL import Image
+from io import BytesIO
 from urlparse import urlparse
 
+from random import randint, random
+
+from django.conf import settings
+
 ################################################################################
+
+colors = [
+    '#f2f3f4', '#f3c300', '#875692', '#f38400', '#a1caf1', '#be0032', '#c2b280',
+    '#848482', '#008856', '#e68fac', '#0067a5', '#f99379', '#604e97', '#f6a600',
+    '#b3446c', '#dcd300', '#882d17', '#8db600', '#654522', '#e25822', '#2b3d26',
+]
 
 FRESHMAN = 0
 SOPHOMORE = 1
@@ -42,22 +58,12 @@ grade_levels = (
     (SENIOR, 'Senior'),
 )
 
-colors = [
-    '#f2f3f4', '#f3c300', '#875692', '#f38400', '#a1caf1', '#be0032', '#c2b280',
-    '#848482', '#008856', '#e68fac', '#0067a5', '#f99379', '#604e97', '#f6a600',
-    '#b3446c', '#dcd300', '#882d17', '#8db600', '#654522', '#e25822', '#2b3d26',
-]
-
-################################################################################
-
 mobile_validator = RegexValidator(
     regex=r'^\d{10}$', message='Enter a valid phone number')
 student_id_validator = RegexValidator(
     regex=r'^\d{10}$', message='Enter a valid student id')
 youtube_validator = RegexValidator(
     regex=r'^[a-zA-Z0-9_-]{11}$', message='Invalid YouTube video id')
-
-################################################################################
 
 class GetOrNoneManager(models.Manager):
 
@@ -69,12 +75,106 @@ class GetOrNoneManager(models.Manager):
 
 ################################################################################
 
+lorem_random = [
+    # First 100 words are capitalized
+    'Lorem','Ipsum','Dolor','Sit','Amet','Consectetur','Adipiscing','Elit','Donec','Vel',
+    'Facilisis','Mi','Imperdiet','Hendrerit','Est','Nam','Venenatis','Magna','Semper','Libero',
+    'Pretium','A','Lacinia','Nisl','Varius','Ut','Velit','Vitae','Viverra','Nibh',
+    'Sed','Eleifend','Volutpat','Placerat','Duis','Eu','Tortor','Nec','Mauris','Aliquam',
+    'Ac','Urna','In','Metus','Augue','Ultrices','At','Felis','Gravida','Fermentum',
+    'Etiam','Fringilla','Purus','Congue','Eget','Turpis','Condimentum','Id','Luctus','Lacus',
+    'Commodo','Porta','Lectus','Vehicula','Nulla','Odio','Erat','Maximus','Et','Sodales',
+    'Tellus','Sapien','Duis','Integer','Dictum','Rhoncus','Nunc','Neque','Dui','Suscipit',
+    'Aliquet','Rutrum','Vestibulum','Tristique','Sem','Enim','Accumsan','Eros','Non','Curabitur',
+    'Laoreet','Quis','Sagittis','Nisi','Efficitur','Auctor','Fusce','Blandit','Pharetra','Leo',
+     # Second 100 words are lowercase
+    'lorem','ipsum','dolor','sit','amet','consectetur','adipiscing','elit','integer','felis',
+    'in','egestas','vitae','malesuada','nisi','proin','pellentesque','est','nec','luctus',
+    'vestibulum','et','metus','at','dui','efficitur','iaculis','a','eleifend','massa',
+    'morbi','elementum','eget','leo','ornare','vel','nunc','placerat','odio','ut',
+    'tincidunt','pulvinar','curabitur','mauris','viverra','eu','id','laoreet','mattis','donec',
+    'erat','facilisis','porttitor','nibh','fringilla','turpis','arcu','sem','molestie','quis',
+    'libero','sed','euismod','fermentum','ultrices','porta','accumsan','neque','nam','quam',
+    'posuere','quisque','dapibus','nisl','ac','nulla','facilisi','nullam','ligula','bibendum',
+    'diam','dapibus','augue','varius','maecenas','risus','semper','dignissim','aliquam','sodales',
+    'pretium','ante','ullamcorper','suscipit','condimentum','tortor','cursus','praesent','non','eros',
+]
+
+random_videos = [
+    "mT0DpuAlJbs", "_yhf_PvRGIE", "LKiDgFySXg8", "zMN9otsaZ80", "cb1Jp-rFJDI",
+    "gGrXEewfz34", "6QdOI4zZC0g", "LWgqWuJG5Jg", "Z1lpZRe7-R8", "Kkr9hf9d8Fo",
+    "s1exvkLxQi8", "T7iiwsT5hWg", "eZ5C7dfU6-A", "pmhqMajav8Y", "8SF1Wt__W6g",
+    "oQq9vDU4IfU", "wLXVDzM8Tnk", "V3i0eOfchxg", "BG9rW-hYikw", "4SxWtQzL6js",
+]
+
+first_names = [
+    # 70 male first names
+    'Adam','Adrian','Alan','Alexander','Andrew','Anthony','Austin','Benjamin','Blake','Boris',
+    'Brandon','Brian','Cameron','Charles','Christian','Christopher','Colin','Connor','Dan','David',
+    'Dominic','Dylan','Edward','Eric','Evan','Frank','Gavin','Gordon','Harry','Ian',
+    'Isaac','Jack','Jacob','Jake','James','Jason','Joe','John','Jonathan','Joseph',
+    'Julian','Justin','Keith','Kevin','Leonard','Liam','Lucas','Luke','Matt','Max',
+    'Michael','Nathan','Nicholas','Oliver','Paul','Peter','Phil','Richard','Robert','Ryan',
+    'Sam','Sean','Sebastian','Stephen','Steven','Stewart','Thomas','Tim','Trevor','William',
+    # 70 female first names
+    'Abigail','Alexandra','Alison','Amanda','Amelia','Amy','Andrea','Angela','Anna','Anne',
+    'Audrey','Ava','Bella','Caroline','Carolyn','Chloe','Claire','Diana','Dorothy','Elizabeth',
+    'Ella','Emily','Emma','Faith','Felicity','Gabrielle','Grace','Hannah','Heather','Irene',
+    'Jane','Jasmine','Jennifer','Jessica','Joan','Julia','Karen','Katherine','Kimberly','Kylie',
+    'Lauren','Leah','Lillian','Lily','Lisa','Madeleine','Maria','Mary','Megan','Melanie',
+    'Michelle','Molly','Natalie','Nicola','Olivia','Penelope','Rachel','Rebecca','Rose','Samantha',
+    'Sarah','Sonia','Sophie','Stephanie','Theresa','Vanessa','Victoria','Virginia','Wendy','Zoe',
+]
+
+last_names = [
+    # 140 last names
+    'Abraham','Allan','Anderson','Arnold','Avery','Bailey','Baker','Ball','Bell', 'Berry',
+    'Black','Blake','Bower','Brown','Buckland','Burgess','Butler','Cameron','Campbell','Chapman',
+    'Churchill','Clark','Clarkson','Coleman','Davidson','Davies','Dickens','Dowd','Duncan','Dyer',
+    'Edmunds','Ellison','Ferguson','Fisher','Forsyth','Fraser','Gibson','Gill','Glover','Graham',
+    'Grant','Gray','Greene','Hamilton','Harris','Hart','Hemmings','Henderson','Hill','Howard',
+    'Hudson','Hughes','Hunter','Jackson','James','Johnston','Jones','Kelly','Kerr','King',
+    'Knox','Lambert','Lawrence','Lee','Lewis','Lyman','MacDonald','Mackay','Mackenzie','Manning',
+    'Marshall','Martin','Mathis','May','McDonald','McLean','McGrath','Metcalfe','Miller','Mills',
+    'Mitchell','Morgan','Morrison','Murray','Nash','Newman','Nolan','North','Ogden','Oliver',
+    'Paige','Parr','Parsons','Paterson','Payne','Peake','Peters','Piper','Poole','Powell',
+    'Pullman','Quinn','Rampling','Randall','Rees','Reid','Roberts','Robertson','Ross','Russell',
+    'Rutherford','Sanderson','Scott','Sharp','Short','Simpson','Skinner','Slater','Smith','Springer',
+    'Stewart','Sutherland','Taylor','Terry','Thomson','Tucker','Turner','Underwood','Vance','Vaughan',
+    'Walker','Wallace','Walsh', 'Watson','Welch','White','Wilkins','Wilson','Wright','Young',
+]
+
+def get_random_name():
+    first = first_names[randint(0, 139)]
+    last = last_names[randint(0, 139)]
+    return (first, last)
+
+def get_random_datetime(interval):
+    steps = int(400000 / interval)
+    random_minutes = timedelta(minutes=(randint(0, steps) * interval))
+    start_date_naive = datetime(2016, 8, 8)
+    local = pytz.timezone ("EST5EDT")
+    start_date_local = local.localize(start_date_naive)
+    return start_date_local + random_minutes
+
+def get_random_minutes(interval):
+    steps = int(10000 / interval)
+    return timedelta(minutes=(randint(6, steps) * interval))
+
+################################################################################
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', null=True)
-    mobile = models.CharField("Phone Number", unique=True, max_length=10,
-                              validators=[mobile_validator])
+    # TODO: set mobile to unique = True in production
+    mobile = models.CharField("Phone Number", max_length=10, validators=[mobile_validator])
+    # TODO: create a signal (or just update save function of related model) that automatically sets these values when a related student/teacher profile object is saved
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
+
+    categories_hidden_announcements = models.ManyToManyField('Category', blank=True)
+    # related_name="user_profiles_categories_hidden_announcements",
+    # categories_hidden_events = models.ManyToManyField('Category', related_name="user_profiles_categories_hidden_events", blank=True)
+
     objects = GetOrNoneManager()
 
     def __str__(self):
@@ -82,13 +182,41 @@ class UserProfile(models.Model):
 
 class StudentProfile(models.Model):
     user_profile = models.OneToOneField(UserProfile, related_name='student_profile', null=True)
-    student_id = models.CharField("Student ID", unique=True, max_length=10,
-                                  validators=[student_id_validator])
+    # TODO: set student_id to unique = True in production
+    student_id = models.CharField("Student ID", max_length=10, validators=[student_id_validator])
     grade_level = models.IntegerField("Grade Level", default=FRESHMAN, choices=grade_levels)
     objects = GetOrNoneManager()
 
     def __str__(self):
         return '%s - student profile' % self.user_profile
+
+    @classmethod
+    def generate_random_objects(cls, count):
+        user_pk = User.objects.latest('pk').pk + 1
+        generated_count = 0
+        for i in range(0, count):
+            first_name, last_name = get_random_name()
+            user = User.objects.create_user(
+                username=user_pk,
+                password=user_pk,
+                first_name=first_name,
+                last_name=last_name,
+            )
+            user_profile = UserProfile.objects.create(
+                user=user,
+                mobile='6787901506',
+                is_student=True,
+            )
+            student_id = randint(1100000000, 1100999999)
+            grade_level = randint(0, 3)
+            student_profile= StudentProfile.objects.create(
+                user_profile=user_profile,
+                grade_level=grade_level,
+            )
+            user_pk += 1
+            generated_count += 1
+            print('StudentProfile %d created (user=%d, user_profile=%d)' %(student_profile.pk, user.pk, user_profile.pk))
+        return generated_count
 
 class TeacherProfile(models.Model):
     user_profile = models.OneToOneField(UserProfile, related_name='teacher_profile', null=True)
@@ -135,10 +263,13 @@ class Category(models.Model):
         self.color = kwargs.pop('color', self.color)
         self.save()
 
+################################################################################
+
 class Announcement(models.Model):
     title = models.CharField(max_length=50)
     author = models.ForeignKey(UserProfile, related_name="announcements", blank=True, null=True, on_delete=models.SET_NULL)
-    date_created = models.DateTimeField(auto_now_add=True)
+    # TODO: set auto_now_add=True for production
+    date_created = models.DateTimeField()
     content = models.TextField()
     category = models.ForeignKey(Category, related_name='announcements', blank=True, null=True, on_delete=models.SET_NULL)
     rank = models.IntegerField(default=0, blank=True)
@@ -173,6 +304,58 @@ class Announcement(models.Model):
         self.rank = 0
         self.save()
 
+    @classmethod
+    def generate_random_objects(cls, count):
+        user_profiles = UserProfile.objects.all()
+        user_profiles_count = user_profiles.count()
+        categories = Category.objects.all()
+        categories_count = categories.count()
+
+        generated_count = 0
+        for i in range(0, count):
+            # Random title
+            title = lorem_random[randint(0, 99)] + ' '
+            length = int(pow(random(), 3) * 6 + 1)
+            for x in range(0, length):
+                title += lorem_random[randint(0, 199)] + ' '
+            # Random author
+            author = user_profiles[int(random() * user_profiles_count)]
+            # Random date_created
+            date_created = get_random_datetime(1)
+            # Random content
+            content = lorem_random[randint(0, 99)] + ' '
+            length = int(pow(random(), 3) * 60 + 10)
+            for y in range(0, length):
+                content += lorem_random[randint(0, 199)] + ' '
+            # Random category
+            category = categories[int(random() * categories_count)]
+            # Create Object
+            a = Announcement(
+                title=title,
+                author=author,
+                date_created=date_created,
+                content=content,
+                category=category,
+            )
+            a.save()
+            # Random Images
+            image_count = int(pow(random(), 5) * 12)
+            for y in range(0, image_count):
+                ImageLink.objects.create(
+                    announcement=a,
+                    image_link="https://unsplash.it/200/300/?random"
+                )
+            # Random Videos
+            video_count = int(pow(random(), 5) * 4)
+            for z in range(0, video_count):
+                YouTubeVideo.objects.create(
+                    announcement=a,
+                    youtube_video=random_videos[randint(0, 19)]
+                )
+            generated_count += 1
+            print('Announcement %d created: %d images %d videos' % (a.pk, image_count, video_count))
+        return generated_count
+
 def default_date():
     return date.today()
 
@@ -180,7 +363,7 @@ def default_time():
     return datetime.now().time().strftime('%I:%M %p')
 
 class Event(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     date_start = models.DateField("Starts on")
     time_start = models.TimeField("Starts at", blank=True, null=True)
     date_end = models.DateField("Ends on", blank=True)
@@ -219,6 +402,54 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         return reverse('event-detail', args=[str(self.pk)])
+
+    @classmethod
+    def generate_random_objects(cls, count):
+        categories = Category.objects.all()
+        categories_count = categories.count()
+
+        generated_count = 0
+        for i in range(0, count):
+            # Random title
+            name = lorem_random[randint(0, 99)] + ' '
+            length = int(pow(random(), 3) * 6 + 1)
+            for x in range(0, length):
+                name += lorem_random[randint(0, 99)] + ' '
+            # Random date_start / time_start
+            datetime_start = get_random_datetime(5)
+            date_start = datetime_start.date()
+            time_start = datetime_start.time()
+            # Random date_end / time_end
+            datetime_end = datetime_start + get_random_minutes(5)
+            date_end = datetime_end.date()
+            time_end = datetime_end.time()
+            # Random Location
+            location = ''
+            length = int(pow(random(), 2) * 4 + 2)
+            for y in range (0, length):
+                location += lorem_random[randint(0, 99)] + ' '
+            # Random Details
+            details = lorem_random[randint(0, 99)]
+            length = int(pow(random(), 3) * 100)
+            for z in range(0, length):
+                details += lorem_random[randint(0, 199)] + ' '
+            # Random category
+            category = categories[int(random() * categories_count)]
+            # Create Object
+            e = Event(
+                name=name,
+                date_start=date_start,
+                time_start=time_start,
+                date_end=date_end,
+                time_end=time_end,
+                location=location,
+                details=details,
+                category=category,
+            )
+            e.save()
+            generated_count += 1
+            print('Event %d created' % e.pk)
+        return generated_count
 
 class Poll(models.Model):
     content = models.CharField(max_length=200)
@@ -284,6 +515,61 @@ class Poll(models.Model):
             a.save()
             i += 1
 
+    @classmethod
+    def generate_random_objects(cls, count, add_votes):
+        user_profiles = UserProfile.objects.all()
+        user_profiles_count = user_profiles.count()
+        categories = Category.objects.all()
+        categories_count = categories.count()
+
+        generated_count = 0
+        for i in range(0, count):
+            # Random content
+            content = lorem_random[randint(0, 99)] + ' '
+            length = int(pow(random(), 2) * 6 + 6)
+            for x in range(0, length):
+                content += lorem_random[randint(0, 199)] + ' '
+            content += '?'
+            # Random author
+            author = user_profiles[int(random() * user_profiles_count)]
+            # Random category
+            category = categories[int(random() * categories_count)]
+            # Create Object
+            p = Poll(content=content, author=author, category=category)
+            p.save()
+            # Random Choices
+            choice_count = randint(2, 6)
+            choice_length = int(pow(random(), 2) * 10)
+            for y in range(0, choice_count):
+                choice_content = lorem_random[randint(0, 99)] + ' '
+                for z in range(0, choice_length):
+                    choice_content += lorem_random[randint(0, 199)] + ' '
+                    c = Choice(poll=p, content=choice_content)
+                    c.save()
+            # Random status
+            status = randint(0, 2)
+            vote_count = 0
+            if status == 2:
+                p.is_open = False
+                p.save()
+            if add_votes:
+                vote_count = p.generate_random_votes(user_profiles, user_profiles_count)
+            generated_count += 1
+            print('Poll %d created: %d choices, %d votes, open: %s' % (p.pk, choice_count, vote_count, p.is_open))
+        return generated_count
+
+    def generate_random_votes(self, user_profiles, user_profiles_count):
+        choices = self.choices.all()
+        choices_count = self.choices.count()
+        vote_counter = 0
+        for user_profile in user_profiles:
+            choice = choices[randint(0, choices_count - 1)]
+            v = Vote(poll=self, choice=choice, voter=user_profile)
+            v.save()
+            print('Userprofile %d voted for choice %d' % (user_profile.pk, choice.pk))
+            vote_counter += 1
+        return vote_counter
+
 class Choice(models.Model):
     poll = models.ForeignKey(Poll, related_name='choices', on_delete=models.CASCADE)
     content = models.CharField(max_length=200)
@@ -295,7 +581,7 @@ class Choice(models.Model):
         return self.content
 
     def vote_count(self):
-        return self.votes.count
+        return self.votes.count()
 
 class Vote(models.Model):
     voter = models.ForeignKey(UserProfile, related_name='votes', on_delete=models.CASCADE)
@@ -320,20 +606,37 @@ class Vote(models.Model):
 ################################################################################
 
 class ImageFile(models.Model):
-    announcement = models.ForeignKey(Announcement, related_name='image_files', on_delete=models.CASCADE)
-    #TODO: change w, h, and quality settings to settings.py variables
-    image_file = ProcessedImageField(upload_to='main/images/', blank=True, null=True, processors=[ResizeToFit(1280, 720)], format='JPEG', options={'quality': 80})
-    image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(127, 127)], format='JPEG', options={'quality': 100})
+    # NOTE: set on_delete=models.CASCADE and remove null=True for production
+    announcement = models.ForeignKey(Announcement, related_name='image_files', null=True, on_delete=models.SET_NULL)
+    image_file = ProcessedImageField(
+        upload_to='main/images/', blank=True, null=True,
+        processors=[ResizeToFit(settings.IMAGE_WIDTH, settings.IMAGE_HEIGHT)],
+        format='JPEG', options={'quality': settings.IMAGE_QUALITY},
+    )
+    image_file_thumbnail = ImageSpecField(
+        source='image_file',
+        processors=[ResizeToFill(settings.THUMBNAIL_WIDTH, settings.THUMBNAIL_HEIGHT)],
+        format='JPEG', options={'quality': settings.THUMBNAIL_QUALITY},
+    )
 
     def __str__(self):
         return os.path.basename(self.image_file.path)
 
 class ImageLink(models.Model):
-    announcement = models.ForeignKey(Announcement, related_name='image_links', on_delete=models.CASCADE)
+    # NOTE: set on_delete=models.CASCADE and remove null=True for production
+    announcement = models.ForeignKey(Announcement, related_name='image_links', blank=True, null=True, on_delete=models.SET_NULL)
     image_link = models.URLField()
-    #TODO: change w, h, and quality settings to settings.py variables
-    image_file = ProcessedImageField(upload_to='main/images/', null=True, processors=[ResizeToFit(1280, 720)], format='JPEG', options={'quality': 80})
-    image_file_thumbnail = ImageSpecField(source='image_file', processors=[ResizeToFill(127, 127)], format='JPEG', options={'quality': 50})
+    image_file = ProcessedImageField(
+        upload_to='main/images/', blank=True, null=True,
+        processors=[ResizeToFit(settings.IMAGE_WIDTH, settings.IMAGE_HEIGHT)],
+        format='JPEG', options={'quality': settings.IMAGE_QUALITY},
+    )
+    image_file_thumbnail = ImageSpecField(
+        source='image_file',
+        processors=[ResizeToFill(settings.THUMBNAIL_WIDTH, settings.THUMBNAIL_HEIGHT)],
+        format='JPEG', options={'quality': settings.THUMBNAIL_QUALITY},
+    )
+
 
     objects = GetOrNoneManager()
 
@@ -359,9 +662,9 @@ class ImageLink(models.Model):
     def download_image(self):
         r = requests.get(self.image_link)
         if r.status_code == 200:
-            img_io = StringIO()
-            img = Image.open(StringIO(r.content))
+            img = Image.open(BytesIO(r.content))
             if img:
+                img_io = BytesIO()
                 img.save(img_io, 'JPEG')
                 return ContentFile(img_io.getvalue())
         return None
@@ -373,8 +676,15 @@ class ImageLink(models.Model):
             return False
         return r.status_code == 200
 
+    @classmethod
+    def create_image_set(cls):
+        for i in range(0, len(random_images)):
+            i = ImageLink(image_link=random_images[i])
+            i.save()
+
 class YouTubeVideo(models.Model):
-    announcement = models.ForeignKey(Announcement, related_name='youtube_videos', on_delete=models.CASCADE)
+    # TODO: set on_delete=models.CASCADE and remove null=True for production
+    announcement = models.ForeignKey(Announcement, related_name='youtube_videos', null=True, on_delete=models.SET_NULL)
     title = models.CharField('Video Title', max_length=200, blank=True)
     youtube_video = models.CharField('YouTube Video ID', max_length=11, validators=[youtube_validator])
 

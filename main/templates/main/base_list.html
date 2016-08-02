@@ -1,21 +1,52 @@
 {% extends "main/base.html" %}
 
-{% block sidebar_extra %}
+{% load staticfiles %}
+
+{% block sidebar_filter %}
   <hr class="sidebar-divider">
   <ul id="sidebar-filter">
-    <a href="#" class="sidebar-header">Filter</a>
-    <a href="#" id="sidebar-filter-button">
-      <span class="icon-container"><span class="glyphicon glyphicon-option-vertical"></span></span>
-    </a>
-    <li><a href="?">
-      <span class="icon-container"><span class="glyphicon glyphicon-th"></span></span>
-      <span class="display-name">Show All</span>
-    </a></li>
-    {% for category in categories %}
-      <li><a href="?category={{ category.pk }}">
+    <div class="sidebar-header">
+      <a href="#">Show</a>
+      <a href="#" id="sidebar-filter-apply">Apply</a>
+      <div id="sidebar-filter-feedback" class="alert-success">
+        <span class="icon-container"><span class="glyphicon glyphicon-saved"></span></span>
+      </div>
+      <!-- <a href="#" id="sidebar-filter-hover-button">
+        <span class="icon-container"><span class="glyphicon glyphicon-option-vertical"></span></span>
+      </a> -->
+    </div>
+    {% for category in categories_shown %}
+      <li><a href="#" class="sidebar-filter-option" data-pk="{{ category.pk }}">
         <span class="icon-container" style="color:{{ category.color }}"><span class="glyphicon glyphicon-tag"></span></span>
         <span class="display-name">{{ category.name }}</span>
       </a></li>
     {% endfor %}
+    {% for category in categories_hidden_announcements %}
+      <li><a href="#" class="sidebar-filter-option filter-applied" data-pk="{{ category.pk }}">
+        <span class="icon-container" style="color:{{ category.color }}"><span class="glyphicon glyphicon-tag"></span></span>
+        <span class="display-name">{{ category.name }}</span>
+      </a></li>
+    {% endfor %}
+    <!-- <li><a href="#">
+      <span id="sidebar-filter-show-more" class="display-name">Show More</span>
+    </a></li> -->
   </ul>
+  <button id="sidebar-filter-apply" class="btn btn-sm btn-custom hidden" type="button">Apply</button>
+{% endblock %}
+
+{% block info_box_top %}
+  <div id="info-bar-top" class="container-white text-center">
+    <ul>
+      <button id="info-bar-top-dismiss" type="button" class="close"><span>&times;</span></button>
+      <span>Hidden: </span>
+      <span id="info-bar-top-content">
+        {% for category in categories_hidden_announcements %}
+          <li><a href="#" data-pk="{{ category.pk }}" title="{{ category.name }}" data-toggle="tooltip" data-placement="top" data-animation="false">
+            <span class="icon-container" style="color:{{ category.color }}"><span class="glyphicon glyphicon-tag"></span></span>
+            <!-- <span class="display-name">{{ category.name }}</span> -->
+          </a></li>
+        {% endfor %}
+      </span>
+    </ul>
+  </div>
 {% endblock %}

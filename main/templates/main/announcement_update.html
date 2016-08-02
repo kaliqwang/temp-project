@@ -7,12 +7,17 @@
 {% block form_id %}announcement-update-form{% endblock %}{% block form_url %}{% url 'announcement-update' announcement.pk %}{% endblock %}
 
 {% block sidebar_extra %}
-  <hr>
-  <ul id="section-admin-announcement">
-    <a href="#" class="sidebar-section-header">Announcement Tools</a>
-    <!-- <span class="glyphicon glyphicon-tags"> -->
-    <li><a href="{% url 'announcement-update' announcement.pk %}" class="selected"><span class="glyphicon glyphicon-pencil"></span><span class="text-label">Make Changes</span></a></li>
-    <li><a href="#"><span class="glyphicon glyphicon-remove"></span><span class="text-label">Remove</span></a></li>
+  <hr class="sidebar-divider">
+  <ul id="sidebar-admin-announcement">
+    <a href="#" class="sidebar-header">Announcement Tools</a>
+    <li><a href="{% url 'announcement-update' announcement.pk %}" class="selected">
+      <span class="icon-container"><span class="glyphicon glyphicon-pencil"></span></span>
+      <span class="display-name">Make Changes</span>
+    </a></li>
+    <li><a href="#">
+      <span class="icon-container"><span class="glyphicon glyphicon-remove"></span></span>
+      <span class="display-name">Delete</span>
+    </a></li>
   </ul>
 {% endblock %}
 

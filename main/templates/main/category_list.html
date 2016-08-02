@@ -28,12 +28,12 @@
             {% endfor %}
           </div><hr>
           <!-- Buttons -->
-          <div class="row row-compact">
-            <div class="col-xs-1 col-compact"></div>
-            <div class="col-xs-5 col-compact">
+          <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-5">
               {% block morebuttons %}<button id="category-add" class="btn btn-sm btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Category</button>{% endblock %}
             </div>
-            <div class="col-xs-6 col-compact text-right">
+            <div class="col-xs-6 text-right">
               <a class="btn btn-sm btn-default" href="{% block cancel_button_target_url %}{% url 'index' %}{% endblock %}">Cancel</a>
               <button id="{% block submit_button_id %}submit-category-list-form{% endblock %}" class="btn btn-sm btn-custom" type="button">{% block submit_button_text %}Save{% endblock %}</button>
             </div>
@@ -59,10 +59,10 @@
   <template id="old-category-template">
     <div class="input-group-wrapper">
       <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}">
-      <div class="row row-compact">
-        <div class="col-xs-1 col-compact">
+      <div class="row">
+        <div class="col-xs-1">
         </div>
-        <div class="col-xs-11 col-compact">
+        <div class="col-xs-11">
           <div class="input-group">
             <input type="text" class="form-control category-name-input"
               name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
@@ -82,11 +82,11 @@
   <template id="new-category-template">
     <div class="input-group-wrapper">
       <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}">
-      <div class="row row-compact">
-        <div class="col-xs-1 col-compact">
+      <div class="row">
+        <div class="col-xs-1">
           <button type="button" class="close remove_field" title="Remove" data-toggle="tooltip" data-placement="top"><span>&times;</span></button>
         </div>
-        <div class="col-xs-11 col-compact">
+        <div class="col-xs-11">
           <div class="input-group">
             <input type="text" class="form-control category-name-input"
               name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"

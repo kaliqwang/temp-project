@@ -16,8 +16,8 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <!-- Other CSS (order important)-->
-    <link href="{% static 'main/js/datepicker/bootstrap-datepicker3.css' %}" rel="stylesheet">
-    <link href="{% static 'main/js/timepicker/jquery.timepicker.css' %}" rel="stylesheet">
+    <link href="{% static 'main/plugins/datepicker/bootstrap-datepicker3.css' %}" rel="stylesheet">
+    <link href="{% static 'main/plugins/timepicker/jquery.timepicker.css' %}" rel="stylesheet">
     <link href="{% static 'main/css/base.css' %}" rel="stylesheet">
     <link href="{% static 'main/css/style.css' %}" rel="stylesheet">
     <!-- Website Title -->
@@ -61,98 +61,106 @@
     <!-- Sidebar -->
     <div id="sidebar-container">
       <div id="sidebar">
-        <div class="sidebar-content">
-          <ul id="sidebar-top">
-            {% if user.is_authenticated %}
-              <li><a href="{% url 'index' %}" class="{% block sidebar_trending %}{% endblock %}">
-                <span class="icon-container"><span class="glyphicon glyphicon-fire"></span></span>
-                <span class="display-name">Trending</span>
-              </a></li>
-              <li><a href="{% url 'announcement-list' %}" class="{% block sidebar_announcements %}{% endblock %}">
-                <span class="icon-container"><span class="glyphicon glyphicon-comment"></span></span>
-                <span class="display-name">Announcements</span>
-              </a></li>
-              <li><a href="{% url 'event-list' %}" class="{% block sidebar_events %}{% endblock %}">
-                <span class="icon-container"><span class="glyphicon glyphicon-calendar"></span></span>
-                <span class="display-name">Events</span>
-              </a></li>
-              <li><a href="{% url 'poll-list' %}" class="{% block sidebar_polls %}{% endblock %}">
-                <span class="icon-container"><span class="glyphicon glyphicon-stats"></span></span>
-                <span class="display-name">Polls</span>
-              </a></li>
-              <li><a href="#" class="{% block sidebar_saved %}{% endblock %}">
-                <span class="icon-container"><span class="glyphicon glyphicon-star"></span></span>
-                <span class="display-name">Saved for Later</span>
-              </a></li>
-              <li><a href="#" class="{% block sidebar_teachers %}{% endblock %}">
-                <span class="icon-container"><span class="glyphicon glyphicon-education"></span></span>
-                <span class="display-name">Teachers</span>
-              </a></li>
-            {% else %}
-              <a href="#" class="sidebar-header">Registration</a>
-              <li><a href="{% url 'parent-register' %}" class="{% block sidebar_parent_register %}{% endblock %}">
-                <span class="icon-container"><span class="glyphicon glyphicon-user"></span></span>
-                <span class="display-name">Parent</span>
-              </a></li>
-              <li><a href="{% url 'student-register' %}" class="{% block sidebar_student_register %}{% endblock %}">
-                <span class="icon-container"><span class="glyphicon glyphicon-user"></span></span>
-                <span class="display-name">Student</span>
-              </a></li>
-              <li><a href="{% url 'teacher-register' %}" class="{% block sidebar_teacher_register %}{% endblock %}">
-                <span class="icon-container"><span class="glyphicon glyphicon-user"></span></span>
-                <span class="display-name">Teacher</span>
-              </a></li>
-            {% endif %}
-          </ul>
-          {% if user.is_superuser %}
-          <hr class="sidebar-divider">
-          <ul id="sidebar-admin">
-            <a href="#" class="sidebar-header">Admin Tools</a>
-            <li><a href="{% url 'announcement-create' %}" class="{% block sidebar_announcement_create %}{% endblock %}">
-              <span class="icon-container"><span class="glyphicon glyphicon-comment"></span></span>
-              <span class="display-name">New Announcement</span>
-            </a></li>
-            <li><a href="{% url 'event-create' %}" class="{% block sidebar_event_create %}{% endblock %}">
-              <span class="icon-container"><span class="glyphicon glyphicon-calendar"></span></span>
-              <span class="display-name">New Event</span>
-            </a></li>
-            <li><a href="{% url 'poll-create' %}" class="{% block sidebar_poll_create %}{% endblock %}">
-              <span class="icon-container"><span class="glyphicon glyphicon-stats"></span></span>
-              <span class="display-name">New Poll</span>
-            </a></li>
-            <li><a href="{% url 'index' %}">
+        <ul id="sidebar-top">
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'index' %}" class="{% block sidebar_trending %}{% endblock %}">
               <span class="icon-container"><span class="glyphicon glyphicon-fire"></span></span>
               <span class="display-name">Trending</span>
             </a></li>
-            <li><a href="#" class="{% block sidebar_pinned %}{% endblock %}">
-              <span class="icon-container"><span class="glyphicon glyphicon-pushpin"></span></span>
-              <span class="display-name">Pinned</span>
+            <li><a href="{% url 'announcement-list' %}" class="{% block sidebar_announcements %}{% endblock %}">
+              <span class="icon-container"><span class="glyphicon glyphicon-comment"></span></span>
+              <span class="display-name">Announcements</span>
             </a></li>
-            <li><a href="{% url 'category-list' %}" class="{% block sidebar_category_list %}{% endblock %}">
-              <span class="icon-container"><span class="glyphicon glyphicon-tags"></span></span>
-              <span class="display-name">Tags</span>
+            <li><a href="{% url 'event-list' %}" class="{% block sidebar_events %}{% endblock %}">
+              <span class="icon-container"><span class="glyphicon glyphicon-calendar"></span></span>
+              <span class="display-name">Events</span>
             </a></li>
-          </ul>
-          <ul id="sidebar-admin-advanced">
-            <a href="#" class="sidebar-header">Advanced</a>
-            <li><a href="{% url 'admin:index' %}" target="_blank">
-              <span class="icon-container"><span class="glyphicon glyphicon-hdd"></span></span>
-              <span class="display-name">Database</span>
+            <li><a href="{% url 'poll-list' %}" class="{% block sidebar_polls %}{% endblock %}">
+              <span class="icon-container"><span class="glyphicon glyphicon-stats"></span></span>
+              <span class="display-name">Polls</span>
             </a></li>
-          </ul>
+            <li><a href="#" class="{% block sidebar_saved %}{% endblock %}">
+              <span class="icon-container"><span class="glyphicon glyphicon-star"></span></span>
+              <span class="display-name">Saved for Later</span>
+            </a></li>
+            <li><a href="#" class="{% block sidebar_teachers %}{% endblock %}">
+              <span class="icon-container"><span class="glyphicon glyphicon-education"></span></span>
+              <span class="display-name">Teachers</span>
+            </a></li>
+          {% else %}
+            <div class="sidebar-header"><a href="#">Registration</a></div>
+            <li><a href="{% url 'parent-register' %}" class="{% block sidebar_parent_register %}{% endblock %}">
+              <span class="icon-container"><span class="glyphicon glyphicon-user"></span></span>
+              <span class="display-name">Parent</span>
+            </a></li>
+            <li><a href="{% url 'student-register' %}" class="{% block sidebar_student_register %}{% endblock %}">
+              <span class="icon-container"><span class="glyphicon glyphicon-user"></span></span>
+              <span class="display-name">Student</span>
+            </a></li>
+            <li><a href="{% url 'teacher-register' %}" class="{% block sidebar_teacher_register %}{% endblock %}">
+              <span class="icon-container"><span class="glyphicon glyphicon-user"></span></span>
+              <span class="display-name">Teacher</span>
+            </a></li>
           {% endif %}
-          {% block sidebar_extra %}{% endblock %}
-        </div>
+        </ul>
+        {% if user.is_superuser %}
+        <hr class="sidebar-divider">
+        <ul id="sidebar-admin">
+          <div class="sidebar-header"><a href="#">Admin Tools</a></div>
+          <li><a href="{% url 'announcement-create' %}" class="{% block sidebar_announcement_create %}{% endblock %}">
+            <span class="icon-container"><span class="glyphicon glyphicon-comment"></span></span>
+            <span class="display-name">New Announcement</span>
+          </a></li>
+          <li><a href="{% url 'event-create' %}" class="{% block sidebar_event_create %}{% endblock %}">
+            <span class="icon-container"><span class="glyphicon glyphicon-calendar"></span></span>
+            <span class="display-name">New Event</span>
+          </a></li>
+          <li><a href="{% url 'poll-create' %}" class="{% block sidebar_poll_create %}{% endblock %}">
+            <span class="icon-container"><span class="glyphicon glyphicon-stats"></span></span>
+            <span class="display-name">New Poll</span>
+          </a></li>
+          <li><a href="{% url 'index' %}">
+            <span class="icon-container"><span class="glyphicon glyphicon-fire"></span></span>
+            <span class="display-name">Trending</span>
+          </a></li>
+          <li><a href="#" class="{% block sidebar_pinned %}{% endblock %}">
+            <span class="icon-container"><span class="glyphicon glyphicon-pushpin"></span></span>
+            <span class="display-name">Pinned</span>
+          </a></li>
+          <li><a href="{% url 'category-list' %}" class="{% block sidebar_category_list %}{% endblock %}">
+            <span class="icon-container"><span class="glyphicon glyphicon-tags"></span></span>
+            <span class="display-name">Tags</span>
+          </a></li>
+        </ul>
+        <ul id="sidebar-admin-advanced">
+          <div class="sidebar-header"><a href="#">Advanced</a></div>
+          <li><a href="{% url 'admin:index' %}" target="_blank">
+            <span class="icon-container"><span class="glyphicon glyphicon-hdd"></span></span>
+            <span class="display-name">Database</span>
+          </a></li>
+          <li><a href="#">
+            <span class="icon-container"><span class="glyphicon glyphicon-signal"></span></span>
+            <span class="display-name">Statistics</span>
+          </a></li>
+          <li><a href="{% url 'generator' %}">
+            <span class="icon-container"><span class="glyphicon glyphicon-wrench"></span></span>
+            <span class="display-name">Generator</span>
+          </a></li>
+        </ul>
+        {% endif %}
+        {% block sidebar_filter %}{% endblock %}
+        {% block sidebar_extra %}{% endblock %}
       </div>
     </div>
 
     <!-- Main Page -->
     <div id="main-page">
       <div id="main-page-content" class="container">
-        <div class="row">
-          <div class="col-md-8 col-md-offset-2">
-            {% block content %}{% endblock %}
-          </div>
+          {% block info_box_top %}{% endblock %}
+          {% block paginator_top %}{% endblock %}
+          {% block data %}{% endblock %}
+          {% block content %}{% endblock %}
+          {% block paginator_bottom %}{% endblock %}
         </div>
       </div>
     </div>
@@ -179,20 +187,23 @@
     </div>
 
     <span id="user-authentication" hidden>{% if user.is_authenticated %}True{% else %}False{% endif %}</span>
+    <!-- TODO: Fix this enormous security hole: -->
+    <span id="user-profile-pk" hidden>{{ request.user.profile.pk }}</span>
 
     {% block templates %}{% endblock %}
 
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <!-- jQuery (latest version)-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/color/jquery.color-2.1.2.min.js" integrity="sha256-H28SdxWrZ387Ldn0qogCzFiUDDxfPiNIyJX7BECQkDE=" crossorigin="anonymous"></script>
     <!-- Bootstrap core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <!-- Other JavaScript -->
-    <script src="{% static 'main/js/datepicker/bootstrap-datepicker.min.js' %}"></script>
-    <script src="{% static 'main/js/timepicker/jquery.timepicker.min.js' %}"></script>
-    <script src="{% static 'main/js/datepair/jquery.datepair.min.js' %}"></script>
-    <script src="{% static 'main/js/ajax-cross-origin/jquery.ajax-cross-origin.min.js' %}"></script>
-    <script src="{% static 'main/js/autosize/autosize.min.js' %}"></script>
-    <script src="{% static 'main/js/mustache.min.js' %}"></script>
+    <script src="{% static 'main/plugins/datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'main/plugins/timepicker/jquery.timepicker.min.js' %}"></script>
+    <script src="{% static 'main/plugins/datepair/jquery.datepair.min.js' %}"></script>
+    <script src="{% static 'main/plugins/ajax-cross-origin/jquery.ajax-cross-origin.min.js' %}"></script>
+    <script src="{% static 'main/plugins/autosize/autosize.min.js' %}"></script>
+    <script src="{% static 'main/plugins/mustache/mustache.min.js' %}"></script>
     <script src="{% static 'main/js/base.js' %}"></script>
     {% block script %}{% endblock %}
   </body>
@@ -207,5 +218,8 @@
 <!-- <span class="icon-container"><span class="glyphicon glyphicon-cog"> -->
 <!-- <span class="icon-container"><span class="glyphicon glyphicon-flash"> -->
 <!-- <span class="icon-container"><span class="glyphicon glyphicon-th"> -->
+<!-- <span class="icon-container"><span class="glyphicon glyphicon-signal"> -->
+<!-- <span class="icon-container"><span class="glyphicon glyphicon-tasks"> -->
+<!-- <span class="icon-container"><span class="glyphicon glyphicon-equalizer"> -->
 <!-- <li><a href="#" class="{% block sidebar_account %}{% endblock %}"><span class="icon-container"><span class="glyphicon glyphicon-user"></span></span><span class="display-name">My Account</span></a></li>
 <li><a href="#" class="{% block sidebar_settings %}{% endblock %}"><span class="icon-container"><span class="glyphicon glyphicon-cog"></span></span><span class="display-name">Settings</span></a></li> -->

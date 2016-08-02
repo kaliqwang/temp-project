@@ -36,6 +36,9 @@ urlpatterns = [
     # Authentication
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
+    # Generator
+    url(r'^generator/$', views.generator, name='generator'),
+    url(r'^generator/(?P<model>[a-z_]+)/(?P<count>\d+)/$', views.generate, name='generate'),
 ]
 
 if settings.DEBUG:

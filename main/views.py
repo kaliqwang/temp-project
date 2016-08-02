@@ -16,6 +16,8 @@ from django.utils import timezone
 from models import *
 from forms import *
 
+from django.conf import settings
+
 ################################################################################
 #################################### INDEX #####################################
 ################################################################################
@@ -29,16 +31,11 @@ def index(request):
 
 @login_required
 def announcement_list(request):
-    filters = request.GET.getlist('category', None)
-    announcements = Announcement.objects.all()
-    if filters:
-        announcements = announcements.filter(category_id__in=filters)
-    else:
-        #TODO: default is filter by user's saved settings
-        #TODO: maybe update user's settings every time the filters are applied (above)?
-        pass
-    categories = Category.objects.all()
-    return render(request, 'main/announcement_list.html', {'announcements': announcements, 'categories': categories})
+    hidden = request.user.profile.categories_hidden_announcements.values_list('pk', flat=True)
+    categories_hidden_announcements = Category.objects.filter(pk__in=hidden)
+    categories_shown = Category.objects.exclude(pk__in=hidden)
+    announcements = Announcement.objects.exclude(category_id__in=hidden)
+    return render(request, 'main/announcement_list.html', {'announcements': announcements, 'categories_shown': categories_shown, 'categories_hidden_announcements': categories_hidden_announcements})
 
 @login_required
 def announcement_detail(request, pk):
@@ -131,16 +128,11 @@ def ytdata(request, video_id):
 
 @login_required
 def event_list(request):
-    filters = request.GET.getlist('category', None)
-    events = Event.objects.all().reverse()
-    if filters:
-        events = events.filter(category_id__in=filters)
-    else:
-        #TODO: default is filter by user's saved settings
-        #TODO: maybe update user's settings every time the filters are applied (above)?
-        pass
-    categories = Category.objects.all()
-    return render(request, 'main/event_list.html', {'events': events, 'categories': categories})
+    hidden = request.user.profile.categories_hidden_announcements.values_list('pk', flat=True)
+    categories_hidden_announcements = Category.objects.filter(pk__in=hidden)
+    categories_shown = Category.objects.exclude(pk__in=hidden)
+    events = Event.objects.exclude(category_id__in=hidden).reverse()
+    return render(request, 'main/event_list.html', {'events': events, 'categories_shown': categories_shown, 'categories_hidden_announcements': categories_hidden_announcements, 'page_size': settings.REST_FRAMEWORK.get('PAGE_SIZE')})
 
 @login_required
 def event_detail(request, pk):
@@ -377,3 +369,29 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('index')
+
+################################################################################
+################################## GENERATORS ##################################
+################################################################################
+
+@staff_member_required
+def generator(request):
+    return render(request, 'main/generator.html')
+
+@staff_member_required
+def generate(request, model, count):
+    if request.method == 'POST':
+        if model == 'announcements':
+            generated_count = Announcement.generate_random_objects(int(count))
+        elif model == 'events':
+            generated_count = Event.generate_random_objects(int(count))
+        elif model == 'polls':
+            generated_count = Poll.generate_random_objects(int(count), add_votes=False)
+        elif model == 'polls_voted':
+            generated_count = Poll.generate_random_objects(int(count), add_votes=True)
+        elif model == 'student_profiles':
+            generated_count = StudentProfile.generate_random_objects(int(count))
+        if (generated_count == int(count)):
+            return HttpResponse('Success: %d %s generated' % (generated_count, model))
+        else:
+            return HttpResponse('Error: %d %s generated' % (generated_count, model))

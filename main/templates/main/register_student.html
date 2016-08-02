@@ -19,9 +19,9 @@
 {% block submit_button_text %}Create Student Account{% endblock %}
 
 {% block register_form_extra_fields %}
-  <div class="row row-compact">
-    <div class="col-sm-2 col-compact"><div class="form-label">Student ID</div></div>
-    <div class="col-sm-10 col-compact">
+  <div class="row">
+    <div class="col-xs-2"><div class="form-label">Student ID</div></div>
+    <div class="col-xs-10">
       <div class="has-feedback {% if studentProfileForm.student_id.errors %}has-error{% elif studentProfileForm.is_bound %}has-success{% endif %}" title="{{ studentProfileForm.student_id.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
         {{ studentProfileForm.student_id }}
         {% if studentProfileForm.student_id.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
@@ -29,9 +29,9 @@
       </div>
     </div>
   </div>
-  <div class="row row-compact">
-    <div class="col-sm-2 col-compact"><div class="form-label">Grade Level</div></div>
-    <div class="col-sm-10 col-compact">
+  <div class="row">
+    <div class="col-xs-2"><div class="form-label">Grade Level</div></div>
+    <div class="col-xs-10">
       <div class="has-feedback {% if studentProfileForm.grade_level.errors %}has-error{% elif studentProfileForm.is_bound %}has-success{% endif %}" title="{{ studentProfileForm.grade_level.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
         {{ studentProfileForm.grade_level }}
         {% if studentProfileForm.grade_level.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>

@@ -19,9 +19,9 @@
 {% block submit_button_text %}Create Teacher Account{% endblock %}
 
 {% block register_form_extra_fields %}
-  <div class="row row-compact">
-    <div class="col-sm-2 col-compact"><div class="form-label">Room Number</div></div>
-    <div class="col-sm-10 col-compact">
+  <div class="row">
+    <div class="col-xs-2"><div class="form-label">Room Number</div></div>
+    <div class="col-xs-10">
       <div class="has-feedback {% if teacherProfileForm.room.errors %}has-error{% elif teacherProfileForm.is_bound %}has-success{% endif %}" title="{{ teacherProfileForm.room.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
         {{ teacherProfileForm.room }}
         {% if teacherProfileForm.room.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>

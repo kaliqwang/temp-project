@@ -7,12 +7,17 @@
 {% block masthead_polls %}selected{% endblock %}
 
 {% block sidebar_extra %}
-  <hr>
-  <ul id="section-admin-poll">
-    <a href="#" class="sidebar-section-header">Poll Tools</a>
-    <!-- <span class="glyphicon glyphicon-tags"> -->
-    <li><a href="{% url 'poll-update' poll.pk %}" class="selected"><span class="glyphicon glyphicon-pencil"></span><span class="text-label">Make Changes</span></a></li>
-    <li><a href="{% url 'poll-list' %}"><span class="glyphicon glyphicon-remove"></span><span class="text-label">Remove</span></a></li>
+  <hr class="sidebar-divider">
+  <ul id="sidebar-admin-poll">
+    <a href="#" class="sidebar-header">Poll Tools</a>
+    <li><a href="{% url 'poll-update' poll.pk %}" class="selected">
+      <span class="icon-container"><span class="glyphicon glyphicon-pencil"></span></span>
+      <span class="display-name">Make Changes</span>
+    </a></li>
+    <li><a href="#">
+      <span class="icon-container"><span class="glyphicon glyphicon-remove"></span></span>
+      <span class="display-name">Delete</span>
+    </a></li>
   </ul>
 {% endblock %}
 
@@ -25,22 +30,22 @@
         <b>Note:</b> This page is incomplete.
       </div>
       <!-- Poll Content -->
-      <div class="row row-compact">
-        <div class="col-sm-1 col-compact"><div class="form-label">Title</div></div>
-        <div class="col-sm-11 col-compact"><div class="{% if form.content.errors %}has-error{% endif %}">{{ form.content }}</div></div>
+      <div class="row">
+        <div class="col-xs-1"><div class="form-label">Title</div></div>
+        <div class="col-xs-11"><div class="{% if form.content.errors %}has-error{% endif %}">{{ form.content }}</div></div>
       </div><br>
       <!-- Poll Choices -->
-      <div class="row row-compact">
-        <div class="col-sm-1 col-compact"><div class="form-label">Choices</div></div>
-        <div class="col-sm-11 col-compact">
+      <div class="row">
+        <div class="col-xs-1"><div class="form-label">Choices</div></div>
+        <div class="col-xs-11">
           <div id="poll-choices-existing">{% for choice in poll.choices.all %}<li data-content="{{ choice.content }}" data-pk="{{ choice.pk }}"></li>{% endfor %}</div>
           <div id="choice-container" class="form-group"></div>
         </div>
       </div><br>
       <!-- Poll Category -->
-      <div class="row row-compact">
-        <div class="col-sm-1 col-compact"><div class="form-label">Category</div></div>
-        <div class="col-sm-11 col-compact"><div class="{% if form.category.errors %}has-error{% endif %}">{{ form.category }}</div><hr></div>
+      <div class="row">
+        <div class="col-xs-1"><div class="form-label">Category</div></div>
+        <div class="col-xs-11"><div class="{% if form.category.errors %}has-error{% endif %}">{{ form.category }}</div><hr></div>
       </div>
       <!-- Buttons -->
       <div class="row">

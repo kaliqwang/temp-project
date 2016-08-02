@@ -124,8 +124,9 @@ $(document).ready(function() {
 
     function addYouTubeVideo(videoID, $container) {
         $.ajax({
+            // crossOrigin: true,
             type: 'GET',
-            url: '../../../ytdata/' + videoID,
+            url: '/ytdata/' + videoID,
             success: function(data){
                 $youTubeVideosAdd.val('');
                 $youTubeVideosAdd.parent().removeClass('has-error');

@@ -1,5 +1,9 @@
 /************************************ All *************************************/
 
+h4 {
+    margin: 0px;
+}
+
 .btn-custom:hover, .btn-custom:focus, .btn-custom:active, .btn-custom:active:focus {
     color: #fff;
     background-color: #126db3;
@@ -10,6 +14,8 @@
     color: #fff;
     background-color: #0778c8;
     border-color: #0778c8;
+    outline: none;
+
 }
 .badge {
     color: #0778c8;
@@ -18,10 +24,6 @@
 
 textarea {
     resize: vertical;
-}
-
-h4 {
-    margin-top: 15px;
 }
 
 .inline-block {
@@ -74,21 +76,21 @@ form:not(#login-form) {
 
 /* announcement_list / announcement_detail */
 .announcement-wrapper {
-    border: 1px solid #e8e8e8;
-    padding: 4px 20px;
+    /*border: 1px solid #e8e8e8;*/
+    padding: 15px 15px 4px 15px;
     margin-bottom: 10px;
 }
-.announcement-wrapper .toggle-collapse {
+.announcement-wrapper .show-more {
     color: #888;
     border-top: 1px solid #e8e8e8;
     padding-top: 4px;
 }
-.announcement-wrapper .toggle-collapse:hover {
+.announcement-wrapper .show-more:hover {
     color: #444;
     cursor: pointer;
 }
-.announcement-wrapper .signature,.content,.image-list,.video {
-    margin-bottom: 15px;
+.announcement-wrapper .title, .signature,.content,.image-list,.video {
+    margin-bottom: 10px;
 }
 .announcement-wrapper a {
     color: #444;
@@ -96,6 +98,14 @@ form:not(#login-form) {
 .announcement-wrapper a:hover {
     color: #1e18cc;
     text-decoration: underline;
+}
+
+.start-hidden {
+    display: none;
+}
+
+.video {
+    max-width: 480px;
 }
 
 /* announcement_create / announcement_update */
@@ -122,7 +132,7 @@ form:not(#login-form) {
 
 /* images */
 .image-list {
-    margin-right: -4px;
+    margin-right: -1px;
     line-height: 0px;
 }
 .image-list.form {
@@ -156,6 +166,7 @@ form:not(#login-form) {
     color: inherit;
     border-bottom: 2px solid;
     border-color: inherit;
+    padding-top: 15px;
 }
 #event-list .month-header:hover {
     color: #1e18cc;
@@ -164,6 +175,10 @@ form:not(#login-form) {
 }
 #event-list .date-header {
     padding-top: 20px;
+}
+#event-list .event-wrapper {
+    white-space: nowrap;
+    overflow: hidden;
 }
 #event-list ul {
     padding-left: 40px;
@@ -174,11 +189,11 @@ form:not(#login-form) {
 #event-list a:hover {
     text-decoration: underline;
 }
-#event-info-box {
+#event-info-wrapper {
     position: fixed;
     /*top: 105px;*/
-    width: 400px;
-    margin-left: -401px;
+    width: 300px;
+    margin-left: -301px;
 }
 #event-info ul {
     padding: 0px;
@@ -192,6 +207,9 @@ form:not(#login-form) {
 }
 #event-info-wrapper hr {
     margin: 0px -10px;
+}
+#event-info-dismiss {
+    padding: 5px 10px;
 }
 
 /*********************************** Polls ************************************/
@@ -235,8 +253,33 @@ form:not(#login-form) {
     padding: 6px 0px;
 }
 
-/*************************** student-register ***************************/
+/*************************** student_register ***************************/
 
 .register-form .row-compact {
     padding: 4px 0px;
+}
+
+/*************************** generator ***************************/
+
+#generator-container {
+    text-align: center;
+}
+#generator {
+    display: inline-block;
+    width: 500px;
+    margin: auto;
+    padding: 20px;
+}
+.generator-section {
+    padding: 10px;
+}
+.generator-section .glyphicon {
+    display: none;
+}
+.generator-section button, {
+    display: inline-block;
+}
+.generator-section-header {
+    display: inline-block;
+    padding: 0px 10px;
 }
