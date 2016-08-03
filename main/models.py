@@ -34,9 +34,9 @@ from PIL import Image
 from io import BytesIO
 from urlparse import urlparse
 
-from random import randint, random
-
 from django.conf import settings
+
+from numpy import random
 
 ################################################################################
 
@@ -145,23 +145,6 @@ random_videos = [
     "oQq9vDU4IfU", "wLXVDzM8Tnk", "V3i0eOfchxg", "BG9rW-hYikw", "4SxWtQzL6js",
 ]
 
-def get_random_name():
-    first = first_names[randint(0, 139)]
-    last = last_names[randint(0, 139)]
-    return (first, last)
-
-def get_random_datetime(interval):
-    steps = int(400000 / interval)
-    random_minutes = timedelta(minutes=(randint(0, steps) * interval))
-    start_date_naive = datetime(2016, 8, 8)
-    local = pytz.timezone ("EST5EDT")
-    start_date_local = local.localize(start_date_naive)
-    return start_date_local + random_minutes
-
-def get_random_minutes(interval):
-    steps = int(10000 / interval)
-    return timedelta(minutes=(randint(6, steps) * interval))
-
 ################################################################################
 
 class UserProfile(models.Model):
@@ -193,10 +176,18 @@ class StudentProfile(models.Model):
 
     @classmethod
     def generate_random_objects(cls, count):
+        rand_1 = random.randint(140, size=count)
+        rand_2 = random.randint(140, size=count)
+        rand_3 = random.randint(1100000000, 1100999999, size=count)
+        rand_4 = random.randint(3, size=count)
+
         user_pk = User.objects.latest('pk').pk + 1
         generated_count = 0
         for i in range(0, count):
-            first_name, last_name = get_random_name()
+            first_name = first_names[rand_1[i]]
+            last_name = last_names[rand_2[i]]
+            student_id = rand_3[i]
+            grade_level = rand_4[i]
             user = User.objects.create_user(
                 username=user_pk,
                 password=user_pk,
@@ -208,15 +199,14 @@ class StudentProfile(models.Model):
                 mobile='6787901506',
                 is_student=True,
             )
-            student_id = randint(1100000000, 1100999999)
-            grade_level = randint(0, 3)
             student_profile= StudentProfile.objects.create(
                 user_profile=user_profile,
+                student_id = student_id,
                 grade_level=grade_level,
             )
             user_pk += 1
             generated_count += 1
-            print('StudentProfile %d created (user=%d, user_profile=%d)' %(student_profile.pk, user.pk, user_profile.pk))
+            print('Generated StudentProfile %d (UserProfile %d User %d)' %(student_profile.pk, user_profile.pk, user.pk))
         return generated_count
 
 class TeacherProfile(models.Model):
@@ -307,54 +297,77 @@ class Announcement(models.Model):
 
     @classmethod
     def generate_random_objects(cls, count):
+        announcement_manager = Announcement.objects
+        image_manager = ImageLink.objects
+        video_manager = YouTubeVideo.objects
+        #
         user_profiles = UserProfile.objects.all()
         user_profiles_count = user_profiles.count()
+        # Titles
+        rand_1 = random.randint(100, size=count) # first word
+        rand_2 = random.randint(1, 7, size=count) # length
+        # Authors
+        rand_3 = random.randint(user_profiles_count, size=count)
+        # Datetimes
+        datetime_base = pytz.timezone("EST5EDT").localize(datetime(2016, 8, 8))
+        rand_4 = random.randint(400000, size=count) # start
+        # Contents
+        rand_5 = random.randint(100, size=count) # first word
+        rand_6 = random.randint(5, 40, size=count) # length
+        # Categories
         categories = Category.objects.all()
         categories_count = categories.count()
-
+        rand_7 = random.randint(categories_count, size=count)
+        # Images
+        rand_8 = random.rand(count)
+        # Videos
+        rand_9 = random.rand(count)
+        # Generator loop
         generated_count = 0
         for i in range(0, count):
             # Random title
-            title = lorem_random[randint(0, 99)] + ' '
-            length = int(pow(random(), 3) * 6 + 1)
-            for x in range(0, length):
-                title += lorem_random[randint(0, 199)] + ' '
+            title = lorem_random[rand_1[i]] + ' '
+            title_length = rand_2[i]
+            title_content = random.randint(200, size=title_length)
+            for t in range(0, title_length):
+                title += lorem_random[title_content[t]] + ' '
             # Random author
-            author = user_profiles[int(random() * user_profiles_count)]
+            author = user_profiles[rand_3[i]]
             # Random date_created
-            date_created = get_random_datetime(1)
+            date_created = datetime_base + timedelta(minutes=rand_4[i])
             # Random content
-            content = lorem_random[randint(0, 99)] + ' '
-            length = int(pow(random(), 3) * 60 + 10)
-            for y in range(0, length):
-                content += lorem_random[randint(0, 199)] + ' '
+            content = lorem_random[rand_5[i]] + ' '
+            content_length = rand_6[i]
+            content_rand = random.randint(200, size=content_length)
+            for c in range(0, content_length):
+                content += lorem_random[content_rand[c]] + ' '
             # Random category
-            category = categories[int(random() * categories_count)]
+            category = categories[rand_7[i]]
             # Create Object
-            a = Announcement(
+            a = announcement_manager.create(
                 title=title,
                 author=author,
                 date_created=date_created,
                 content=content,
                 category=category,
             )
-            a.save()
             # Random Images
-            image_count = int(pow(random(), 5) * 8)
-            for y in range(0, image_count):
-                ImageLink.objects.create(
+            image_count = int(pow(rand_8[i], 5) * 8)
+            for x in range(0, image_count):
+                image_manager.create(
                     announcement=a,
                     image_link="https://unsplash.it/200/300/?random"
                 )
             # Random Videos
-            video_count = int(pow(random(), 5) * 3)
-            for z in range(0, video_count):
-                YouTubeVideo.objects.create(
+            video_count = int(pow(rand_9[i], 5) * 3)
+            video_content = random.randint(20, size=video_count)
+            for y in range(0, video_count):
+                video_manager.create(
                     announcement=a,
-                    youtube_video=random_videos[randint(0, 19)]
+                    youtube_video=random_videos[video_content[y]]
                 )
             generated_count += 1
-            print('Announcement %d created: %d images %d videos' % (a.pk, image_count, video_count))
+            print('Generated Announcement %d (%d images, %d videos)' % (a.pk, image_count, video_count))
         return generated_count
 
 def default_date():
@@ -406,38 +419,56 @@ class Event(models.Model):
 
     @classmethod
     def generate_random_objects(cls, count):
+        event_manager = Event.objects
+        # Names
+        rand_1 = random.randint(100, size=count) # first word
+        rand_2 = random.randint(1, 7, size=count) # length
+        # Datetimes
+        datetime_base = pytz.timezone("EST5EDT").localize(datetime(2016, 8, 8))
+        rand_3 = random.randint(80000, size=count) # start
+        rand_4 = random.randint(6, 2000, size=count) # end - start
+        # Locations
+        rand_5 = random.randint(100, size=count) # first word
+        rand_6 = random.randint(1, 7, size=count) # length
+        # Details
+        rand_7 = random.randint(100, size=count) # first word
+        rand_8 = random.randint(60, size=count) # length
+        # Categories
         categories = Category.objects.all()
         categories_count = categories.count()
-
+        rand_9 = random.randint(categories_count, size=count)
+        # Generator loop
         generated_count = 0
         for i in range(0, count):
-            # Random title
-            name = lorem_random[randint(0, 99)] + ' '
-            length = int(pow(random(), 3) * 6 + 1)
-            for x in range(0, length):
-                name += lorem_random[randint(0, 99)] + ' '
-            # Random date_start / time_start
-            datetime_start = get_random_datetime(5)
+            # Random name
+            name = lorem_random[rand_1[i]] + ' '
+            name_length = rand_2[i]
+            name_rand = random.randint(200, size=name_length)
+            for n in range(0, name_length):
+                name += lorem_random[name_rand[n]] + ' '
+            # Random datetime start/end
+            datetime_start = datetime_base + timedelta(minutes=(rand_3[i] * 5))
             date_start = datetime_start.date()
             time_start = datetime_start.time()
-            # Random date_end / time_end
-            datetime_end = datetime_start + get_random_minutes(5)
+            datetime_end = datetime_start + timedelta(minutes=(rand_4[i] * 5))
             date_end = datetime_end.date()
             time_end = datetime_end.time()
             # Random Location
-            location = ''
-            length = int(pow(random(), 2) * 4 + 2)
-            for y in range (0, length):
-                location += lorem_random[randint(0, 99)] + ' '
+            location = lorem_random[rand_5[i]] + ' '
+            location_length = rand_6[i]
+            location_rand = random.randint(200, size=location_length)
+            for l in range (0, location_length):
+                location += lorem_random[location_rand[l]] + ' '
             # Random Details
-            details = lorem_random[randint(0, 99)]
-            length = int(pow(random(), 3) * 100)
-            for z in range(0, length):
-                details += lorem_random[randint(0, 199)] + ' '
+            details = lorem_random[rand_7[i]] + ' '
+            details_length = rand_8[i]
+            details_rand = random.randint(200, size=details_length)
+            for d in range(0, details_length):
+                details += lorem_random[details_rand[d]] + ' '
             # Random category
-            category = categories[int(random() * categories_count)]
+            category = categories[rand_9[i]]
             # Create Object
-            e = Event(
+            e = event_manager.create(
                 name=name,
                 date_start=date_start,
                 time_start=time_start,
@@ -447,9 +478,8 @@ class Event(models.Model):
                 details=details,
                 category=category,
             )
-            e.save()
             generated_count += 1
-            print('Event %d created' % e.pk)
+            print('Generated Event %d' % e.pk)
         return generated_count
 
 class Poll(models.Model):
@@ -518,59 +548,74 @@ class Poll(models.Model):
 
     @classmethod
     def generate_random_objects(cls, count, add_votes):
+        poll_manager = Poll.objects
+        choice_manager = Choice.objects
         user_profiles = UserProfile.objects.all()
-        user_profiles_count = user_profiles.count()
-        if user_profiles_count > 100:
-            user_profiles_count = 100
+        user_profile_count = user_profiles.count()
+        if user_profile_count < 100:
+            StudentProfile.generate_random_objects(100)
+        voter_count = 100
+        # Contents
+        rand_1 = random.randint(100, size=count) # first word
+        rand_2 = random.randint(5, 11, size=count) # length
+        # Authors
+        rand_3 = random.randint(user_profile_count, size=count)
+        # Categories
         categories = Category.objects.all()
         categories_count = categories.count()
+        rand_4 = random.randint(categories_count, size=count)
+        # Choices
+        rand_5 = random.randint(2, 6, size=count)
+        # status
+        rand_6 = random.randint(3, size=count)
 
+        # Generator loop
         generated_count = 0
         for i in range(0, count):
-            # Random content
-            content = lorem_random[randint(0, 99)] + ' '
-            length = int(pow(random(), 2) * 6 + 6)
-            for x in range(0, length):
-                content += lorem_random[randint(0, 199)] + ' '
+            # Random Content
+            content = lorem_random[rand_1[i]] + ' '
+            content_length = rand_2[i]
+            content_rand = random.randint(200, size=content_length)
+            for c in range(0, content_length):
+                content += lorem_random[content_rand[c]] + ' '
             content += '?'
-            # Random author
-            author = user_profiles[int(random() * user_profiles_count)]
-            # Random category
-            category = categories[int(random() * categories_count)]
+            # Random Author
+            author = user_profiles[rand_3[i]]
+            # Random Category
+            category = categories[rand_4[i]]
+            # Random Status
+            is_open = True
+            if rand_6[i] == 2:
+                is_open = False
             # Create Object
-            p = Poll(content=content, author=author, category=category)
-            p.save()
+            p = poll_manager.create(content=content, author=author, category=category, is_open=is_open)
             # Random Choices
-            choice_count = randint(2, 6)
-            choice_length = int(pow(random(), 2) * 10)
-            for y in range(0, choice_count):
-                choice_content = lorem_random[randint(0, 99)] + ' '
-                for z in range(0, choice_length):
-                    choice_content += lorem_random[randint(0, 199)] + ' '
-                c = Choice(poll=p, content=choice_content)
-                c.save()
-            # Random status
-            status = randint(0, 2)
+            choice_count = rand_5[i]
+            for x in range(0, choice_count):
+                choice_content = lorem_random[rand_1[i]] + ' '
+                choice_length = rand_2[i]
+                choice_rand = random.randint(200, size=choice_length)
+                for y in range(0, choice_length):
+                    choice_content += lorem_random[choice_rand[y]] + ' '
+                c = choice_manager.create(poll=p, content=choice_content)
+            # Random Votes
             vote_count = 0
-            if status == 2:
-                p.is_open = False
-                p.save()
             if add_votes:
-                vote_count = p.generate_random_votes(user_profiles, user_profiles_count)
+                vote_count = p.generate_random_votes(user_profiles, choice_count, voter_count)
             generated_count += 1
-            print('Poll %d created: %d choices, %d votes, open: %s' % (p.pk, choice_count, vote_count, p.is_open))
+            print('Generated Poll %d (%d choices, %d votes, open: %s)' % (p.pk, choice_count, vote_count, p.is_open))
         return generated_count
 
-    def generate_random_votes(self, user_profiles, user_profiles_count):
+    def generate_random_votes(self, user_profiles, choice_count, voter_count):
+        vote_manager = Vote.objects
+        rand_votes = random.randint(choice_count, size=voter_count)
         choices = self.choices.all()
-        choices_count = self.choices.count()
         vote_counter = 0
-        for i in range(0, user_profiles_count):
-            choice = choices[randint(0, choices_count - 1)]
-            user_profile = user_profiles[i]
-            v = Vote(poll=self, choice=choice, voter=user_profile)
-            v.save()
-            print('Userprofile %d voted for choice %d' % (user_profile.pk, choice.pk))
+        for i in range(0, voter_count):
+            voter = user_profiles[i]
+            choice = choices[rand_votes[i]]
+            v = vote_manager.create(poll=self, choice=choice, voter=voter)
+            print('Generated Vote %d (Userprofile %d, Choice %d)' % (v.pk, voter.pk, choice.pk))
             vote_counter += 1
         return vote_counter
 
