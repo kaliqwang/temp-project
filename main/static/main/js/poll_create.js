@@ -14,7 +14,7 @@ $(document).ready(function() {
 
     // Variables
     var $pollChoiceAdd = $('#poll-choice-add');
-    var $choiceContainer = $('#choice-container');
+    var $choiceContainer = $('#poll-choices-new');
     var count = 0;
 
     /***************************** Event Handlers *****************************/
@@ -37,8 +37,14 @@ $(document).ready(function() {
         count--;
     });
 
+    $('#submit-poll-create-form').click(function(e){e.preventDefault();
+        $('#poll-create-form').submit();
+        return false;
+    });
+
     $pollChoiceAdd.click();
     $pollChoiceAdd.click();
     $pollChoiceAdd.click();
     $pollChoiceAdd.click();
+
 });
