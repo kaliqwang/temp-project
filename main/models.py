@@ -75,38 +75,6 @@ class GetOrNoneManager(models.Manager):
 
 ################################################################################
 
-lorem_random = [
-    # First 100 words are capitalized
-    'Lorem','Ipsum','Dolor','Sit','Amet','Consectetur','Adipiscing','Elit','Donec','Vel',
-    'Facilisis','Mi','Imperdiet','Hendrerit','Est','Nam','Venenatis','Magna','Semper','Libero',
-    'Pretium','A','Lacinia','Nisl','Varius','Ut','Velit','Vitae','Viverra','Nibh',
-    'Sed','Eleifend','Volutpat','Placerat','Duis','Eu','Tortor','Nec','Mauris','Aliquam',
-    'Ac','Urna','In','Metus','Augue','Ultrices','At','Felis','Gravida','Fermentum',
-    'Etiam','Fringilla','Purus','Congue','Eget','Turpis','Condimentum','Id','Luctus','Lacus',
-    'Commodo','Porta','Lectus','Vehicula','Nulla','Odio','Erat','Maximus','Et','Sodales',
-    'Tellus','Sapien','Duis','Integer','Dictum','Rhoncus','Nunc','Neque','Dui','Suscipit',
-    'Aliquet','Rutrum','Vestibulum','Tristique','Sem','Enim','Accumsan','Eros','Non','Curabitur',
-    'Laoreet','Quis','Sagittis','Nisi','Efficitur','Auctor','Fusce','Blandit','Pharetra','Leo',
-     # Second 100 words are lowercase
-    'lorem','ipsum','dolor','sit','amet','consectetur','adipiscing','elit','integer','felis',
-    'in','egestas','vitae','malesuada','nisi','proin','pellentesque','est','nec','luctus',
-    'vestibulum','et','metus','at','dui','efficitur','iaculis','a','eleifend','massa',
-    'morbi','elementum','eget','leo','ornare','vel','nunc','placerat','odio','ut',
-    'tincidunt','pulvinar','curabitur','mauris','viverra','eu','id','laoreet','mattis','donec',
-    'erat','facilisis','porttitor','nibh','fringilla','turpis','arcu','sem','molestie','quis',
-    'libero','sed','euismod','fermentum','ultrices','porta','accumsan','neque','nam','quam',
-    'posuere','quisque','dapibus','nisl','ac','nulla','facilisi','nullam','ligula','bibendum',
-    'diam','dapibus','augue','varius','maecenas','risus','semper','dignissim','aliquam','sodales',
-    'pretium','ante','ullamcorper','suscipit','condimentum','tortor','cursus','praesent','non','eros',
-]
-
-random_videos = [
-    "mT0DpuAlJbs", "_yhf_PvRGIE", "LKiDgFySXg8", "zMN9otsaZ80", "cb1Jp-rFJDI",
-    "gGrXEewfz34", "6QdOI4zZC0g", "LWgqWuJG5Jg", "Z1lpZRe7-R8", "Kkr9hf9d8Fo",
-    "s1exvkLxQi8", "T7iiwsT5hWg", "eZ5C7dfU6-A", "pmhqMajav8Y", "8SF1Wt__W6g",
-    "oQq9vDU4IfU", "wLXVDzM8Tnk", "V3i0eOfchxg", "BG9rW-hYikw", "4SxWtQzL6js",
-]
-
 first_names = [
     # 70 male first names
     'Adam','Adrian','Alan','Alexander','Andrew','Anthony','Austin','Benjamin','Blake','Boris',
@@ -142,6 +110,39 @@ last_names = [
     'Rutherford','Sanderson','Scott','Sharp','Short','Simpson','Skinner','Slater','Smith','Springer',
     'Stewart','Sutherland','Taylor','Terry','Thomson','Tucker','Turner','Underwood','Vance','Vaughan',
     'Walker','Wallace','Walsh', 'Watson','Welch','White','Wilkins','Wilson','Wright','Young',
+]
+
+lorem_random = [
+    # First 100 words are capitalized
+    'Lorem','Ipsum','Dolor','Sit','Amet','Consectetur','Adipiscing','Elit','Donec','Vel',
+    'Facilisis','Mi','Imperdiet','Hendrerit','Est','Nam','Venenatis','Magna','Semper','Libero',
+    'Pretium','A','Lacinia','Nisl','Varius','Ut','Velit','Vitae','Viverra','Nibh',
+    'Sed','Eleifend','Volutpat','Placerat','Duis','Eu','Tortor','Nec','Mauris','Aliquam',
+    'Ac','Urna','In','Metus','Augue','Ultrices','At','Felis','Gravida','Fermentum',
+    'Etiam','Fringilla','Purus','Congue','Eget','Turpis','Condimentum','Id','Luctus','Lacus',
+    'Commodo','Porta','Lectus','Vehicula','Nulla','Odio','Erat','Maximus','Et','Sodales',
+    'Tellus','Sapien','Duis','Integer','Dictum','Rhoncus','Nunc','Neque','Dui','Suscipit',
+    'Aliquet','Rutrum','Vestibulum','Tristique','Sem','Enim','Accumsan','Eros','Non','Curabitur',
+    'Laoreet','Quis','Sagittis','Nisi','Efficitur','Auctor','Fusce','Blandit','Pharetra','Leo',
+     # Second 100 words are lowercase
+    'lorem','ipsum','dolor','sit','amet','consectetur','adipiscing','elit','integer','felis',
+    'in','egestas','vitae','malesuada','nisi','proin','pellentesque','est','nec','luctus',
+    'vestibulum','et','metus','at','dui','efficitur','iaculis','a','eleifend','massa',
+    'morbi','elementum','eget','leo','ornare','vel','nunc','placerat','odio','ut',
+    'tincidunt','pulvinar','curabitur','mauris','viverra','eu','id','laoreet','mattis','donec',
+    'erat','facilisis','porttitor','nibh','fringilla','turpis','arcu','sem','molestie','quis',
+    'libero','sed','euismod','fermentum','ultrices','porta','accumsan','neque','nam','quam',
+    'posuere','quisque','dapibus','nisl','ac','nulla','facilisi','nullam','ligula','bibendum',
+    'diam','dapibus','augue','varius','maecenas','risus','semper','dignissim','aliquam','sodales',
+    'pretium','ante','ullamcorper','suscipit','condimentum','tortor','cursus','praesent','non','eros',
+]
+
+random_videos = [
+    # 20 total
+    "mT0DpuAlJbs", "_yhf_PvRGIE", "LKiDgFySXg8", "zMN9otsaZ80", "cb1Jp-rFJDI",
+    "gGrXEewfz34", "6QdOI4zZC0g", "LWgqWuJG5Jg", "Z1lpZRe7-R8", "Kkr9hf9d8Fo",
+    "s1exvkLxQi8", "T7iiwsT5hWg", "eZ5C7dfU6-A", "pmhqMajav8Y", "8SF1Wt__W6g",
+    "oQq9vDU4IfU", "wLXVDzM8Tnk", "V3i0eOfchxg", "BG9rW-hYikw", "4SxWtQzL6js",
 ]
 
 def get_random_name():
@@ -339,14 +340,14 @@ class Announcement(models.Model):
             )
             a.save()
             # Random Images
-            image_count = int(pow(random(), 5) * 12)
+            image_count = int(pow(random(), 5) * 8)
             for y in range(0, image_count):
                 ImageLink.objects.create(
                     announcement=a,
                     image_link="https://unsplash.it/200/300/?random"
                 )
             # Random Videos
-            video_count = int(pow(random(), 5) * 4)
+            video_count = int(pow(random(), 5) * 3)
             for z in range(0, video_count):
                 YouTubeVideo.objects.create(
                     announcement=a,
@@ -519,6 +520,8 @@ class Poll(models.Model):
     def generate_random_objects(cls, count, add_votes):
         user_profiles = UserProfile.objects.all()
         user_profiles_count = user_profiles.count()
+        if user_profiles_count > 100:
+            user_profiles_count = 100
         categories = Category.objects.all()
         categories_count = categories.count()
 
@@ -544,8 +547,8 @@ class Poll(models.Model):
                 choice_content = lorem_random[randint(0, 99)] + ' '
                 for z in range(0, choice_length):
                     choice_content += lorem_random[randint(0, 199)] + ' '
-                    c = Choice(poll=p, content=choice_content)
-                    c.save()
+                c = Choice(poll=p, content=choice_content)
+                c.save()
             # Random status
             status = randint(0, 2)
             vote_count = 0
@@ -562,8 +565,9 @@ class Poll(models.Model):
         choices = self.choices.all()
         choices_count = self.choices.count()
         vote_counter = 0
-        for user_profile in user_profiles:
+        for i in range(0, user_profiles_count):
             choice = choices[randint(0, choices_count - 1)]
+            user_profile = user_profiles[i]
             v = Vote(poll=self, choice=choice, voter=user_profile)
             v.save()
             print('Userprofile %d voted for choice %d' % (user_profile.pk, choice.pk))
