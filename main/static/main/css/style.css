@@ -60,6 +60,9 @@ textarea {
     display: inline-block;
     vertical-align: middle;
 }
+#announcement-sidebar .dot {
+    margin: 0px 10px;
+}
 
 /* Links - No Underline */
 a:hover, a:focus {
@@ -77,10 +80,20 @@ form:not(#login-form) {
 /******************************* Announcements ********************************/
 
 /* announcement_list / announcement_detail */
+#announcement-list {
+    width: 514px;
+    margin: 0px auto;
+}
 .announcement-wrapper {
     /*border: 1px solid #e8e8e8;*/
     padding: 15px 15px 4px 15px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+}
+.announcement-wrapper.selected {
+    padding-left: 55px;
+    padding-right: 55px;
+    margin-left: -40px;
+    margin-right: -40px;
 }
 .announcement-wrapper .show-more {
     color: #888;

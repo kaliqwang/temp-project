@@ -1,9 +1,38 @@
 $(document).ready(function() {
     //Test Variables
-    var $announcementSidebarItemTemplate = $('#announcement-sidebar-item-template').html().trim();
-    Mustache.parse($announcementSidebarItemTemplate);
+    var $sidebarAnnouncementLinkTemplate = $('#sidebar-announcement-link-template').html().trim();
+    Mustache.parse($sidebarAnnouncementLinkTemplate);
     var $announcementSidebar = $('#announcement-sidebar');
+    var $announcementSidebarAll = $('#announcement-sidebar-all');
+    var $announcementSidebarAllItems = $('#announcement-sidebar-all-items');
     var announcementSidebarHTML = ''
+
+    var $announcementSidebarLinkSelected = $();
+    var $announcementItemSelected = $();
+
+    var $sidebarShowMore = $('#sidebar-show-more');
+    var $sidebarBackToTop = $('#sidebar-back-to-top');
+
+    $sidebarBackToTop.on('click', function(e) {e.preventDefault();
+        $(document.body).animate({scrollTop: 0}, 300);
+        $announcementSidebar.animate({scrollTop: 0}, 300);
+    });
+
+    // Scroll to announcement with id=announcement-pk
+    $announcementSidebar.on('click', '.announcement-sidebar-link', function(e) {e.preventDefault();
+        $announcementSidebarLinkSelected.removeClass('selected');
+        $announcementSidebarLinkSelected = $(this);
+        $announcementSidebarLinkSelected.addClass('selected');
+        $announcementSidebarLinkSelected.addClass('read');
+        var targetPK = $(this).data('announcement-pk');
+        var $target = $('#announcement-' + targetPK);
+        $announcementItemSelected.removeClass('selected');
+        $announcementItemSelected = $target;
+        $announcementItemSelected.addClass('selected');
+        $(document.body).animate({scrollTop: $target.offset().top - ($(window).height() / 2) + 90}, 300);
+    });
+
+    /**************************************************************************/
 
     // Templates
     var $announcementItemTemplate = $('#announcement-item-template').html().trim();
@@ -47,7 +76,6 @@ $(document).ready(function() {
 
     var profilePK = $('#user-profile-pk').text();
 
-
     /****************************** On Page Load ******************************/
 
     renderAnnouncementListPageNumber();
@@ -64,6 +92,14 @@ $(document).ready(function() {
             $paginatorPageNumbers.data('current-page', newPage);
         }
         renderAnnouncementListTarget($(this).data('target'), false);
+    });
+    // NOTE: New code
+    $sidebarShowMore.on('click', function(e){e.preventDefault();
+        var newPage = $paginatorPageNumbers.data('current-page') + 1;
+        if (newPage <= pageCount) {
+            $paginatorPageNumbers.data('current-page', newPage);
+        }
+        renderAnnouncementListTarget($paginatorShowMore.data('target'), false);
     });
     $paginatorPrevious.on('click', function(e){e.preventDefault();
         if ($(this).data('target')) {
@@ -319,13 +355,14 @@ $(document).ready(function() {
                     // Write entire announcement list HTML to DOM
                     if (replace) {
                         $announcementList.html(announcementListHTML);
-                        $announcementSidebar.html(announcementSidebarHTML);
+                        $announcementSidebarAllItems.html(announcementSidebarHTML);
                     } else {
                         $announcementList.append(announcementListHTML);
-                        $announcementSidebar.append(announcementSidebarHTML);
+                        $announcementSidebarAllItems.append(announcementSidebarHTML);
                     }
                     // Reset announcement list HTML variable
                     announcementListHTML = '';
+                    announcementSidebarHTML = '';
                     // Update current page number (paginator)
                     var currentPage = $paginatorPageNumbers.data('current-page');
                     $paginatorPageNumbers.children('.selected').removeClass('selected');
@@ -382,16 +419,12 @@ $(document).ready(function() {
             videoList: data.videoList,
             showMore: data.showMore,
         });
-        announcementSidebarHTML += Mustache.render($announcementSidebarItemTemplate, {
-          pk: data.pk,
-          absoluteURL: data.absoluteURL,
+        // NOTE: New code
+        announcementSidebarHTML += Mustache.render($sidebarAnnouncementLinkTemplate, {
+          announcementPK: data.pk,
           title: data.title,
-          dateCreated: data.dateCreated,
-          timeCreated: data.timeCreated,
           categoryColor: data.categoryColor,
-          categoryPK: data.categoryPK,
         });
-
     }
 
     // TODO: Could this be optimized to only add/remove the most recently clicked category rather than check the whole list every time? Would that be secure / sync-safe?

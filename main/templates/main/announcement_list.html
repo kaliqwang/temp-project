@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block paginator_top %}
-  <div id="paginator-standard" class="container-white text-center">
+  <div id="paginator-standard" class="container-white text-center announcement-paginator">
     <a href="#" id="paginator-first" class="paginator-link">First</a
     ><a href="#" id="paginator-previous" class="paginator-link">Previous</a
     ><span id="paginator-page-numbers" data-current-page="1"></span
@@ -32,51 +32,64 @@
 {% block data %}<div id="page-size" data-page-size="{{ page_size }}" hidden></div>{% endblock %}
 {% block content %}
   <div id="announcement-list"></div>
+  <!-- <div id="announcement-sidebar-toggle"></div> -->
   <div id="announcement-sidebar-container">
     <div id="announcement-sidebar">
-      <ul id="announcement-sidebar-top">
+      <ul id="announcement-sidebar-pinned">
+        <div class="sidebar-header">
+          <a href="#">Pinned</a>
+          <!-- TODO: Mark all as read option -->
+        </div>
+      </ul>
+      <hr class="sidebar-divider">
+      <ul id="announcement-sidebar-all">
+        <div class="sidebar-header">
+          <a href="#">All Announcements</a>
+          <!-- TODO: Mark all as read option -->
+        </div>
+        <div id="announcement-sidebar-all-items"></div>
+      </ul>
+      <hr class="sidebar-divider">
+      <ul id="announcement-sidebar-bottom">
+        <div class="sidebar-header">
+          <a href="#" id="sidebar-show-more">Show More</a>
+        </div>
+        <div class="sidebar-header">
+          <a href="#" id="sidebar-back-to-top">Back to Top</a>
+        </div>
       </ul>
     </div>
   </div>
 {% endblock %}
 
 {% block paginator_bottom %}
-  <div id="paginator-simple" class="container-white text-center">
-    <a href="#" id="paginator-show-more" class="paginator-link" type="button" data-target>Show More</a>
+  <div id="paginator-simple" class="text-center">
+    <a href="#" id="paginator-show-more" class="paginator-link container-white" type="button" data-target>Show More</a>
   </div>
 {% endblock %}
 
 
 {% block templates %}
-<template id="announcement-sidebar-item-template">
-  <div class="col-xl-4 col-xxl-3" style="float:both">
-    <div style="padding:5px 0; margin: 5px 0;" data-category-pk="{% templatetag openvariable %} categoryPK {% templatetag closevariable %}">
-      <!-- Announcement Title -->
-      <div class="dot" style="background-color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}">
-      </div>
-      <div>
-        <div class="title"><h5><a href="{% templatetag openvariable %} absoluteURL {% templatetag closevariable %}"><div>{% templatetag openvariable %} title {% templatetag closevariable %}</div></a></h5></div>
-        <!-- Announcement Signature -->
-          <span class="fa fa-clock-o"></span>
-          <span class="date-created">{% templatetag openvariable %} dateCreated {% templatetag closevariable %},</span>
-          <span class="time-created">{% templatetag openvariable %} timeCreated {% templatetag closevariable %}</span> <!--| Tags:
-           <span class="label" style="background-color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}">{% templatetag openvariable %} categoryName {% templatetag closevariable %}</span> -->
-      </div>
-    </div>
-  </div>
-</template>
+  <!-- Sidebar Announcement Link Template -->
+  <template id="sidebar-announcement-link-template">
+    <li><a href="#" class="announcement-sidebar-link" data-announcement-pk="{% templatetag openvariable %} announcementPK {% templatetag closevariable %}">
+      <div class="dot" style="background-color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}"></div>
+      <!-- <span class="icon-container"><span class="glyphicon glyphicon-tag" style="color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}"></span></span> -->
+      <span class="display-name">{% templatetag openvariable %} title {% templatetag closevariable %}</span>
+    </a></li>
+  </template>
   <!-- Announcement Item Template -->
   <template id="announcement-item-template">
-    <div class="col-xl-4 col-xxl-3" style="float:both">
-      <div class="announcement-wrapper container-white" data-category-pk="{% templatetag openvariable %} categoryPK {% templatetag closevariable %}">
+    <!-- <div class="col-xl-4 col-xxl-3" style="float:both"> -->
+      <div id="announcement-{% templatetag openvariable %} pk {% templatetag closevariable %}" class="announcement-wrapper container-white" style="border-right: 4px solid {% templatetag openvariable %} categoryColor {% templatetag closevariable %}" data-category-pk="{% templatetag openvariable %} categoryPK {% templatetag closevariable %}">
         <!-- Announcement Title -->
         <div class="title"><h4><a href="{% templatetag openvariable %} absoluteURL {% templatetag closevariable %}"><div>{% templatetag openvariable %} title {% templatetag closevariable %}</div></a></h4></div>
         <!-- Announcement Signature -->
-        <div class="signature" style="border-bottom: 2px solid {% templatetag openvariable %} categoryColor {% templatetag closevariable %}; padding-bottom:5px;">
+        <div class="signature">
           <span class="fa fa-clock-o"></span>
           <span class="date-created">{% templatetag openvariable %} dateCreated {% templatetag closevariable %},</span>
-          <span class="time-created">{% templatetag openvariable %} timeCreated {% templatetag closevariable %}</span> <!--| Tags:
-           <span class="label" style="background-color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}">{% templatetag openvariable %} categoryName {% templatetag closevariable %}</span> -->
+          <span class="time-created">{% templatetag openvariable %} timeCreated {% templatetag closevariable %}</span> |
+          <span>{% templatetag openvariable %} categoryName {% templatetag closevariable %}</span>
         </div>
         <!-- Announcement Content -->
         <div class="content">{% templatetag openvariable %} content {% templatetag closevariable %}</div>
@@ -90,7 +103,7 @@
         <!-- Announcement Show More -->
         <div class="show-more text-center {% templatetag openvariable %} showMore {% templatetag closevariable %}">Show More</div>
       </div>
-    </div>
+    <!-- </div> -->
   </template>
   <!-- Image Item Template -->
   <template id="image-item-template">
