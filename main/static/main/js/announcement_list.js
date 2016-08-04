@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    //Test Variables
+    var $announcementSidebarItemTemplate = $('#announcement-sidebar-item-template').html().trim();
+    Mustache.parse($announcementSidebarItemTemplate);
+    var $announcementSidebar = $('#announcement-sidebar');
+    var announcementSidebarHTML = ''
 
     // Templates
     var $announcementItemTemplate = $('#announcement-item-template').html().trim();
@@ -314,8 +319,10 @@ $(document).ready(function() {
                     // Write entire announcement list HTML to DOM
                     if (replace) {
                         $announcementList.html(announcementListHTML);
+                        $announcementSidebar.html(announcementSidebarHTML);
                     } else {
                         $announcementList.append(announcementListHTML);
+                        $announcementSidebar.append(announcementSidebarHTML);
                     }
                     // Reset announcement list HTML variable
                     announcementListHTML = '';
@@ -375,6 +382,16 @@ $(document).ready(function() {
             videoList: data.videoList,
             showMore: data.showMore,
         });
+        announcementSidebarHTML += Mustache.render($announcementSidebarItemTemplate, {
+          pk: data.pk,
+          absoluteURL: data.absoluteURL,
+          title: data.title,
+          dateCreated: data.dateCreated,
+          timeCreated: data.timeCreated,
+          categoryColor: data.categoryColor,
+          categoryPK: data.categoryPK,
+        });
+
     }
 
     // TODO: Could this be optimized to only add/remove the most recently clicked category rather than check the whole list every time? Would that be secure / sync-safe?

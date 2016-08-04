@@ -3,7 +3,9 @@
 h4 {
     margin: 0px;
 }
-
+li {
+  list-style:none;
+}
 .btn-custom:hover, .btn-custom:focus, .btn-custom:active, .btn-custom:active:focus {
     color: #fff;
     background-color: #126db3;
@@ -89,7 +91,7 @@ form:not(#login-form) {
     color: #444;
     cursor: pointer;
 }
-.announcement-wrapper .title, .signature,.content,.image-list,.video {
+.announcement-wrapper .content,.image-list,.video {
     margin-bottom: 10px;
 }
 .announcement-wrapper a {
@@ -99,11 +101,17 @@ form:not(#login-form) {
     color: #1e18cc;
     text-decoration: underline;
 }
-
+.announcement-wrapper .signature, #announcement-sidebar .signature {
+  font-size:13px;
+  color: #888;
+  margin-bottom:10px;
+}
 .start-hidden {
     display: none;
 }
-
+.announcement-wrapper .title {
+  margin-bottom:5px;
+}
 .video {
     max-width: 480px;
 }

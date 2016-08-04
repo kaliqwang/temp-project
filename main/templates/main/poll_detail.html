@@ -24,12 +24,7 @@
 {% endblock %}
 
 {% block content %}
-  <!-- Temporary Alert -->
-  <div class="alert alert-warning alert-dismissible">
-    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-    <b>Note:</b> This page is incomplete.
-  </div>
-  <div id="poll-{{ poll.pk }}" class="poll-wrapper"
+  <div id="poll-{{ poll.pk }}" class="poll-wrapper container-white"
     data-votes="{{ poll.votes.count }}"
     data-author="{{ poll.author.pk }}"
     data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
@@ -39,7 +34,7 @@
     <!-- How to pass python dict context variable containing vote count for each choice and total? -->
 
     <!-- Poll Content -->
-    <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
+    <div class="content" style="border-bottom:2px solid {{ poll.category.color|default:'#222222' }}; padding: 10px 0;"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
     <!-- Poll Signature -->
     <div class="signature">
       <span class="fa fa-clock-o"></span>

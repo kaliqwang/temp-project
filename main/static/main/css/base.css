@@ -77,6 +77,31 @@ ul {list-style:none; margin:0px; padding:0px}
 #sidebar-filter-feedback {float:right; text-align:center}
 #sidebar-filter-feedback .icon-container {padding:0px}
 
+/* Sidebar Container (sidebar positioner, scrollbar/border overlay) */
+#announcement-sidebar-container {
+    position:fixed;
+    z-index:99;
+    top:50px; right: 0px; bottom:0px; /* Positioning */
+    width: 300px; height:auto; /* Sizing */
+    background-color:white;
+    border:1px solid #e8e8e8;
+    padding: 13px 22px;
+}
+ /*Custom Scrollbar */
+ #announcement-sidebar-container ::-webkit-scrollbar {width:9px; height:9px}
+ #announcement-sidebar-container ::-webkit-scrollbar-thumb {background:transparent}
+ #announcement-sidebar-container:hover ::-webkit-scrollbar-thumb {background:#ccc}
+ /* announcement-sidebar */
+ #announcement-sidebar {width:272px; height:100%; overflow:overlay}
+ /* announcement-sidebar links */
+ #announcement-sidebar li a {height:28px; line-height: 28px; width:100%}
+ #announcement-sidebar li a:hover {background-color:#444; color:#fff}
+ #announcement-sidebar li a.selected {background-color:#1e18cc; color: #fff; font-weight:500}
+ #announcement-sidebar .display-name {height:20px; line-height:20px; width: 140px}
+ /* announcement-sidebar sections */
+ #announcement-sidebar .sidebar-divider {margin:8px 0px}
+ #announcement-sidebar .sidebar-header {padding:4px 0px; width:auto}
+ #announcement-sidebar .sidebar-header a:hover {text-decoration:underline}
 /**************************** Section 3: Main Page ****************************/
 
 #main-page-content {margin-top:8px}
@@ -120,7 +145,7 @@ ul {list-style:none; margin:0px; padding:0px}
   body.show-sidebar #main-page,
   body.show-sidebar #site-footer {margin-left:0px}
 }
-/* Second level (2 columns)*/
+ /*Second level (2 columns)*/
 @media (min-width: 1200px) {
   .container {
     width: 1040px;

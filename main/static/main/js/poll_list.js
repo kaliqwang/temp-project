@@ -1,5 +1,7 @@
-
 $(document).ready(function() {
+    /******************************* Templates ********************************/
+    $pollUnvotedItemTemplate = $('#poll-unvoted-item-template');
+    Mustache.parse($pollUnvotedItemTemplate);
     var $pollList = $('#poll-list');
     //checks if poll is closed
     function checkClosed($poll) {

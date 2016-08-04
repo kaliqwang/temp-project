@@ -7,11 +7,6 @@
 {% block content %}
 <div class="container-white">
   <form id="{% block form_id %}{% endblock %}" action="{% block form_url %}{% endblock %}" enctype="multipart/form-data" method="post">{% csrf_token %}
-    <!-- Temporary Alert -->
-    <div class="alert alert-warning alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-      <b>Note:</b> This page is incomplete.
-    </div>
     <!-- Poll Content -->
     <div class="row row-compact">
       <div class="col-sm-1 col-compact"><div class="form-label">Title</div></div>
