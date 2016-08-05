@@ -1,8 +1,204 @@
 $(document).ready(function() {
-    /******************************* Templates ********************************/
+    //Templates
     $pollUnvotedItemTemplate = $('#poll-unvoted-item-template');
     Mustache.parse($pollUnvotedItemTemplate);
+
+    //Variables
+    var $paginatorSimple = $('#paginator-simple');
+    var $paginatorShowMore = $('#paginator-show-more');
+
+    var $paginatorLinks = $('.paginator-link');
+    var $paginatorStandard = $('#paginator-standard');
+    var $paginatorPrevious = $('#paginator-previous');
+    var $paginatorNext = $('#paginator-next');
+    var $paginatorFirst = $('#paginator-first');
+    var $paginatorLast = $('#paginator-last');
+    var $paginatorPageNumbers = $('#paginator-page-numbers');
     var $pollList = $('#poll-list');
+
+    //Helper Functions
+    function renderPollListPageNumber(pageNumber) {
+        var queryString = '';
+        if (pageNumber) {
+            queryString = 'page=' + pageNumber;
+            $paginatorPageNumbers.data('current-page', pageNumber);
+            if (pageNumber == 'last') {
+                $paginatorPageNumbers.data('current-page', pageCount);
+            }
+        } else {
+            $paginatorPageNumbers.data('current-page', 1);
+        }
+        var target = '/api/polls/?' + queryString;
+        renderPollListTarget(target, true);
+    }
+    function renderAnnouncementListTarget(target, replace) {
+        if (target != null) {
+            var currentPage = $paginatorPageNumbers.data('current-page');
+            // Start Timer
+            console.log('Loading Page ' + currentPage + '...');
+            console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+            console.log('Sending GET request to ' + target);
+            var ajaxStart = performance.now();
+            // Ajax call
+            $.ajax({
+                type: 'GET',
+                url: target,
+                success: function(data) {
+                    var functionStart = performance.now();
+                    var results = data.results;
+                    var resultsCount = results.length;
+                    var totalCount = data.count;
+                    pageCount = Math.ceil(totalCount / pageSize);
+                    console.log('Success Callback:\t' + (functionStart - ajaxEnd) + ' milliseconds');
+                    console.log('');
+                    console.log('Rendering ( ' + resultsCount + ' / ' + totalCount + ' ) announcements:');
+                    console.log('');
+                    // Render paginator
+                    var pageNumbersHTML = '';
+                    $paginatorPrevious.data('target', data.previous);
+                    $paginatorNext.data('target', data.next);
+                    $paginatorShowMore.data('target', data.next);
+                    for (i = 1; i <= pageCount; i++) {
+                        pageNumbersHTML += '<a href="#" class="paginator-link" data-target="' + i + '">' + i + '</a>';
+                    }
+                    $paginatorPageNumbers.html(pageNumbersHTML);
+                    // Render announcements to HTML
+                    for (var i = 0; i < resultsCount; i++) {
+                        var time0 = performance.now();
+                        var a = results[i];
+                        // Extract data
+                        var categoryName = '';
+                        var categoryColor = '';
+                        var categoryPK = '';
+                        var pk = a.pk;
+                        var absoluteURL = a.absolute_url;
+                        var title = a.title;
+                        var dateOpen = a.date_open_data;
+                        var timeCreated = a.time_created_data.replace(/\./g, '');
+                        var category = a.category_data;
+                        if (category) {
+                            categoryName = a.category_data.name;
+                            categoryColor = a.category_data.color;
+                            categoryPK = a.category_data.pk;
+                        } else {
+                            categoryName = 'Everyone';
+                            categoryColor = '#222';
+                            categoryPK = '-1';
+                        }
+                        var content = a.content;
+                        var imageFiles = a.image_files_data;
+                        var imageLinks = a.image_links_data;
+                        var youTubeVideos = a.youtube_videos_data;
+                        // Create image list and video list HTML
+                        var $imageListHTML = '';
+                        var $videoListHTML = '';
+                        var showMore = '';
+                        var hasExtra = false;
+                        var imageCount = 0;
+                        // For each image file
+                        for (x = 0, xMax = imageFiles.length; x < xMax; x++) {
+                            var imageFile = imageFiles[x];
+                            if (imageCount == 6) {
+                                $imageListHTML += '<span class="start-hidden">';
+                                hasExtra = true;
+                            }
+                            // Render image HTML and add to imageListHTML string
+                            $imageListHTML += Mustache.render($imageItemTemplate, {
+                                imageURL: imageFile.image_file_url,
+                                imageThumbnailURL: imageFile.image_file_thumbnail_url,
+                            });
+                            imageCount++;
+                        }
+                        // For each image link
+                        for (y = 0, yMax = imageLinks.length; y < yMax; y++) {
+                            var imageLink = imageLinks[y];
+                            if (imageCount == 6) {
+                                $imageListHTML += '<span class="start-hidden">';
+                                hasExtra = true;
+                            }
+                            // Render image HTML and add to imageListHTML string
+                            $imageListHTML += Mustache.render($imageItemTemplate, {
+                                imageURL: imageLink.image_file_url,
+                                imageThumbnailURL: imageLink.image_file_thumbnail_url,
+                            });
+                            imageCount++;
+                        }
+                        if (hasExtra) {
+                            $imageListHTML += '</span>'
+                        }
+                        // For each youtube video
+                        for (var z = 0, zMax = youTubeVideos.length; z < zMax; z++) {
+                            hasExtra = true;
+                            var youTubeVideo = youTubeVideos[z];
+                            // Render image HTML and add to imageListHTML string
+                            $videoListHTML += Mustache.render($videoDataTemplate, {
+                                videoID: youTubeVideo.youtube_video,
+                            });
+                        }
+                        // Set class for '#show-more' button
+                        if (!hasExtra) showMore = 'hidden';
+                        var time1 = performance.now();
+                        // Render entire announcement and add to announcement list HTML string
+                        renderAnnouncement({
+                            pk: pk,
+                            absoluteURL: absoluteURL,
+                            title: title,
+                            dateCreated: dateCreated,
+                            timeCreated: timeCreated,
+                            categoryName: categoryName,
+                            categoryColor: categoryColor,
+                            categoryPK: categoryPK,
+                            content: content,
+                            imageList: $imageListHTML,
+                            videoList: $videoListHTML,
+                            showMore: showMore,
+                        }, i);
+                        var time2 = performance.now();
+
+                        console.log('Announcement ' + (i + 1) + ': \t' + (time2 - time0) + ' milliseconds');
+                        // console.log('\tProcessing:\t\t\t' + (time1 - time0) + ' milliseconds');
+                        // console.log('\tRender:\t\t\t\t' + (time2 - time1) + ' milliseconds');
+                    }
+                    var render = performance.now();
+                    // Write entire announcement list HTML to DOM
+                    if (replace) {
+                        $announcementList.html(announcementListHTML);
+                        $announcementSidebar.html(announcementSidebarHTML);
+                    } else {
+                        $announcementList.append(announcementListHTML);
+                        $announcementSidebar.append(announcementSidebarHTML);
+                    }
+                    // Reset announcement list HTML variable
+                    announcementListHTML = '';
+                    // Update current page number (paginator)
+                    var currentPage = $paginatorPageNumbers.data('current-page');
+                    $paginatorPageNumbers.children('.selected').removeClass('selected');
+                    $paginatorPageNumbers.children(':nth-child(' + currentPage + ')').addClass('selected');
+                    // Update variables TODO: use document.getElementsByClassName() to enable auto-updating
+                    $announcementItems = $announcementList.children('.announcement-wrapper');
+                    $itemsCollapse = $('.start-hidden');
+                    var functionEnd = performance.now();
+                    console.log('');
+                    console.log('Writing to DOM:\t\t' + (functionEnd - render) + ' milliseconds');
+                    console.log('Total:\t\t\t\t' + (functionEnd - ajaxStart) + ' milliseconds');
+                    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+                },
+                error: function(xhr, status, error) {
+                    console.log('(Error)');
+                    console.log('');
+                    console.log('Will redirect to first page...');
+                    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+                    $paginatorPageNumbers.data('current-page', 1);
+                    // Render first page of list
+                    renderAnnouncementListPageNumber();
+                }
+            });
+            // End Timer
+            var ajaxEnd = performance.now();
+            console.log('');
+            console.log('Server responded:\t' + (ajaxEnd - ajaxStart) + ' milliseconds');
+        }
+    }
     //checks if poll is closed
     function checkClosed($poll) {
         $.ajax({
