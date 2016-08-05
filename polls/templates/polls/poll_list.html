@@ -8,9 +8,20 @@
 
 {% block sidebar_polls %}selected{% endblock %}
 
+{% block paginator_top %}
+  <div id="paginator-standard" class="container-white text-center">
+    <a href="#" id="paginator-first" class="paginator-link">First</a
+    ><a href="#" id="paginator-previous" class="paginator-link">Previous</a
+    ><span id="paginator-page-numbers" data-current-page="1"></span
+    ><a href="#" id="paginator-next" class="paginator-link">Next</a
+    ><a href="#" id="paginator-last" class="paginator-link">Last</a>
+  </div>
+{% endblock %}
+
+{% block data %}<div id="page-size" data-page-size="{{ page_size }}" hidden></div>{% endblock %}
+
 {% block content %}
 <div class="row">
-
     <div class="col-xs-8 col-xs-offset-2">
       <div id="alert-danger" class="alert alert-danger alert-dismissible hidden" style="position:fixed; z-index:1; width:530px;">
         <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
@@ -25,7 +36,7 @@
   <!-- Media tab panes -->
   <div id="poll-list" class="tab-content" data-user="{{ user.pk }}">
     <!-- Unvoted Polls -->
-    <div id="polls-unvoted" class="tab-pane fade in active">
+    <!-- <div id="polls-unvoted" class="tab-pane fade in active">
       {% for poll in polls_unvoted %}
           <div id="poll-{{ poll.pk }}" class="poll-wrapper container-white"
             data-votes="{{ poll.votes.count }}"
@@ -33,19 +44,19 @@
             data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
             data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
             data-is-open="{{ poll.is_open }}"
-            data-category="{{ poll.category.pk }}">
+            data-category="{{ poll.category.pk }}"> -->
             <!-- How to pass python dict context variable containing vote count for each choice and total? -->
 
             <!-- Poll Content -->
-            <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
+            <!-- <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div> -->
             <!-- Poll Signature -->
-            <div class="signature">
+            <!-- <div class="signature">
               <span class="fa fa-clock-o"></span>
               <span class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</span>
               | Tags: <span class="label" style="background-color:{{ poll.category.color|default:'#222222' }}">{{ poll.category|default_if_none:'Everyone' }}</span>
-            </div>
+            </div> -->
             <!-- Poll Choices -->
-            <div class="poll-choices">
+            <!-- <div class="poll-choices">
               {% for choice in poll.choices.all %}
                 <div class="row choice-wrapper">
                   <div class="col-xs-2 text-right">
@@ -56,9 +67,9 @@
                   </div>
                 </div>
               {% endfor %}
-            </div>
+            </div> -->
             <!-- Progress Bars -->
-            <div class="progress-bars hidden">
+            <!-- <div class="progress-bars hidden">
               <br>
               {% for choice in poll.choices.all %}
               <div class="row progress-bar-wrapper">
@@ -74,9 +85,9 @@
               </div>
 
               {% endfor %}
-            </div>
+            </div> -->
             <!-- Buttons -->
-            <div class="row poll-bottom">
+            <!-- <div class="row poll-bottom">
               <div class="col-xs-5">
                 <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
                 <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
@@ -88,9 +99,9 @@
             </div>
           </div>
       {% endfor %}
-    </div>
+    </div> -->
     <!-- Voted Polls -->
-    <div id="polls-voted" class="tab-pane fade">
+    <!-- <div id="polls-voted" class="tab-pane fade">
       {% for poll in polls_voted %}
 
           <div id="poll-{{ poll.pk }}" class="poll-wrapper container-white submitted"
@@ -99,19 +110,19 @@
             data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
             data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
             data-is-open="{{ poll.is_open }}"
-            data-category="{{ poll.category.pk }}">
+            data-category="{{ poll.category.pk }}"> -->
             <!-- How to pass python dict context variable containing vote count for each choice and total? -->
 
             <!-- Poll Content -->
-            <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
+            <!-- <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div> -->
             <!-- Poll Signature -->
-            <div class="signature">
+            <!-- <div class="signature"> -->
               <!-- <i class="fa fa-clock-o"></i> -->
-              <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
+              <!-- <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
               <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
-            </div>
+            </div> -->
             <!-- Poll Choices -->
-            <div class="poll-choices hidden">
+            <!-- <div class="poll-choices hidden">
               {% for choice in poll.choices.all %}
                 <div class="row choice-wrapper">
                   <div class="col-xs-2 text-right">
@@ -122,9 +133,9 @@
                   </div>
                 </div>
               {% endfor %}
-            </div>
+            </div> -->
             <!-- Progress Bars -->
-            <div class="progress-bars">
+            <!-- <div class="progress-bars">
               <br>
               {% for choice in poll.choices.all %}
                 <div class="row progress-bar-wrapper">
@@ -139,9 +150,9 @@
                   </div>
                 </div>
             {% endfor %}
-          </div>
+          </div> -->
           <!-- Buttons -->
-          <div class="row poll-bottom">
+          <!-- <div class="row poll-bottom">
             <div class="col-xs-5">
               <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
               <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
@@ -153,7 +164,7 @@
           </div>
         </div>
       {% endfor %}
-    </div>
+    </div> -->
     <!-- Closed Polls -->
     <div id="polls-closed" class="tab-pane fade">
       {% for poll in polls_closed %}
@@ -198,6 +209,12 @@
 </div>
 </div>
 {% endblock %}
+
+{% block paginator_bottom %}
+  <div id="paginator-simple" class="container-white text-center">
+    <a href="#" id="paginator-show-more" class="paginator-link" type="button" data-target>Show More</a>
+  </div>
+{% endblock %}
   {% block templates %}
   <!-- Poll Unvoted Item Template -->
   <template id="poll-unvoted-item-template">
@@ -224,6 +241,7 @@
         {% templatetag openvariable %}{ choiceList }{% templatetag closevariable %}
       </div>
     </div>
+  </template>
 
   <template id="open-poll-template">
     <div id="poll-{{ poll.pk }}" class="poll-wrapper"
