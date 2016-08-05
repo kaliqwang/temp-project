@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+
+{% load static from staticfiles %}
+
+{% block title %}Event Detail{% endblock %}
+
+{% block masthead_events %}selected{% endblock %}
+
+{% block sidebar_events %}selected{% endblock %}
+
+{% block sidebar_extra %}
+  <hr class="sidebar-divider">
+  <ul id="sidebar-admin-event">
+    <a href="#" class="sidebar-header">Event</a>
+    <li><a href="{% url 'events:update' event.pk %}">
+      <span class="icon-container"><span class="glyphicon glyphicon-pencil"></span></span>
+      <span class="display-name">Make Changes</span>
+    </a></li>
+    <li><a href="#">
+      <span class="icon-container"><span class="glyphicon glyphicon-remove"></span></span>
+      <span class="display-name">Delete</span>
+    </a></li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <div id="event-info-wrapper" class="container-white">
+    <div id="event-info"></div><hr>
+    <div id="event-info-footer" class="text-right"><a href="{% url 'events:list' %}" class="btn btn-sm btn-default">Back to Calendar</a></div>
+  </div>
+  <ul id="event-list" hidden>
+    <li data-name="{{ event.name }}" data-date-start="{{ event.date_start|date:'M j' }}" data-time-start="{{ event.time_start|default_if_none:'' }}"
+      data-date-end="{{ event.date_end|date:'M j' }}" data-time-end="{{ event.time_end|default_if_none:'' }}"
+      data-is-multi-day="{{ event.is_multi_day }}" data-location="{{ event.location|default:'TBA' }}" data-details="{{ event.details|default:'TBA' }}">
+      <span class="label" style="background-color:{{ event.category.color|default:'#222222' }}">{{ event.category|default_if_none:'Everyone' }}</span>
+    </li>
+  </ul>
+{% endblock %}
+
+{% block templates %}
+  <!-- Event Info Template -->
+  <template id="event-info-template">
+    <ul>
+      <li><b>What:</b> {% templatetag openvariable %} what {% templatetag closevariable %}</li>
+      <li><b>When:</b> {% templatetag openvariable %} when {% templatetag closevariable %}</li>
+      <li><b>Where:</b> {% templatetag openvariable %} where {% templatetag closevariable %}</li>
+      <li><b>Details:</b> {% templatetag openvariable %} details {% templatetag closevariable %}</li>
+      <li><b>Tags:</b> {% templatetag openvariable %}{ category }{% templatetag closevariable %}</li>
+    </ul>
+  </template>
+{% endblock %}
+
+
+
+{% block script %}<script src= "{% static 'events/js/event_detail.js' %}"></script>{% endblock %}

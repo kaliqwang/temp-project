@@ -1,0 +1,24 @@
+{% extends "polls/poll_form.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Create Poll{% endblock %}
+
+{% block sidebar_poll_create %}selected{% endblock %}
+
+{% block form_id %}poll-create-form{% endblock %}{% block form_url %}{% url 'polls:create' %}{% endblock %}
+
+{% block templates %}
+  <template id="choice-input-template">
+    <div class="input-group choice-input-wrapper">
+      <input required type="text" class="form-control choice-input" name="choice[]" placeholder="{% templatetag openvariable %} placeholder {% templatetag closevariable %}" maxlength="200" data-existing>
+      <span class="input-group-btn" tabindex="-1">
+        <button class="btn btn-default remove-input" data-flavor="{% templatetag openvariable %} placeholder {% templatetag closevariable %}">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
+      </span>
+    </div>
+  </template>
+{% endblock %}
+{% block submit_button_id %}submit-poll-create-form{% endblock %}
+{% block script %}<script src="{% static 'polls/js/poll_create.js' %}"></script>{% endblock%}

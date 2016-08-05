@@ -1,0 +1,107 @@
+{% extends 'base/base.html' %}
+
+{% load static from staticfiles %}
+
+{% block title %}Categories{% endblock %}
+
+{% block header %}Categories{% endblock %}
+
+{% block masthead_bottom %}
+  <li><a href="{% url 'base:index' %}">Trending</a></li>
+  <li><a href="{% url 'announcements:list' %}">Announcements</a></li>
+  <li><a href="{% url 'events:list' %}">Events</a></li>
+  <li><a href="{% url 'polls:list' %}">Polls</a></li>
+{% endblock %}
+
+{% block sidebar_category_list %}selected{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="container-white">
+        <form id="category-list-form" action="{% url 'categories:list' %}" method="post">{% csrf_token %}
+          <!-- Category List -->
+          <div id="categories" class="form-group">
+            {% for c in categories %}
+              <li data-name="{{ c.name }}" data-color="{{ c.color }}" data-pk="{{ c.pk }}" hidden></li>
+              {% if forloop.last %}<div id="initial-count" hidden>{{ forloop.counter }}</div>{% endif %}
+            {% endfor %}
+          </div><hr>
+          <!-- Buttons -->
+          <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-5">
+              {% block morebuttons %}<button id="category-add" class="btn btn-sm btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Category</button>{% endblock %}
+            </div>
+            <div class="col-xs-6 text-right">
+              <a class="btn btn-sm btn-default" href="{% block cancel_button_target_url %}{% url 'base:index' %}{% endblock %}">Cancel</a>
+              <button id="{% block submit_button_id %}submit-category-list-form{% endblock %}" class="btn btn-sm btn-custom" type="button">{% block submit_button_text %}Save{% endblock %}</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color Choices -->
+  <datalist id="datalist-color-choices">
+    <option>#f2f3f4</option><option>#f3c300</option><option>#875692</option>
+    <option>#f38400</option><option>#a1caf1</option><option>#be0032</option>
+    <option>#c2b280</option><option>#848482</option><option>#008856</option>
+    <option>#e68fac</option><option>#0067a5</option><option>#f99379</option>
+    <option>#604e97</option><option>#f6a600</option><option>#b3446c</option>
+    <option>#dcd300</option><option>#882d17</option><option>#8db600</option>
+    <option>#654522</option><option>#e25822</option><option>#2b3d26</option>
+  </datalist>
+{% endblock %}
+
+{% block templates %}
+  <template id="old-category-template">
+    <div class="input-group-wrapper">
+      <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}">
+      <div class="row">
+        <div class="col-xs-1">
+        </div>
+        <div class="col-xs-11">
+          <div class="input-group">
+            <input type="text" class="form-control category-name-input"
+              name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
+              value="{% templatetag openvariable %} name {% templatetag closevariable %}"
+              placeholder="Category Name" maxlength="30" required>
+            <span class="input-group-btn"><input required type="color" class="form-control btn btn-default color-input" maxlength="7"
+              list="datalist-color-choices"
+              name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
+              value="{% templatetag openvariable %} color {% templatetag closevariable %}"
+              data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template id="new-category-template">
+    <div class="input-group-wrapper">
+      <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}">
+      <div class="row">
+        <div class="col-xs-1">
+          <button type="button" class="close remove_field" title="Remove" data-toggle="tooltip" data-placement="top"><span>&times;</span></button>
+        </div>
+        <div class="col-xs-11">
+          <div class="input-group">
+            <input type="text" class="form-control category-name-input"
+              name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
+              placeholder="Category Name" maxlength="30" required>
+            <span class="input-group-btn"><input required type="color" class="form-control btn btn-default" maxlength="7"
+              list="datalist-color-choices"
+              name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
+              value="{% templatetag openvariable %} color {% templatetag closevariable %}"
+              data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+{% endblock %}
+
+{% block script %}<script src="{% static 'categories/js/category_list.js' %}"></script>{% endblock %}

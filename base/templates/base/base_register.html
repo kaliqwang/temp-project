@@ -1,0 +1,91 @@
+{% extends 'base/base.html' %}
+
+{% load static from staticfiles %}
+
+{% block title %}Registration{% endblock %}
+
+{% block header %}Registration{% endblock %}
+
+{% block masthead_bottom %}
+  <li><a href="{% url 'base:index' %}">Trending</a></li>
+  <li><a href="{% url 'announcements:list' %}">Announcements</a></li>
+  <li><a href="{% url 'events:list' %}">Events</a></li>
+  <li><a href="{% url 'polls:list' %}">Polls</a></li>
+{% endblock %}
+
+{% block content %}
+  <div class="container-white">
+    <form id="{% block register_form_id %}{% endblock %}" class="register-form" action="{% block register_form_url %}{% endblock %}" method="post">{% csrf_token %}
+      <div class="row">
+        <div class="col-xs-2"><div class="form-label">Username</div></div>
+        <div class="col-xs-10">
+          <div class="has-feedback {% if userForm.username.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.username.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
+            {{ userForm.username }}
+            {% if userForm.username.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-2"><div class="form-label">Password</div></div>
+        <div class="col-xs-10">
+          <div class="has-feedback {% if userForm.password.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.password.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
+            {{ userForm.password }}
+            {% if userForm.password.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-2"><div class="form-label">First Name</div></div>
+        <div class="col-xs-10">
+          <div class="has-feedback {% if userForm.first_name.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.first_name.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
+            {{ userForm.first_name }}
+            {% if userForm.first_name.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-2"><div class="form-label">Last Name</div></div>
+        <div class="col-xs-10">
+          <div class="has-feedback {% if userForm.last_name.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.last_name.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
+            {{ userForm.last_name }}
+            {% if userForm.last_name.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-2"><div class="form-label">Phone Number</div></div>
+        <div class="col-xs-10">
+          <div class="has-feedback {% if userProfileForm.mobile.errors %}has-error{% elif userProfileForm.is_bound %}has-success{% endif %}" title="{{ userProfileForm.mobile.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
+            {{ userProfileForm.mobile }}
+            {% if userProfileForm.mobile.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            {% elif userProfileForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-2"><div class="form-label">School Email</div></div>
+        <div class="col-xs-10">
+          <div class="has-feedback {% if userForm.email.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.email.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
+            {{ userForm.email }}
+            {% if userForm.email.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+          </div>
+        </div>
+      </div>
+      {% block register_form_extra_fields %}{% endblock %}<hr>
+      <!-- Buttons -->
+      <div class="row">
+        <div class="col-xs-2 col-xs-offset-6">
+          {% block morebuttons %}{% endblock %}
+        </div>
+        <div class="col-xs-4 text-right">
+          <a class="btn btn-sm btn-default" href="{% block cancel_button_target_url %}{% url 'index' %}{% endblock %}">Cancel</a>
+          <button id="{% block submit_button_id %}{% endblock %}" class="btn btn-sm btn-custom" type="button">{% block submit_button_text %}Create Account{% endblock %}</button>
+        </div>
+    </form>
+  </div>
+{% endblock %}

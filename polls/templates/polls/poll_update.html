@@ -1,0 +1,24 @@
+{% extends "polls/poll_form.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Update Poll{% endblock %}
+
+{% block form_id %}poll-update-form{% endblock %}
+{% block form_url %}{% url 'polls:update' poll.pk %}{% endblock %}
+
+{% block sidebar_extra %}
+  <hr>
+  <ul id="section-admin-poll">
+    <a href="#" class="sidebar-section-header">Poll Tools</a>
+    <!-- <span class="glyphicon glyphicon-tags"> -->
+    <li><a href="{% url 'polls:update' poll.pk %}" class="selected"><span class="icon-container"><span class="glyphicon glyphicon-pencil"></span></span>
+      <span class="display-name">Make Changes</span></a></li>
+    <li><a href="{% url 'polls:list' %}"><span class="icon-container"><span class="glyphicon glyphicon-remove"></span></span>
+      <span class="display-name">Remove</span></a></li>
+  </ul>
+{% endblock %}
+
+{% block cancel_button_target_url %}{% url 'polls:detail' poll.pk %}{% endblock %}
+{% block submit_button_id %}submit-poll-update-form{% endblock %}
+{% block script %}<script src="{% static 'polls/js/poll_update.js' %}"></script>{% endblock%}

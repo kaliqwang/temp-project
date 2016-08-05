@@ -1,0 +1,11 @@
+{% extends "events/event_form.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Create Event{% endblock %}
+
+{% block sidebar_event_create %}selected{% endblock %}
+
+{% block form_id %}event-create-form{% endblock %}
+{% block form_url %}{% url 'events:create' %}{% endblock %}
+{% block submit_button_id %}submit-event-create-form{% endblock %}
