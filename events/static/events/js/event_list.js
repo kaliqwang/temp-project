@@ -203,7 +203,7 @@ $(document).ready(function() {
                     categoryPK: categoryPK,
                 });
                 // If month or date changes, flush buffer
-                var d = new Date(dateStartData);
+                var d = new Date(dateStart);
                 if (i != 0) {
                     if (d.getDate() != currentDate) flushDateBuffer();
                     if (d.getMonth() != currentMonth) flushMonthBuffer();
