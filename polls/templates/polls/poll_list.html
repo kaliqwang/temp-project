@@ -78,7 +78,7 @@
   </template>
   <!-- Poll Item Template -->
   <template id="poll-item-template">
-    <div id="poll-{% templatetag openvariable %} pk {% templatetag closevariable %}" class="poll-wrapper container-white" style="border-left: 4px solid {% templatetag openvariable %} categoryColor {% templatetag closevariable %}">
+    <div class="poll-wrapper container-white" data-pk="{% templatetag openvariable %} pk {% templatetag closevariable %}" style="border-left: 4px solid {% templatetag openvariable %} categoryColor {% templatetag closevariable %}">
       <!-- Poll Content -->
       <div class="content"><h4><a href="{% templatetag openvariable %} absoluteURL {% templatetag closevariable %}"><div>{% templatetag openvariable %} content {% templatetag closevariable %}</div></a></h4></div>
       <!-- Poll Signature -->
@@ -91,10 +91,7 @@
       <!-- Poll Choices -->
       <div class="choice-container">{% templatetag openvariable %}{ choices }{% templatetag closevariable %}</div>
 			<!-- Buttons -->
-      <div class="poll-buttons text-right">
-        <button type="button" class="btn btn-custom btn-sm submit-poll">Submit</button>
-        <button type="button" class="btn btn-default btn-sm change-vote disabled">Change Vote</button>
-      </div>
+      <div class="poll-buttons text-right"><button type="button" class="btn btn-custom btn-sm poll-vote">{% templatetag openvariable %} buttonAction {% templatetag closevariable %}</button></div>
     </div>
   </template>
 	<!-- Choice Option Template -->

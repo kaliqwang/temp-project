@@ -51,7 +51,7 @@ $(document).ready(function() {
         $pollSidebarLinkSelected = $(this);
         $pollSidebarLinkSelected.addClass('selected');
         $pollSidebarLinkSelected.addClass('read');
-        var targetPK = $(this).data('poll-pk');
+        var targetPK = $(this).data('pk');
         var $target = $('#poll-' + targetPK);
         $pollItemSelected.removeClass('selected');
         $pollItemSelected = $target;
@@ -72,9 +72,8 @@ $(document).ready(function() {
 
     // Main elements
     var $pollList = $('#poll-list');
-    // TODO: select buttons
-    var pollListHTML = '';
-
+  	var pollListHTML = '';
+    var $pollVoteButtons;
     // Top info bar
     var $infoBarTop = $('#info-bar-top');
     var $infoBarTopContent = $('#info-bar-top-content');
@@ -138,6 +137,13 @@ $(document).ready(function() {
             else if (is_open == false) target += '&is_open=False';
             if (is_voted == true) target += '&is_voted=True';
             else if (is_voted == false) target += '&is_voted=False';
+          	// Set initial state of poll list
+          	var initial_state = 0;
+          	var buttonAction = 'Vote';
+          	if (is_open == false || is_voted == true) {
+                initial_state = 1;
+              	buttonAction = 'Change Vote';
+            }
             console.log('Loading Page ' + currentPage + '...');
             console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
             console.log('Sending GET request to ' + target);
@@ -195,20 +201,20 @@ $(document).ready(function() {
                         for (x = 0, xMax = choices.length; x < xMax; x++) {
                             var choice = choices[x];
                             // Render choice HTML and add to choicesHTML string
-                            if (is_open == false || is_voted == true) { // NOTE: fragile code; depends on integrity of args
+                            if (initial_state == 0) { // 0 = options, 1 = results
+                              	choicesHTML += Mustache.render($choiceOptionTemplate, {
+                                    choicePK: choice.pk,
+                                    pk: choice.poll,
+                                    choiceContent: choice.content,
+                                });
+                            } else {
                                 var votePercent = parseInt(choice.vote_count);
-                                if (totalVoteCount > 0) votePercent = votePerectn / totalVotecount;
+                                if (totalVoteCount > 0) votePercent = (votePercent / totalVoteCount) * 100;
                                 choicesHTML += Mustache.render($choiceResultTemplate, {
                                     choicePK: choice.pk,
                                     choiceContent: choice.content,
                                     voteCount: choice.vote_count,
                                     widthPercent: votePercent,
-                                });
-                            } else {
-                                choicesHTML += Mustache.render($choiceOptionTemplate, {
-                                    choicePK: choice.pk,
-                                    pollPK: choice.poll,
-                                    choiceContent: choice.content,
                                 });
                             }
                         }
@@ -223,9 +229,10 @@ $(document).ready(function() {
                             categoryColor: categoryColor,
                             categoryPK: categoryPK,
                             choices: choicesHTML,
+                          	buttonAction: buttonAction,
                         });
                         pollSidebarHTML += Mustache.render($sidebarPollLinkTemplate, {
-                            pollPK: pk,
+                            pk: pk,
                             content: content,
                             categoryColor: categoryColor,
                         });
@@ -246,11 +253,12 @@ $(document).ready(function() {
                     pollListHTML = '';
                     pollSidebarHTML = '';
                     // Activate tooltips
-                    if (is_voted) {
-                        console.log('activating tooltips');
-                        $('.my-progress-bar').tooltip();
-                    }
+                    if (is_voted) $('.my-progress-bar').tooltip();
                     // Update selectors TODO: use document.getElementsByClassName() to enable auto-updating
+                  	$pollVoteButtons = $pollList.find('button.poll-vote');
+                  	$pollVoteButtons.each(function() {
+                      $(this).data('state', initial_state);
+                    })
                     functionEnd = performance.now(); // Timestamp
                     console.log('');
                     console.log('Writing to DOM:\t\t' + (functionEnd - renderStart) + ' milliseconds');
@@ -406,5 +414,89 @@ $(document).ready(function() {
             renderPollListPageNumber(pageNumber, true);
         }
     });
+
+  	/***************************** Submit Votes ******************************/
+
+    $pollList.on('click', 'button.poll-vote', function(e) { e.preventDefault();
+
+        var state = $(this).data('state');
+
+      	var $target = $(this).parent().siblings('.choice-container');
+        var $choiceSelected = $target.find('input:checked');
+		var pk = $target.parent().data('pk');
+
+        if (state == 0) {
+          	if ($choiceSelected.length > 0) {
+                var choicePK = $choiceSelected.val();
+                state = 1;
+                // TODO: allow voter to be blank (set automatically in api to request.user.profile)
+                var vote = {
+                    voter: profilePK,
+                    choice: choicePK,
+                    poll: pk,
+                 }
+                 $.ajax({
+                    type: 'POST',
+                    url: '/api/votes/',
+                    data: vote,
+                    success: function() {
+                        console.log('success');
+                        updateChoicesView($target, state);
+                    },
+                    error: function() {
+                                console.log('error');
+                    }
+                });
+                $(this).html("Change Vote");
+        	} else {
+                // Error: no choice selected
+            }
+        } else {
+        	  state = 0;
+            $(this).html("Vote");
+            updateChoicesView($target, state); // pass in the state to be rendered (0 = options; 1 = results)
+        }
+        $(this).data('state', state); // update state of button
+    });
+
+  	function updateChoicesView($choiceContainer, state) {
+    	  var pk = $choiceContainer.parent().data('pk');
+
+      	$.ajax({
+        	  type: 'GET',
+          	url: '/api/polls/' + pk,
+          	success: function(data) {
+                var choices = data.choices_data;
+              	var totalVoteCount = parseInt(data.total_vote_count);
+                // For each choice
+                var choicesHTML = ''
+                for (x = 0, xMax = choices.length; x < xMax; x++) {
+                    var choice = choices[x];
+                    // Render choice HTML and add to choicesHTML string
+                    if (state == 0) { // 0 = options, 1 = results
+                        choicesHTML += Mustache.render($choiceOptionTemplate, {
+                            choicePK: choice.pk,
+                            pk: choice.poll,
+                            choiceContent: choice.content,
+                        });
+                    } else {
+                        var votePercent = parseInt(choice.vote_count);
+                        if (totalVoteCount > 0) votePercent = (votePercent / totalVoteCount) * 100;
+                        choicesHTML += Mustache.render($choiceResultTemplate, {
+                            choicePK: choice.pk,
+                            choiceContent: choice.content,
+                            voteCount: choice.vote_count,
+                            widthPercent: votePercent,
+                        });
+                    }
+                }
+              	$choiceContainer.html(choicesHTML);
+              	$('.my-progress-bar').tooltip();
+            },
+          	error: function() {
+            	  console.log('error getting poll');
+            }
+        });
+    }
 
 });

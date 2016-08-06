@@ -49,7 +49,7 @@ class Poll(models.Model):
 
     def update_vote_count(self):
         total_vote_count = 0
-        for c in self.choices:
+        for c in self.choices.all():
           	total_vote_count += c.vote_count
         self.total_vote_count = total_vote_count
         self.save()
@@ -184,14 +184,17 @@ class Vote(models.Model):
         return "%s - %s" %(self.choice, self.voter)
 
     def save(self, *args, **kwargs):
-        self.poll = self.choice.poll
+        p = self.choice.poll
+        self.poll = p
         c = self.choice
         previous_vote = Vote.objects.get_or_none(voter=self.voter, poll=self.poll)
         if previous_vote:
+            previous_vote.choice.vote_count -=1
+            previous_vote.choice.save()
             previous_vote.delete()
-            c.vote_count -= 1
         if c.vote_count % 100 == 0:
           	c.update_vote_count()
         c.vote_count += 1
         c.save()
+        p.update_vote_count()
         super(Vote, self).save(*args, **kwargs)
