@@ -70,7 +70,7 @@
 {% block templates %}
 	<!-- Sidebar Poll Link Template -->
   <template id="sidebar-poll-link-template">
-    <li><a href="#" class="poll-sidebar-link" data-poll-pk="{% templatetag openvariable %} pollPK {% templatetag closevariable %}">
+    <li><a href="#" class="poll-sidebar-link" data-pk="{% templatetag openvariable %} pk {% templatetag closevariable %}">
       <div class="dot" style="background-color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}"></div>
       <!-- <span class="icon-container"><span class="glyphicon glyphicon-tag" style="color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}"></span></span> -->
       <span class="display-name">{% templatetag openvariable %} content {% templatetag closevariable %}</span>
@@ -78,7 +78,7 @@
   </template>
   <!-- Poll Item Template -->
   <template id="poll-item-template">
-    <div class="poll-wrapper container-white" data-pk="{% templatetag openvariable %} pk {% templatetag closevariable %}" style="border-left: 4px solid {% templatetag openvariable %} categoryColor {% templatetag closevariable %}">
+    <div id="poll-{% templatetag openvariable %} pk {% templatetag closevariable %}"class="poll-wrapper container-white" data-pk="{% templatetag openvariable %} pk {% templatetag closevariable %}" style="border-left: 4px solid {% templatetag openvariable %} categoryColor {% templatetag closevariable %}">
       <!-- Poll Content -->
       <div class="content"><h4><a href="{% templatetag openvariable %} absoluteURL {% templatetag closevariable %}"><div>{% templatetag openvariable %} content {% templatetag closevariable %}</div></a></h4></div>
       <!-- Poll Signature -->
@@ -91,7 +91,7 @@
       <!-- Poll Choices -->
       <div class="choice-container">{% templatetag openvariable %}{ choices }{% templatetag closevariable %}</div>
 			<!-- Buttons -->
-      <div class="poll-buttons text-right"><button type="button" class="btn btn-custom btn-sm poll-vote">{% templatetag openvariable %} buttonAction {% templatetag closevariable %}</button></div>
+      <div class="poll-buttons text-right {% templatetag openvariable %} voteButtonHiddenClass {% templatetag closevariable %}"><button type="button" class="btn btn-custom btn-sm poll-vote">{% templatetag openvariable %} buttonAction {% templatetag closevariable %}</button></div>
     </div>
   </template>
 	<!-- Choice Option Template -->
@@ -117,6 +117,16 @@
       </div>
     </div>
 	</template>
+  <!-- Info Bar Top Teamplte -->
+  <template id="info-bar-top-template">
+    <li>
+      <a href="#" data-pk="{% templatetag openvariable %} pk {% templatetag closevariable %}" title="{% templatetag openvariable %} categoryName {% templatetag closevariable %}" data-toggle="tooltip" data-placement="top" data-trigger="hover">
+      <span class="icon-container" style="color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}">
+        <span class="glyphicon glyphicon-tag"></span>
+      </span>
+      </a>
+    </li>
+  </template>
 {% endblock %}
 
 {% block script %}<script src="{% static 'polls/js/poll_list.js' %}"></script>{% endblock %}

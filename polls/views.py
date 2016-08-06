@@ -10,14 +10,10 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 @login_required
 def poll_list(request):
-    polls = Poll.objects.all()
-    categories = Category.objects.all()
-    polls_voted_id_list = request.user.profile.votes.values('poll_id')
-    polls_open = polls.filter(is_open=True)
-    polls_closed = polls.exclude(is_open=True)
-    polls_voted= polls.filter(pk__in=polls_voted_id_list)
-    polls_unvoted = polls.exclude(pk__in=polls_voted_id_list)
-    return render(request, 'polls/poll_list.html', {'polls_voted': polls_voted, 'polls_unvoted':polls_unvoted, 'polls_closed' : polls_closed, 'categories': categories})
+    hidden = request.user.profile.categories_hidden_announcements.values_list('pk', flat=True)
+    categories_hidden_announcements = Category.objects.filter(pk__in=hidden)
+    categories_shown = Category.objects.exclude(pk__in=hidden)
+    return render(request, 'polls/poll_list.html', {'categories_shown': categories_shown, 'categories_hidden_announcements': categories_hidden_announcements})
 
 @login_required
 def poll_detail(request, pk):

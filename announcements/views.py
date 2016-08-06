@@ -16,8 +16,7 @@ def announcement_list(request):
     hidden = request.user.profile.categories_hidden_announcements.values_list('pk', flat=True)
     categories_hidden_announcements = Category.objects.filter(pk__in=hidden)
     categories_shown = Category.objects.exclude(pk__in=hidden)
-    announcements = Announcement.objects.exclude(category_id__in=hidden)
-    return render(request, 'announcements/announcement_list.html', {'announcements': announcements, 'categories_shown': categories_shown, 'categories_hidden_announcements': categories_hidden_announcements})
+    return render(request, 'announcements/announcement_list.html', {'categories_shown': categories_shown, 'categories_hidden_announcements': categories_hidden_announcements})
 
 @login_required
 def announcement_detail(request, pk):

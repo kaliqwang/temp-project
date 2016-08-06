@@ -8,15 +8,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
-from django.conf import settings
-
 @login_required
 def event_list(request):
     hidden = request.user.profile.categories_hidden_announcements.values_list('pk', flat=True)
     categories_hidden_announcements = Category.objects.filter(pk__in=hidden)
     categories_shown = Category.objects.exclude(pk__in=hidden)
-    events = Event.objects.exclude(category_id__in=hidden).reverse()
-    return render(request, 'events/event_list.html', {'events': events, 'categories_shown': categories_shown, 'categories_hidden_announcements': categories_hidden_announcements, 'page_size': settings.REST_FRAMEWORK.get('PAGE_SIZE')})
+    return render(request, 'events/event_list.html', {'categories_shown': categories_shown, 'categories_hidden_announcements': categories_hidden_announcements})
 
 @login_required
 def event_detail(request, pk):

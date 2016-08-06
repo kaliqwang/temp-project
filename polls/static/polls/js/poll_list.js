@@ -1,7 +1,5 @@
 // JavaScript poll_list.js
-
 $(document).ready(function() {
-
   	/********************************* Temp ***********************************/
 
   	var $sidebarPollLinkTemplate = $('#sidebar-poll-link-template').html().trim();
@@ -64,9 +62,11 @@ $(document).ready(function() {
     $pollItemTemplate = $('#poll-item-template').html();
     $choiceOptionTemplate = $('#choice-option-template').html();
     $choiceResultTemplate = $('#choice-result-template').html();
+    $infoBarTopTemplate = $('#info-bar-top-template').html();
     Mustache.parse($pollItemTemplate);
     Mustache.parse($choiceOptionTemplate);
     Mustache.parse($choiceResultTemplate);
+    Mustache.parse($infoBarTopTemplate);
 
     /******************************* Variables ********************************/
 
@@ -108,7 +108,7 @@ $(document).ready(function() {
     /****************************** On Page Load ******************************/
 
     // Render poll list
-    renderPollListPageNumber(1, true, false);
+    renderPollListPageNumber(1, true);
     // Initialize top info bar
     if ($infoBarTopContent.children().length > 0) showInfoBarTop();
 
@@ -218,6 +218,11 @@ $(document).ready(function() {
                                 });
                             }
                         }
+                      	var voteButtonHiddenClass = '';
+                      	// Show / hide vote button
+                        if (is_open == false) {
+                        	voteButtonHiddenClass = 'hidden';
+                        }
                         // Render entire poll item
                         pollListHTML += Mustache.render($pollItemTemplate, {
                             pk: pk,
@@ -230,6 +235,7 @@ $(document).ready(function() {
                             categoryPK: categoryPK,
                             choices: choicesHTML,
                           	buttonAction: buttonAction,
+                          	voteButtonHiddenClass: voteButtonHiddenClass,
                         });
                         pollSidebarHTML += Mustache.render($sidebarPollLinkTemplate, {
                             pk: pk,
@@ -354,7 +360,7 @@ $(document).ready(function() {
                 console.log('');
                 console.log('Total:\t\t\t\t' + (functionEnd - ajaxStart) + ' milliseconds');
                 console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-                renderPollListPageNumber();
+                renderPollListPageNumber(1, true);
             },
             error: function() {
                 console.log('Error');
@@ -444,7 +450,7 @@ $(document).ready(function() {
                         updateChoicesView($target, state);
                     },
                     error: function() {
-                                console.log('error');
+                        console.log('error');
                     }
                 });
                 $(this).html("Change Vote");
@@ -452,7 +458,7 @@ $(document).ready(function() {
                 // Error: no choice selected
             }
         } else {
-        	  state = 0;
+            state = 0;
             $(this).html("Vote");
             updateChoicesView($target, state); // pass in the state to be rendered (0 = options; 1 = results)
         }
@@ -494,7 +500,7 @@ $(document).ready(function() {
               	$('.my-progress-bar').tooltip();
             },
           	error: function() {
-            	  console.log('error getting poll');
+                console.log('error getting poll');
             }
         });
     }
