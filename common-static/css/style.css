@@ -63,6 +63,9 @@ textarea {
 #announcement-sidebar .dot {
     margin: 0px 10px;
 }
+#poll-sidebar .dot {
+    margin: 0px 10px;
+}
 
 /* Links - No Underline */
 a:hover, a:focus {
@@ -237,26 +240,56 @@ form:not(#login-form) {
 
 /* poll_list */
 .poll-wrapper {
-    border-radius: 4px;
-    padding: 8px 32px;
+    padding: 15px 15px 5px 15px;
+    margin-bottom: 15px;
+}
+.poll-wrapper.selected {
+    padding-left: 55px;
+    padding-right: 55px;
+    margin-left: -40px;
+    margin-right: -40px;
+}
+.poll-wrapper .choice-container, .poll-wrapper .poll-buttons, .poll-wrapper .signature {
     margin-bottom: 10px;
-    border: 1px solid #e8e8e8;
 }
-.poll-choices {
-    padding: 16px;
-    border-bottom: 1px solid #eee;
+/*.poll-wrapper .choice-container {
+    border-bottom: 1px solid #e8e8e8;
+}*/
+.poll-wrapper .content {
+    margin-bottom: 5px;
 }
-
-.poll-bottom {
-    padding-top: 10px;
+.poll-wrapper .signature {
+    font-size:13px;
+    color: #888;
 }
-
 .poll-wrapper label {
     font-weight: normal;
 }
-
-.poll-choice-label:hover {
+.poll-wrapper label:hover {
     text-decoration: underline;
+    cursor: pointer;
+}
+
+.poll-wrapper .my-progress-bar {
+    border: 1px solid #e8e8e8;
+    overflow: hidden;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    padding: 0px 10px;
+    position: relative;
+}
+
+.poll-wrapper .my-progress-bar-fill {
+    background-color: #87CEFF;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+}
+.poll-wrapper .choice-result-content {
+    position: absolute;
 }
 
 /**************************** category_list *****************************/

@@ -80,13 +80,6 @@ ul {list-style:none; margin:0px; padding:0px}
 /**************************** Announcement Sidebar ****************************/
 
 /* Sidebar Container (sidebar positioner, scrollbar/border overlay) */
-#announcement-sidebar-toggle {
-    position:fixed; z-index:199;
-    top:50px; right: 0px;  /* Positioning */
-    width: 230px; height: 40px; /* Sizing */
-    background-color:white;
-    border-left:1px solid #e8e8e8;
-}
 #announcement-sidebar-container {
     position:fixed; z-index:99;
     top:90px; right: 0px; bottom:0px; /* Positioning */
@@ -271,7 +264,7 @@ ul {list-style:none; margin:0px; padding:0px}
 
 #paginator-standard, #paginator-simple, #info-bar-top {min-height: 40px; line-height:40px; margin: 15px auto; clear:both}
 
-.announcement-paginator {width: 520px}
+.announcement-paginator {width: 514px}
 
 .paginator-link {height: 40px; line-height: 40px;padding: 0px 15px; color: #888}
 .paginator-link:hover {background-color:#444; color:#fff}
@@ -283,3 +276,36 @@ ul {list-style:none; margin:0px; padding:0px}
 
 /*.paginator-link:hover, .paginator-link.selected {border-bottom:3px solid #1e18cc}
 .paginator-link.selected {color:#444; font-weight:500}*/
+
+/********************************* Poll List **********************************/
+#poll-list {
+    width: 514px;
+    margin: 0px auto;
+}
+
+.poll-paginator {width: 514px}
+
+/* Sidebar Container (sidebar positioner, scrollbar/border overlay) */
+#poll-sidebar-container {
+    position:fixed; z-index:99;
+    top:90px; right: 0px; bottom:0px; /* Positioning */
+    width: 230px; height:auto; /* Sizing */
+    background-color:white;
+    border-left:1px solid #e8e8e8;
+}
+ /*Custom Scrollbar */
+ #poll-sidebar-container ::-webkit-scrollbar {width:9px; height:9px}
+ #poll-sidebar-container ::-webkit-scrollbar-thumb {background:transparent}
+ #poll-sidebar-container:hover ::-webkit-scrollbar-thumb {background:#ccc}
+ /* poll-sidebar */
+ #poll-sidebar {width:230px; height:100%; padding: 13px 22px; overflow:overlay}
+ /* poll-sidebar links */
+ #poll-sidebar li a {height:28px; line-height: 28px; width:100%}
+ #poll-sidebar li a:hover {background-color:#444; color:#fff}
+ #poll-sidebar li a.read {opacity: .4}
+ #poll-sidebar li a.selected {background-color:#444; color: #fff; font-weight:500}
+ #poll-sidebar .display-name {height:20px; line-height:20px; width: 150px; display: inline-block; vertical-align: middle; overflow:hidden}
+ /* poll-sidebar sections */
+ #poll-sidebar .sidebar-divider {margin:8px 0px}
+ #poll-sidebar .sidebar-header {padding:4px 0px; width:auto; color:#888}
+ #poll-sidebar .sidebar-header a:hover {text-decoration:underline}

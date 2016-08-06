@@ -1,3 +1,5 @@
+<!-- HTML poll_list.html -->
+
 {% extends 'base/base_list.html' %}
 
 {% load static from staticfiles %}
@@ -9,7 +11,7 @@
 {% block sidebar_polls %}selected{% endblock %}
 
 {% block paginator_top %}
-  <div id="paginator-standard" class="container-white text-center">
+  <div id="paginator-standard" class="container-white text-center poll-paginator">
     <a href="#" id="paginator-first" class="paginator-link">First</a
     ><a href="#" id="paginator-previous" class="paginator-link">Previous</a
     ><span id="paginator-page-numbers" data-current-page="1"></span
@@ -21,286 +23,103 @@
 {% block data %}<div id="page-size" data-page-size="{{ page_size }}" hidden></div>{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-xs-8 col-xs-offset-2">
-      <div id="alert-danger" class="alert alert-danger alert-dismissible hidden" style="position:fixed; z-index:1; width:530px;">
-        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-        <b>Error :</b> Please select a choice.
-      </div>
-  <!-- Media tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li class="active"><a href="#polls-unvoted" data-toggle="tab">New</a></li>
-    <li><a href="#polls-voted" data-toggle="tab">Voted</a></li>
-    <li><a href="#polls-closed" data-toggle="tab">Closed</a></li>
-  </ul><br>
-  <!-- Media tab panes -->
-  <div id="poll-list" class="tab-content" data-user="{{ user.pk }}">
-    <!-- Unvoted Polls -->
-    <!-- <div id="polls-unvoted" class="tab-pane fade in active">
-      {% for poll in polls_unvoted %}
-          <div id="poll-{{ poll.pk }}" class="poll-wrapper container-white"
-            data-votes="{{ poll.votes.count }}"
-            data-author="{{ poll.author.pk }}"
-            data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
-            data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
-            data-is-open="{{ poll.is_open }}"
-            data-category="{{ poll.category.pk }}"> -->
-            <!-- How to pass python dict context variable containing vote count for each choice and total? -->
-
-            <!-- Poll Content -->
-            <!-- <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div> -->
-            <!-- Poll Signature -->
-            <!-- <div class="signature">
-              <span class="fa fa-clock-o"></span>
-              <span class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</span>
-              | Tags: <span class="label" style="background-color:{{ poll.category.color|default:'#222222' }}">{{ poll.category|default_if_none:'Everyone' }}</span>
-            </div> -->
-            <!-- Poll Choices -->
-            <!-- <div class="poll-choices">
-              {% for choice in poll.choices.all %}
-                <div class="row choice-wrapper">
-                  <div class="col-xs-2 text-right">
-                    <input id="choice-{{ choice.pk }}" type="radio" name="poll-{{ poll.pk }}" value="{{ choice.content }}">
-                  </div>
-                  <div class="col-xs-10">
-                    <label for="choice-{{ choice.pk }}" class="poll-choice-label">{{ choice.content }}</label>
-                  </div>
-                </div>
-              {% endfor %}
-            </div> -->
-            <!-- Progress Bars -->
-            <!-- <div class="progress-bars hidden">
-              <br>
-              {% for choice in poll.choices.all %}
-              <div class="row progress-bar-wrapper">
-                <div class="col-xs-3 text-right">
-                  <label>{{ choice.content }}</label>
-                </div>
-                <div class="col-xs-9 bar-wrapper">
-                  <div class="progress">
-                    <div id="progress-{{ choice.pk }}" class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}" data-toggle="tooltip" title="{{ choice.votes.count }}" data-placement="top">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {% endfor %}
-            </div> -->
-            <!-- Buttons -->
-            <!-- <div class="row poll-bottom">
-              <div class="col-xs-5">
-                <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
-                <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
-              </div>
-              <div class="col-xs-5 col-xs-offset-2 text-right">
-                <button type="button" class="btn btn-custom btn-sm submit-poll">Submit</button>
-                <button type="button" class="btn btn-default btn-sm change-vote hidden">Change Vote</button>
-              </div>
-            </div>
-          </div>
-      {% endfor %}
-    </div> -->
-    <!-- Voted Polls -->
-    <!-- <div id="polls-voted" class="tab-pane fade">
-      {% for poll in polls_voted %}
-
-          <div id="poll-{{ poll.pk }}" class="poll-wrapper container-white submitted"
-            data-votes="{{ poll.votes.count }}"
-            data-author="{{ poll.author.pk }}"
-            data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
-            data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
-            data-is-open="{{ poll.is_open }}"
-            data-category="{{ poll.category.pk }}"> -->
-            <!-- How to pass python dict context variable containing vote count for each choice and total? -->
-
-            <!-- Poll Content -->
-            <!-- <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div> -->
-            <!-- Poll Signature -->
-            <!-- <div class="signature"> -->
-              <!-- <i class="fa fa-clock-o"></i> -->
-              <!-- <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
-              <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
-            </div> -->
-            <!-- Poll Choices -->
-            <!-- <div class="poll-choices hidden">
-              {% for choice in poll.choices.all %}
-                <div class="row choice-wrapper">
-                  <div class="col-xs-2 text-right">
-                    <input id="choice-{{ choice.pk }}" type="radio" name="poll-{{ poll.pk }}" value="{{ choice.content }}">
-                  </div>
-                  <div class="col-xs-10">
-                    <label for="choice-{{ choice.pk }}" class="poll-choice-label">{{ choice.content }}</label>
-                  </div>
-                </div>
-              {% endfor %}
-            </div> -->
-            <!-- Progress Bars -->
-            <!-- <div class="progress-bars">
-              <br>
-              {% for choice in poll.choices.all %}
-                <div class="row progress-bar-wrapper">
-                  <div class="col-xs-3 text-right">
-                    <label>{{ choice.content }}</label>
-                  </div>
-                  <div class="col-xs-9 bar-wrapper">
-                    <div class="progress">
-                      <div id="progress-{{ choice.pk }}" class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}" data-toggle="tooltip" title="{{ choice.votes.count }}" data-placement="top">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            {% endfor %}
-          </div> -->
-          <!-- Buttons -->
-          <!-- <div class="row poll-bottom">
-            <div class="col-xs-5">
-              <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
-              <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
-            </div>
-            <div class="col-xs-5 col-xs-offset-2 text-right">
-              <button type="button" class="btn btn-custom btn-sm submit-poll hidden">Submit</button>
-              <button type="button" class="btn btn-default btn-sm change-vote">Change Vote</button>
-            </div>
-          </div>
+  <div id="poll-list"></div>
+  <div id="poll-sidebar-container">
+    <div id="poll-sidebar">
+      <ul id="poll-sidebar-poll-list-status">
+        <div class="sidebar-header">
+          <a id="show-new-polls" href="#">New</a> &bull;
+          <a id="show-voted-polls" href="#">Voted</a> &bull;
+          <a id="show-closed-polls" href="#">Closed</a>
         </div>
-      {% endfor %}
-    </div> -->
-    <!-- Closed Polls -->
-    <div id="polls-closed" class="tab-pane fade">
-      {% for poll in polls_closed %}
-          <div id="poll-{{ poll.pk }}" class="poll-wrapper container-white"
-            data-votes="{{ poll.votes.count }}"
-            data-author="{{ poll.author.pk }}"
-            data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
-            data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
-            data-is-open="{{ poll.is_open }}"
-            data-category="{{ poll.category.pk }}">
-            <!-- How to pass python dict context variable containing vote count for each choice and total? -->
-
-            <!-- Poll Content -->
-            <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
-            <!-- Poll Signature -->
-            <div class="signature">
-              <!-- <i class="fa fa-clock-o"></i> -->
-              <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
-              <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
-            </div>
-            <!-- Progress Bars -->
-            <div class="progress-bars">
-              <br>
-              {% for choice in poll.choices.all %}
-              <div class="row progress-bar-wrapper">
-                <div class="col-xs-3 text-right">
-                  <label>{{ choice.content }}</label>
-                </div>
-                <div class="col-xs-9 bar-wrapper">
-                  <div class="progress">
-                    <div id="progress-{{ choice.pk }}" class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}" data-toggle="tooltip" title="{{ choice.votes.count }}" data-placement="top">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-      {% endfor %}
+      </ul>
+      <hr class="sidebar-divider">
+      <ul id="poll-sidebar-pinned">
+        <div class="sidebar-header">
+          <a href="#">Pinned</a>
+          <!-- TODO: Mark all as read option -->
+        </div>
+      </ul>
+      <hr class="sidebar-divider">
+      <ul id="poll-sidebar-all">
+        <div class="sidebar-header">
+          <a href="#">All Polls</a>
+          <!-- TODO: Mark all as read option -->
+        </div>
+        <div id="poll-sidebar-all-items"></div>
+      </ul>
+      <hr class="sidebar-divider">
+      <ul id="poll-sidebar-bottom">
+        <div class="sidebar-header">
+          <a href="#" id="sidebar-show-more">Show More</a>
+        </div>
+        <div class="sidebar-header">
+          <a href="#" id="sidebar-back-to-top">Back to Top</a>
+        </div>
+      </ul>
     </div>
   </div>
-</div>
-</div>
 {% endblock %}
 
 {% block paginator_bottom %}
-  <div id="paginator-simple" class="container-white text-center">
-    <a href="#" id="paginator-show-more" class="paginator-link" type="button" data-target>Show More</a>
+  <div id="paginator-simple" class="text-center">
+    <a href="#" id="paginator-show-more" class="paginator-link container-white" type="button" data-target>Show More</a>
   </div>
 {% endblock %}
-  {% block templates %}
-  <!-- Poll Unvoted Item Template -->
-  <template id="poll-unvoted-item-template">
-    <div class="poll-wrapper"
-      data-poll-pk="{% templatetag openvariable %} pollPK {% templatetag closevariable %}"
-      data-votes"{% templatetag openvariable %} votes {% templatetag closevariable %}"
-      data-author="{% templatetag openvariable %} author {% templatetag closevariable %}"
-      data-date-open="{% templatetag openvariable %} dateOpen {% templatetag closevariable %}"
-      data-date-close="{% templatetag openvariable %} dateClose {% templatetag closevariable %}"
-      data-is-open="{% templatetag openvariable %} isOpen {% templatetag closevariable %}"
-      data-category-name="{% templatetag openvariable %} categoryName {% templatetag closevariable %}"
-      data-category-color="{% templatetag openvariable %} categoryColor {% templatetag closevariable %}"
-      data-category-pk"{% templatetag openvariable %} categoryPK {% templatetag closevariable %}">
+
+{% block templates %}
+	<!-- Sidebar Poll Link Template -->
+  <template id="sidebar-poll-link-template">
+    <li><a href="#" class="poll-sidebar-link" data-poll-pk="{% templatetag openvariable %} pollPK {% templatetag closevariable %}">
+      <div class="dot" style="background-color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}"></div>
+      <!-- <span class="icon-container"><span class="glyphicon glyphicon-tag" style="color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}"></span></span> -->
+      <span class="display-name">{% templatetag openvariable %} content {% templatetag closevariable %}</span>
+    </a></li>
+  </template>
+  <!-- Poll Item Template -->
+  <template id="poll-item-template">
+    <div id="poll-{% templatetag openvariable %} pk {% templatetag closevariable %}" class="poll-wrapper container-white" style="border-left: 4px solid {% templatetag openvariable %} categoryColor {% templatetag closevariable %}">
       <!-- Poll Content -->
-      <div class="content">{% templatetag openvariable %} content {% templatetag closevariable %}</div>
+      <div class="content"><h4><a href="{% templatetag openvariable %} absoluteURL {% templatetag closevariable %}"><div>{% templatetag openvariable %} content {% templatetag closevariable %}</div></a></h4></div>
       <!-- Poll Signature -->
       <div class="signature">
         <span class="fa fa-clock-o"></span>
-        <span class="date-created">{% templatetag openvariable %} dateCreated {% templatetag closevariable %},</span>
-        <span class="time-created">{% templatetag openvariable %} timeCreated {% templatetag closevariable %}</span>
-        | Tags: <span class="label" style="background-color:{% templatetag openvariable %} categoryColor {% templatetag closevariable %}">{% templatetag openvariable %} categoryName {% templatetag closevariable %}</span>
+        <span class="date-open">{% templatetag openvariable %} dateOpen {% templatetag closevariable %},</span>
+        <span class="time-open">{% templatetag openvariable %} timeOpen {% templatetag closevariable %}</span> |
+        <span>{% templatetag openvariable %} categoryName {% templatetag closevariable %}</span>
       </div>
-      <div class="choice-list">
-        {% templatetag openvariable %}{ choiceList }{% templatetag closevariable %}
-      </div>
-    </div>
-  </template>
-
-  <template id="open-poll-template">
-    <div id="poll-{{ poll.pk }}" class="poll-wrapper"
-      data-votes="{{ poll.votes.count }}"
-      data-author="{{ poll.author.pk }}"
-      data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
-      data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
-      data-is-open="{{ poll.is_open }}"
-      data-category="{{ poll.category.pk }}">
-      <!-- How to pass python dict context variable containing vote count for each choice and total? -->
-
-      <!-- Poll Content -->
-      <div class="content"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
-      <!-- Poll Signature -->
-      <div class="signature">
-        <!-- <i class="fa fa-clock-o"></i> -->
-        <i class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</i> | Tags:
-        <span class="category label" style="background-color:{{ poll.category.color }}">{{ poll.category }}</span>
-      </div><br>
       <!-- Poll Choices -->
-      <div class="poll-choices">
-        {% for choice in poll.choices.all %}
-          <div class="row choice-wrapper">
-            <div class="col-xs-2 text-right">
-              <input id="choice-{{ choice.pk }}" type="radio" name="poll-{{ poll.pk }}" value="{{ choice.pk }}">
-            </div>
-            <div class="col-xs-10">
-              <label for="choice-{{ choice.pk }}">{{ choice.content }}</label>
-            </div>
-          </div>
-        {% endfor %}
-      </div><br>
-      <!-- Buttons -->
-      <div class="row poll-bottom">
-        <div class="col-xs-5">
-          <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
-          <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
-        </div>
-        <div class="col-xs-5 col-xs-offset-2 text-right">
-          <button type="button" class="btn btn-default btn-sm show-results">Show Results</button>
-          <button type="button" class="btn btn-custom btn-sm submit-poll">Submit</button>
-          <button type="button" class="btn btn-default btn-sm hidden">Change Vote</button>
-        </div>
+      <div class="choice-container">{% templatetag openvariable %}{ choices }{% templatetag closevariable %}</div>
+			<!-- Buttons -->
+      <div class="poll-buttons text-right">
+        <button type="button" class="btn btn-custom btn-sm submit-poll">Submit</button>
+        <button type="button" class="btn btn-default btn-sm change-vote disabled">Change Vote</button>
       </div>
     </div>
   </template>
-
-  <template id="closed-poll-template">
-    <div class="progress-bars">
-      {% for choice in poll.choices.all %}
-        <label>{{ choice.content }} | {{choice.votes.count}}</label>
-        <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-votes="{{ choice.votes.count }}">
-          </div>
-        </div>
-        <br>
-      {% endfor %}
+	<!-- Choice Option Template -->
+	<template id="choice-option-template">
+    <div class="choice-option-wrapper row">
+      <div class="col-sm-1 text-right">
+        <input id="choice-{% templatetag openvariable %} choicePK {% templatetag closevariable %}" type="radio" name="poll-{% templatetag openvariable %} pollPK {% templatetag closevariable %}" value="{% templatetag openvariable %} choicePK {% templatetag closevariable %}">
+      </div>
+      <div class="col-sm-11">
+        <label for="choice-{% templatetag openvariable %} choicePK {% templatetag closevariable %}" class="poll-choice-label">{% templatetag openvariable %} choiceContent {% templatetag closevariable %}</label>
+      </div>
     </div>
-  </template>
+	</template>
+  <!-- Choice Result Template -->
+  <template id="choice-result-template">
+    <div class="choice-result-wrapper">
+      <div class="my-progress-bar" title="{% templatetag openvariable %} voteCount {% templatetag closevariable %}"
+        data-toggle="tooltip"
+        data-placement="top"
+        data-votes="{% templatetag openvariable %} voteCount {% templatetag closevariable %}">
+        <div id="progress-{% templatetag openvariable %} choicePK {% templatetag closevariable %}" class="my-progress-bar-fill" style="width:{% templatetag openvariable %} widthPercent {% templatetag closevariable %}%"></div>
+        <span class="choice-result-content">{% templatetag openvariable %} choiceContent {% templatetag closevariable %}</span>
+      </div>
+    </div>
+	</template>
 {% endblock %}
 
 {% block script %}<script src="{% static 'polls/js/poll_list.js' %}"></script>{% endblock %}

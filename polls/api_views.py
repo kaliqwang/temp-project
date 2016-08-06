@@ -1,11 +1,16 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import pagination
 
 from models import *
 from serializers import *
 
+class PollPaginator(pagination.PageNumberPagination):
+    page_size = 36
+
 class PollViewSet(ModelViewSet):
     queryset = Poll.objects.none()
     serializer_class = PollSerializer
+    pagination_class = PollPaginator
 
     def get_queryset(self):
         user_profile = self.request.user.profile

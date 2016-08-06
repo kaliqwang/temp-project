@@ -85,6 +85,52 @@ $(document).ready(function() {
 
     /***************************** Event Handlers *****************************/
 
+    // // Simple paginator (show more)
+    // $paginatorShowMore.on('click', function(e) {e.preventDefault();
+    //     if (currentPage < pageCount) {
+    //         previousPage = currentPage;
+    //         currentPage++;
+    //         renderPollListTarget($(this).data('target'), false);
+    //     }
+    // });
+    // // Standard paginator (page numbers)
+    // $paginatorFirst.on('click', function(e) {e.preventDefault();
+    //     if (currentPage != 1) {
+    //         previousPage = currentPage;
+    //         currentPage = 1;
+    //         renderPollListPageNumber(1, true);
+    //     }
+    // });
+    // $paginatorLast.on('click', function(e) {e.preventDefault();
+    //     if (currentPage != pageCount) {
+    //         previousPage = currentPage;
+    //         currentPage = pageCount;
+    //         renderPollListPageNumber('last', true);
+    //     }
+    // });
+    // $paginatorPrevious.on('click', function(e) {e.preventDefault();
+    //     if (currentPage > 1) {
+    //         previousPage = currentPage;
+    //         currentPage--;
+    //         renderPollListTarget($(this).data('target'), true);
+    //     }
+    // });
+    // $paginatorNext.on('click', function(e) {e.preventDefault();
+    //     if (currentPage < pageCount) {
+    //         previousPage = currentPage;
+    //         currentPage++;
+    //         renderPollListTarget($(this).data('target'), true);
+    //     }
+    // });
+    // $paginatorPageNumbers.on('click', '.paginator-link', function(e) {e.preventDefault();
+    //     pageNumber = $(this).data('target');
+    //     if (currentPage != pageNumber) {
+    //         previousPage = currentPage;
+    //         currentPage = pageNumber;
+    //         renderPollListPageNumber(pageNumber, true);
+    //     }
+    // });
+
     // Paginator
     $paginatorShowMore.on('click', function(e){e.preventDefault();
         var newPage = $paginatorPageNumbers.data('current-page') + 1;

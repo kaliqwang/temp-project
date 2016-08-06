@@ -25,6 +25,7 @@ class Poll(models.Model):
     is_open = models.BooleanField(default=True)
     category = models.ForeignKey(Category, related_name='polls', blank=True, null=True, on_delete=models.SET_NULL)
     rank = models.IntegerField(default=0, blank=True)
+    total_vote_count = models.IntegerField(default=0, blank=True)
     # voters = models.ManyToManyField(UserProfile, related_name="polls_submitted", blank=True)
     #TODO: allow visibility to be set for each poll (students, parents, teachers, etc.)
 
@@ -46,12 +47,12 @@ class Poll(models.Model):
     def get_absolute_url(self):
         return reverse('polls:detail', args=[str(self.pk)])
 
-    def vote_count(self):
-        count = {c.pk : c.vote_count() for c in self.choices.all()}
-        for v in count.values():
-            total += v
-        count['total'] = total
-        return count
+    def update_vote_count(self):
+        total_vote_count = 0
+        for c in self.choices:
+          	total_vote_count += c.vote_count
+        self.total_vote_count = total_vote_count
+        self.save()
 
     def get_vote(self, user_profile_pk):
         for c in self.choices.all():
@@ -157,6 +158,7 @@ class Poll(models.Model):
 class Choice(models.Model):
     poll = models.ForeignKey(Poll, related_name='choices', on_delete=models.CASCADE)
     content = models.CharField(max_length=200)
+    vote_count = models.IntegerField(default=0, blank=True)
 
     class Meta:
         ordering = ('poll',)
@@ -164,8 +166,9 @@ class Choice(models.Model):
     def __str__(self):
         return self.content
 
-    def vote_count(self):
-        return self.votes.count()
+    def update_vote_count(self):
+        self.vote_count = self.votes.count()
+        self.save()
 
 class Vote(models.Model):
     voter = models.ForeignKey(UserProfile, related_name='votes', on_delete=models.CASCADE)
@@ -182,7 +185,13 @@ class Vote(models.Model):
 
     def save(self, *args, **kwargs):
         self.poll = self.choice.poll
+        c = self.choice
         previous_vote = Vote.objects.get_or_none(voter=self.voter, poll=self.poll)
         if previous_vote:
             previous_vote.delete()
+            c.vote_count -= 1
+        if c.vote_count % 100 == 0:
+          	c.update_vote_count()
+        c.vote_count += 1
+        c.save()
         super(Vote, self).save(*args, **kwargs)
