@@ -164,77 +164,75 @@ $(document).ready(function() {
         }
         $paginatorPageNumbers.html(pageNumbersHTML);
         // Render each event to HTML
-        if (data.count > 0) {
-            jQuery.each(data.results, function(i, e) {
-                start = performance.now(); // Timestamp
-                // Extract data
-                var pk = e.pk;
-                var absoluteURL = e.absolute_url
-                var name = e.name;
-                var dateStart = e.date_start;
-                var isMultiDay = e.is_multi_day;
-                var dateStartData = e.date_start_data;
-                var timeStartData = e.time_start_data;
-                var dateEndData = e.date_end_data;
-                var timeEndData = e.time_end_data;
-                var location = e.location;
-                var details = e.details;
-                var categoryData = e.category_data;
-                if (categoryData) {
-                    categoryName = categoryData.name;
-                    categoryColor = categoryData.color;
-                    categoryPK = categoryData.pk;
-                } else {
-                    categoryName = 'Everyone';
-                    categoryColor = '#222';
-                    categoryPK = '-1';
-                }
-                // Render entire event item
-                var dateTime = dateTimeStringify(isMultiDay, dateStartData, timeStartData, dateEndData, timeEndData);
-                var eventItemHTML = Mustache.render($eventItemTemplate, {
-                    pk: pk,
-                    absoluteURL: absoluteURL,
-                    name: name,
-                    dateTime: dateTime,
-                    location: location,
-                    details: details,
-                    categoryName: categoryName,
-                    categoryColor: categoryColor,
-                    categoryPK: categoryPK,
-                });
-                // If month or date changes, flush buffer
-                var d = new Date(dateStart);
-                if (i != 0) {
-                    if (d.getDate() != currentDate) flushDateBuffer();
-                    if (d.getMonth() != currentMonth) flushMonthBuffer();
-                }
-                // Update buffer state
-                currentYear = new Date(dateStart).getFullYear();
-                currentMonth = d.getMonth();
-                currentDate = d.getDate();
-                currentDay = d.getDay();
-                // Add event item to date buffer
-                dateBuffer.push(eventItemHTML);
-                end = performance.now(); // Timestamp
-                console.log('Event ' + (i + 1) + ':\t\t\t' + (end - start) + ' milliseconds');
+        jQuery.each(data.results, function(i, e) {
+            start = performance.now(); // Timestamp
+            // Extract data
+            var pk = e.pk;
+            var absoluteURL = e.absolute_url
+            var name = e.name;
+            var dateStart = e.date_start;
+            var isMultiDay = e.is_multi_day;
+            var dateStartData = e.date_start_data;
+            var timeStartData = e.time_start_data;
+            var dateEndData = e.date_end_data;
+            var timeEndData = e.time_end_data;
+            var location = e.location;
+            var details = e.details;
+            var categoryData = e.category_data;
+            if (categoryData) {
+                categoryName = categoryData.name;
+                categoryColor = categoryData.color;
+                categoryPK = categoryData.pk;
+            } else {
+                categoryName = 'Everyone';
+                categoryColor = '#222';
+                categoryPK = '-1';
+            }
+            // Render entire event item
+            var dateTime = dateTimeStringify(isMultiDay, dateStartData, timeStartData, dateEndData, timeEndData);
+            var eventItemHTML = Mustache.render($eventItemTemplate, {
+                pk: pk,
+                absoluteURL: absoluteURL,
+                name: name,
+                dateTime: dateTime,
+                location: location,
+                details: details,
+                categoryName: categoryName,
+                categoryColor: categoryColor,
+                categoryPK: categoryPK,
             });
-            // Flush all remaining events to event list buffer
-            flushDateBuffer();
-            flushMonthBuffer();
-            renderStart = performance.now(); // Timestamp
-            // Flush entire event list buffer (HTML) to DOM
-            if (extendList == true) {$eventList.append(eventListHTML)}
-            else {$eventList.html(eventListHTML)}
-            // Clear event list buffer
-            eventListHTML = '';
-            // Update selectors TODO: use document.getElementsByClassName() to enable auto-updating
-            $monthItems = $('.month-wrapper');
-            $monthHeaders = $('.month-header');
-            $monthContents = $('.month-content');
-            // Maintain state consistency
-            var state = $showMoreAll.data('state'); // 0 = collapsed, 1 = expanded
-            if (state == 0) $monthContents.hide();
-        }
+            // If month or date changes, flush buffer
+            var d = new Date(dateStart);
+            if (i != 0) {
+                if (d.getDate() != currentDate) flushDateBuffer();
+                if (d.getMonth() != currentMonth) flushMonthBuffer();
+            }
+            // Update buffer state
+            currentYear = new Date(dateStart).getFullYear();
+            currentMonth = d.getMonth();
+            currentDate = d.getDate();
+            currentDay = d.getDay();
+            // Add event item to date buffer
+            dateBuffer.push(eventItemHTML);
+            end = performance.now(); // Timestamp
+            console.log('Event ' + (i + 1) + ':\t\t\t' + (end - start) + ' milliseconds');
+        });
+        // Flush all remaining events to event list buffer
+        flushDateBuffer();
+        flushMonthBuffer();
+        renderStart = performance.now(); // Timestamp
+        // Flush entire event list buffer (HTML) to DOM
+        if (extendList == true) {$eventList.append(eventListHTML)}
+        else {$eventList.html(eventListHTML)}
+        // Clear event list buffer
+        eventListHTML = '';
+        // Update selectors TODO: use document.getElementsByClassName() to enable auto-updating
+        $monthItems = $('.month-wrapper');
+        $monthHeaders = $('.month-header');
+        $monthContents = $('.month-content');
+        // Maintain state consistency
+        var state = $showMoreAll.data('state'); // 0 = collapsed, 1 = expanded
+        if (state == 0) $monthContents.hide();
         functionEnd = performance.now(); // Timestamp
         console.log('');
         console.log('Writing to DOM:\t\t' + (functionEnd - renderStart) + ' milliseconds');
