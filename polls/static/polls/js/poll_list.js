@@ -21,18 +21,21 @@ $(document).ready(function() {
 
     // Side show new polls
     $showNewPolls.on('click', function(e) { e.preventDefault();
+        currentPage = 1;
         is_open = true;
         is_voted = false;
         renderPollListPageNumber(1, true);
     });
     // Sidebar show voted polls
     $showVotedPolls.on('click', function(e) { e.preventDefault();
+        currentPage = 1;
         is_open= true;
         is_voted= true;
         renderPollListPageNumber(1, true);
     });
     // Sidebar show closed polls
     $showClosedPolls.on('click', function(e) { e.preventDefault();
+        currentPage = 1;
         is_open = false;
         is_voted = null;
         renderPollListPageNumber(1, true);
@@ -208,13 +211,15 @@ $(document).ready(function() {
                                     choiceContent: choice.content,
                                 });
                             } else {
-                                var votePercent = parseInt(choice.vote_count);
-                                if (totalVoteCount > 0) votePercent = (votePercent / totalVoteCount) * 100;
+                                var widthPercent = parseInt(choice.vote_count);
+                                if (totalVoteCount > 0) widthPercent = (widthPercent / totalVoteCount) * 100;
+                                var votePercent = Math.round(widthPercent);
                                 choicesHTML += Mustache.render($choiceResultTemplate, {
                                     choicePK: choice.pk,
                                     choiceContent: choice.content,
                                     voteCount: choice.vote_count,
-                                    widthPercent: votePercent,
+                                    votePercent: votePercent,
+                                    widthPercent: widthPercent,
                                 });
                             }
                         }
@@ -259,7 +264,10 @@ $(document).ready(function() {
                     pollListHTML = '';
                     pollSidebarHTML = '';
                     // Activate tooltips
-                    if (is_voted) $('.my-progress-bar').tooltip();
+                    if (!is_open || is_voted) $('.my-progress-bar').tooltip({
+                        animation: false,
+                        placement: 'right',
+                    });
                     // Update selectors TODO: use document.getElementsByClassName() to enable auto-updating
                   	$pollVoteButtons = $pollList.find('button.poll-vote');
                   	$pollVoteButtons.each(function() {
@@ -346,7 +354,10 @@ $(document).ready(function() {
                 });
                 if (infoBarTopContentHTML != '') {
                     $infoBarTopContent.html(infoBarTopContentHTML);
-                    $infoBarTopContent.find('a').tooltip();
+                    $infoBarTopContent.find('a').tooltip({
+                        animation: false,
+                        placement: 'top',
+                    });
                     showInfoBarTop();
                     $infoBarTop.css('background-color', '#dff0d8');
                     $infoBarTop.delay(200).animate({'background-color': '#fff'}, 800);
@@ -385,11 +396,9 @@ $(document).ready(function() {
     });
     // Standard paginator (page numbers)
     $paginatorFirst.on('click', function(e) {e.preventDefault();
-        if (currentPage != 1) {
-            previousPage = currentPage;
-            currentPage = 1;
-            renderPollListPageNumber(1, true);
-        }
+          previousPage = currentPage;
+          currentPage = 1;
+          renderPollListPageNumber(1, true);
     });
     $paginatorLast.on('click', function(e) {e.preventDefault();
         if (currentPage != pageCount) {
@@ -414,7 +423,7 @@ $(document).ready(function() {
     });
     $paginatorPageNumbers.on('click', '.paginator-link', function(e) {e.preventDefault();
         pageNumber = $(this).data('target');
-        if (currentPage != pageNumber) {
+        if (pageNumber == 1 || currentPage != pageNumber) {
             previousPage = currentPage;
             currentPage = pageNumber;
             renderPollListPageNumber(pageNumber, true);
@@ -429,7 +438,7 @@ $(document).ready(function() {
 
       	var $target = $(this).parent().siblings('.choice-container');
         var $choiceSelected = $target.find('input:checked');
-		var pk = $target.parent().data('pk');
+		    var pk = $target.parent().data('pk');
 
         if (state == 0) {
           	if ($choiceSelected.length > 0) {
@@ -486,18 +495,23 @@ $(document).ready(function() {
                             choiceContent: choice.content,
                         });
                     } else {
-                        var votePercent = parseInt(choice.vote_count);
-                        if (totalVoteCount > 0) votePercent = (votePercent / totalVoteCount) * 100;
+                        var widthPercent = parseInt(choice.vote_count);
+                        if (totalVoteCount > 0) widthPercent = (widthPercent / totalVoteCount) * 100;
+                        var votePercent = Math.round(widthPercent);
                         choicesHTML += Mustache.render($choiceResultTemplate, {
                             choicePK: choice.pk,
                             choiceContent: choice.content,
                             voteCount: choice.vote_count,
-                            widthPercent: votePercent,
+                            votePercent: votePercent,
+                            widthPercent: widthPercent,
                         });
                     }
                 }
               	$choiceContainer.html(choicesHTML);
-              	$('.my-progress-bar').tooltip();
+              	$('.my-progress-bar').tooltip({
+                    animation: false,
+                    placement: 'right',
+                });
             },
           	error: function() {
                 console.log('error getting poll');

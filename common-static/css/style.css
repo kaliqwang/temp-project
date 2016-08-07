@@ -292,6 +292,11 @@ form:not(#login-form) {
     position: absolute;
 }
 
+.poll-wrapper .choice-vote-count {
+    height: 30px;
+    line-height: 30px;
+}
+
 /**************************** category_list *****************************/
 
 #categories input[type="color"] {

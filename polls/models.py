@@ -160,6 +160,8 @@ class Choice(models.Model):
     content = models.CharField(max_length=200)
     vote_count = models.IntegerField(default=0, blank=True)
 
+    objects = GetOrNoneManager()
+
     class Meta:
         ordering = ('poll',)
 
@@ -186,15 +188,16 @@ class Vote(models.Model):
     def save(self, *args, **kwargs):
         p = self.choice.poll
         self.poll = p
-        c = self.choice
         previous_vote = Vote.objects.get_or_none(voter=self.voter, poll=self.poll)
         if previous_vote:
-            previous_vote.choice.vote_count -=1
-            previous_vote.choice.save()
+            original_choice = previous_vote.choice
+            original_choice.vote_count -= 1
+            original_choice.save()
             previous_vote.delete()
-        if c.vote_count % 100 == 0:
-          	c.update_vote_count()
-        c.vote_count += 1
-        c.save()
+        new_choice = Choice.objects.get_or_none(pk=self.choice.pk)
+        if new_choice.vote_count % 100 == 0:
+          	new_choice.update_vote_count()
+        new_choice.vote_count += 1
+        new_choice.save()
         p.update_vote_count()
         super(Vote, self).save(*args, **kwargs)

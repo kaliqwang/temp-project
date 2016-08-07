@@ -87,8 +87,15 @@ def get_vote_count(request, choice_pk):
 @staff_member_required
 def generator(request, count):
     if request.method == 'POST':
-        generated_count = Poll.generate_random_objects(int(count), add_votes=False)
+        add_votes = (request.GET.get('add_votes') == 'true')
+        generated_count = Poll.generate_random_objects(int(count), add_votes=add_votes)
         if (generated_count == int(count)):
-            return HttpResponse('Success: %d polls were generated' % generated_count)
+            if add_votes:
+                return HttpResponse('Success: %d polls were generated with votes' % generated_count)
+            else:
+                return HttpResponse('Success: %d polls were generated' % generated_count)
         else:
-            return HttpResponse('Error: %d polls were generated' % generated_count)
+            if add_votes:
+                return HttpResponse('Error: %d polls were generated with votes' % generated_count)
+            else:
+                return HttpResponse('Error: %d polls were generated' % generated_count)

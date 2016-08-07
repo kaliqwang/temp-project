@@ -90,7 +90,7 @@ def logout(request):
 def generator(request, model, count):
     if request.method == 'POST':
         generated_count = 0
-        if model == 'student_profile':
+        if model == 'student_profiles':
             generated_count = StudentProfile.generate_random_objects(int(count))
         if (generated_count == int(count)):
             return HttpResponse('Success: %d %s were generated' % (generated_count, model))
