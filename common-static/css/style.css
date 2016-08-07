@@ -282,7 +282,7 @@ form:not(#login-form) {
 }
 
 .poll-wrapper .my-progress-bar-fill {
-    background-color: #a4aaf4;
+    background-color: #d2d4f9;
     position: absolute;
     top: 0px;
     left: 0px;

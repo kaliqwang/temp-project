@@ -21,7 +21,7 @@ def announcement_list(request):
 @login_required
 def announcement_detail(request, pk):
     announcement = Announcement.objects.get(pk=pk)
-    return render(request, 'main/announcement_detail.html', {'announcement': announcement})
+    return render(request, 'announcements/announcement_detail.html', {'announcement': announcement})
 
 @staff_member_required()
 def announcement_create(request):
