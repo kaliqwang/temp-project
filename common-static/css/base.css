@@ -25,7 +25,7 @@ ul {list-style:none; margin:0px; padding:0px}
 /* Text color */
 #masthead, #sidebar-container, #site-footer {color:#888}
 /* Glyphicon positioning */
-.icon-container {display:inline-block; height:16px; line-height:16px; padding: 0px 12px; vertical-align:middle}
+.icon-container {display:inline-block; height:16px; line-height:16px; padding: 0px 12px; width: 38px; vertical-align:middle}
 
 /***************************** Section 1: Navbar ******************************/
 
@@ -33,10 +33,13 @@ ul {list-style:none; margin:0px; padding:0px}
 #masthead-top, #masthead-bottom {border-bottom:1px solid #e8e8e8}
 /* Top Navbar */
 #masthead-top {height:50px; padding:10px 30px 9px} /* Spacing */
-#masthead-top-left {float:left;} /* Left (logo) */
+#masthead-top-left {float:left; height:30px; line-height: 30px; position: relative; background-color: yellow} /* Left (logo) */
+#masthead-top-left #toggle-sidebar {max-height: 30px; position: absolute; top:0px;} /* Toggle sidebar */
+#masthead-top-left #site-logo {max-height: 30px; position: absolute; top:0px; left: 38px} /* Site logo */
+#masthead-top-left #site-logo img {position: absolute; top:0px;} /* Site logo */
 #masthead-top-right {padding-left:199px; text-align:right} /* Right (links) */
 #masthead-top-right a {line-height: 30px}
-#toggle-sidebar {line-height:30px; margin-left:-12px; color:#bbb}
+#toggle-sidebar {line-height:30px; margin-left:-6px; color:#bbb}
 #masthead:hover #toggle-sidebar {color:#888}
 /* Bottom Navbar */
 #masthead-bottom {height:40px; text-align:center; overflow:hidden;} /* Spacing */

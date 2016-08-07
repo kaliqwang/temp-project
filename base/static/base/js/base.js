@@ -21,6 +21,7 @@ $(document).ready(function() {
     // $fadeIn.delay('fast').fadeIn('fast');
 
     // Retrieve sidebar status
+    // TODO: do sidebar differently? No margin push? simply .show() .hide() sidebar?
     if (localStorage.sidebarStatus == 0) {
         $('body').removeClass('show-sidebar');
     }

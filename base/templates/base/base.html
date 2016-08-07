@@ -30,13 +30,8 @@
     <nav id="masthead">
       <div id="masthead-top" class="masthead-section">
         <div id="masthead-top-left">
-          <a href="" id="toggle-sidebar">
-            <span class="icon-container"><span class="glyphicon glyphicon-menu-hamburger"></span></span>
-          </a>
-          <a href="{% url 'base:index' %}" id="site-logo">
-            <img src="{% static 'theme/logo.png' %}" id="site-logo-icon">
-            <img src="{% static 'theme/logo-text.png' %}" id="site-logo-text">
-          </a>
+          <a href="" id="toggle-sidebar"><span class="icon-container"><span class="glyphicon glyphicon-menu-hamburger"></span></span></a>
+          <a href="{% url 'base:index' %}" id="site-logo"><img src="{% static 'theme/site-logo.png' %}" id="site-logo-icon"></a>
         </div>
         <div id="masthead-top-right">
           {% if user.is_authenticated %}
