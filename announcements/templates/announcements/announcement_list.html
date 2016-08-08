@@ -86,11 +86,11 @@
         <!-- <div class="title"><h4><a href="{% templatetag openvariable %} absoluteURL {% templatetag closevariable %}"><div>{% templatetag openvariable %} title {% templatetag closevariable %}</div></a></h4></div> -->
         <!-- Announcement Signature -->
         <div class="signature">
+
+          <span><a style="color:#888" href="{% templatetag openvariable %} absoluteURL {% templatetag closevariable %}"><div>{% templatetag openvariable %} title {% templatetag closevariable %}</div></a></span> &bull;
           <span>{% templatetag openvariable %} categoryName {% templatetag closevariable %}</span>
-          <span style="float: right">
-            <span class="date-created">{% templatetag openvariable %} dateCreated {% templatetag closevariable %}</span>
+          <span class="date-created" style="float: right">{% templatetag openvariable %} dateCreated {% templatetag closevariable %}</span>
             <!-- <span class="time-created">{% templatetag openvariable %} timeCreated {% templatetag closevariable %}</span> -->
-          </span>
         </div>
         <!-- Announcement Content -->
         <div class="content">{% templatetag openvariable %} content {% templatetag closevariable %}</div>
