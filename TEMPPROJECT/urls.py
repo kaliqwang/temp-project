@@ -7,7 +7,13 @@ from django.conf.urls.static import static
 
 from rest_framework.urlpatterns import format_suffix_patterns
 
-urlpatterns = [
+urlpatterns = []
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('api.urls')),
     url(r'^accounts/', include('accounts.urls')),
@@ -17,9 +23,5 @@ urlpatterns = [
     url(r'^polls/', include('polls.urls')),
     url(r'^', include('base.urls')),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -9,17 +9,14 @@ from base.models import GetOrNoneManager
 
 ################################################################################
 
-colors = [
-    '#f2f3f4', '#f3c300', '#875692', '#f38400', '#a1caf1', '#be0032', '#c2b280',
-    '#848482', '#008856', '#e68fac', '#0067a5', '#f99379', '#604e97', '#f6a600',
-    '#b3446c', '#dcd300', '#882d17', '#8db600', '#654522', '#e25822', '#2b3d26',
-]
-
-################################################################################
-
 class Category(models.Model):
+    COLOR_CHOICES = [
+        '#f2f3f4', '#f3c300', '#875692', '#f38400', '#a1caf1', '#be0032', '#c2b280',
+        '#848482', '#008856', '#e68fac', '#0067a5', '#f99379', '#604e97', '#f6a600',
+        '#b3446c', '#dcd300', '#882d17', '#8db600', '#654522', '#e25822', '#2b3d26',
+    ]
     name = models.CharField(max_length=30)
-    color = RGBColorField(unique=True, colors=colors)
+    color = RGBColorField(unique=True, colors=COLOR_CHOICES)
 
     objects = GetOrNoneManager()
 
@@ -30,24 +27,20 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def merge(self, c):
-        # get all related objects of c
-        announcements = c.announcements.all()
-        events = c.events.all()
-        polls = c.polls.all()
-        # for each related object, set category field to self
-        #TODO: use special queryset functions that efficiently update all fields (single column) at once
-        for a in announcements:
-            a.category = self
-            a.save()
-        for e in events:
-            e.category = self
-            e.save()
-        for p in polls:
-            p.category = self
-            p.save()
-        # delete c
-        c.delete()
-        # set color with kwarg
-        self.color = kwargs.pop('color', self.color)
-        self.save()
+    @classmethod
+    def merge(cls, categories, new_name=None, new_color=None):
+        count = len(categories)
+        if count > 0:
+            first = categories[0]
+            for i in range(1, count):
+                categories[i].announcements.all().update(category=first)
+                categories[i].events.all().update(category=first)
+                categories[i].polls.all().update(category=first)
+                categories[i].delete()
+            # Keep first category's name and color by default
+            if new_name:
+                first.name = new_name
+            if new_color:
+                first.color = new_color
+            first.save()
+            return True

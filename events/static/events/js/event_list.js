@@ -173,9 +173,9 @@ $(document).ready(function() {
             var dateStart = e.date_start;
             var isMultiDay = e.is_multi_day;
             var dateStartData = e.date_start_data;
-            var timeStartData = e.time_start_data;
+            var timeStartData = e.time_start_data.split('.').join('');
             var dateEndData = e.date_end_data;
-            var timeEndData = e.time_end_data;
+            var timeEndData = e.time_end_data.split('.').join('');
             var location = e.location;
             var details = e.details;
             var categoryData = e.category_data;
@@ -270,7 +270,7 @@ $(document).ready(function() {
     // Format date / time into a single string
     function dateTimeStringify(isMultiDay, dateStart, timeStart, dateEnd, timeEnd) {
         var result = dateStart;
-        if (isMultiDay == 'True') {
+        if (isMultiDay) {
             if (timeStart) timeStart = ', ' + timeStart;
             if (timeEnd) timeEnd = ', ' + timeEnd;
             result += timeStart + ' - ' + dateEnd + timeEnd;

@@ -67,6 +67,7 @@ class Event(models.Model):
 
     @classmethod
     def generate_random_objects(cls, count):
+        Event.objects.all().delete()
         event_manager = Event.objects
         # Names
         rand_1 = random.randint(100, size=count) # first word
@@ -95,10 +96,14 @@ class Event(models.Model):
             for n in range(0, name_length):
                 name += lorem_random[name_rand[n]] + ' '
             # Random datetime start/end
-            datetime_start = datetime_base + timedelta(minutes=(rand_3[i] * 5))
+            days = (rand_3[i] * 5) / (60 * 24)
+            minutes = (rand_3[i] * 5) % (60 * 24)
+            datetime_start = datetime_base + timedelta(days=days, minutes=minutes)
             date_start = datetime_start.date()
             time_start = datetime_start.time()
-            datetime_end = datetime_start + timedelta(minutes=(rand_4[i] * 5))
+            days = (rand_4[i] * 5) / (60 * 24)
+            minutes = (rand_4[i] * 5) % (60 * 24)
+            datetime_end = datetime_start + timedelta(days=days, minutes=minutes)
             date_end = datetime_end.date()
             time_end = datetime_end.time()
             # Random Location

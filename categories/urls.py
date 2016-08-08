@@ -6,4 +6,5 @@ app_name = 'categories'
 
 urlpatterns = [
     url(r'^$', category_list, name='list'),
+    url(r'^merge/$', category_merge, name='merge'),
 ]

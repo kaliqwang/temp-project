@@ -20,6 +20,15 @@ def category_list(request):
                     new_c.name = name
                     new_c.color = color
                 new_c.save()
-        return redirect('categories:list')
     categories = Category.objects.all()
     return render(request, 'categories/category_list.html', {'categories': categories})
+
+@staff_member_required
+def category_merge(request):
+    category_pks = request.GET.getlist('category')
+    categories = Category.objects.filter(pk__in=category_pks)
+    new_name = request.GET.get('new_name')
+    new_color = request.GET.get('new_color')
+    if categories:
+        Category.merge(categories=categories, new_name=new_name, new_color=new_color)
+    return redirect('categories:list')

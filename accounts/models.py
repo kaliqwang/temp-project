@@ -14,20 +14,6 @@ from base.models import GetOrNoneManager, mobile_validator, student_id_validator
 
 ################################################################################
 
-FRESHMAN = 0
-SOPHOMORE = 1
-JUNIOR = 2
-SENIOR = 3
-
-grade_levels = (
-    (FRESHMAN, 'Freshman'),
-    (SOPHOMORE, 'Sophomore'),
-    (JUNIOR, 'Junior'),
-    (SENIOR, 'Senior'),
-)
-
-################################################################################
-
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', null=True)
     # TODO: set mobile to unique = True in production
@@ -46,10 +32,20 @@ class UserProfile(models.Model):
         return self.user.get_full_name()
 
 class StudentProfile(models.Model):
+    FRESHMAN = 0
+    SOPHOMORE = 1
+    JUNIOR = 2
+    SENIOR = 3
+    GRADE_LEVEL_CHOICES = (
+        (FRESHMAN, 'Freshman'),
+        (SOPHOMORE, 'Sophomore'),
+        (JUNIOR, 'Junior'),
+        (SENIOR, 'Senior'),
+    )
     user_profile = models.OneToOneField(UserProfile, related_name='student_profile', null=True)
     # TODO: set student_id to unique = True in production
     student_id = models.CharField("Student ID", max_length=10, validators=[student_id_validator])
-    grade_level = models.IntegerField("Grade Level", default=FRESHMAN, choices=grade_levels)
+    grade_level = models.IntegerField("Grade Level", default=FRESHMAN, choices=GRADE_LEVEL_CHOICES)
 
     objects = GetOrNoneManager()
 
