@@ -34,18 +34,16 @@
   <button id="sidebar-filter-apply" class="btn btn-sm btn-custom hidden" type="button">Apply</button>
 {% endblock %}
 
-{% block info_box_top %}
+{% block info_bar_top %}
   <div id="info-bar-top" class="container-white text-center">
     <ul>
       <button id="info-bar-top-dismiss" type="button" class="close"><span>&times;</span></button>
       <span>Hidden: </span>
       <span id="info-bar-top-content">
-        {% for category in categories_hidden_announcements %}
-          <li><a href="#" data-pk="{{ category.pk }}" title="{{ category.name }}" data-toggle="tooltip" data-placement="top" data-animation="false">
-            <span class="icon-container" style="color:{{ category.color }}"><span class="glyphicon glyphicon-tag"></span></span>
-            <!-- <span class="display-name">{{ category.name }}</span> -->
-          </a></li>
-        {% endfor %}
+        {% for category in categories_hidden_announcements %}<li><a href="#" data-pk="{{ category.pk }}" title="{{ category.name }}" data-toggle="tooltip" data-placement="top" data-animation="false">
+          <span class="icon-container" style="color:{{ category.color }}"><span class="glyphicon glyphicon-tag"></span></span>
+          <!-- <span class="display-name">{{ category.name }}</span> -->
+          </a></li>{% endfor %}
       </span>
     </ul>
   </div>
