@@ -88,7 +88,7 @@ class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
 
     # TODO: is it necessary to check for datetimes that are None, given that the field has auto_add_now=True?
     def get_date_created_data(self, obj):
-        return dateformat.format(obj.date_created, settings.LONG_DATE_FORMAT)
+        return dateformat.format(obj.date_created, settings.SHORT_DATE_FORMAT)
 
     def get_time_created_data(self, obj):
         return dateformat.format(obj.date_created, settings.TIME_FORMAT)

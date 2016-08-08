@@ -211,11 +211,11 @@ $(document).ready(function() {
         }
         if ($(this).data('state') != 1) {
             $(this).data('state', 1);
-            $itemsCollapseLocal.show();
+            $itemsCollapseLocal.slideDown(200);
             $(this).text('Show Less');
         } else {
             $(this).data('state', 0);
-            $itemsCollapseLocal.hide();
+            $itemsCollapseLocal.slideUp(200);
             $(this).text('Show More');
         }
         var functionEnd = performance.now();

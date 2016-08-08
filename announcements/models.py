@@ -113,7 +113,9 @@ class Announcement(models.Model):
             # Random author
             author = user_profiles[rand_3[i]]
             # Random date_created
-            date_created = datetime_base + timedelta(minutes=rand_4[i])
+            days = (rand_4[i] * 5) / (60 * 24)
+            minutes = (rand_4[i] * 5) % (60 * 24)
+            date_created = datetime_base + timedelta(days=days, minutes=minutes)
             # Random content
             content = lorem_random[rand_5[i]] + ' '
             content_length = rand_6[i]
