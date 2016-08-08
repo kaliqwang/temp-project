@@ -12,32 +12,49 @@
   <li><a href="{% url 'polls:list' %}">Polls</a></li>
 {% endblock %}
 
-{% block sidebar_category_list %}selected{% endblock %}
+{% block sidebar_category_merge %}selected{% endblock %}
 
 {% block content %}
   <div class="row">
       <div class="container-white">
-        <form id="category-list-form" action="{% url 'categories:list' %}" method="post">{% csrf_token %}
+        <form id="category-merge-form" action="{% url 'categories:merge' %}" method="post">{% csrf_token %}
+          <div class="row">
+            <div class="col-sm-3"><div class="form-label">Merged Category</div></div>
+            <div class="input-group col-sm-9">
+              <input id="category-new-name" type="text" class="form-control category-name-input"
+                name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
+                placeholder="Category Name" maxlength="30" required>
+              <span  class="input-group-btn"><input id="category-new-color" required type="color" class="form-control btn btn-default" maxlength="7"
+                list="datalist-color-choices"
+                name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
+                value="{% templatetag openvariable %} color {% templatetag closevariable %}"
+                data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}">
+              </span>
+            </div>
+          </div><br />
           <!-- Category List -->
-          <div id="categories" class="form-group">
-            {% for c in categories %}
-              <li data-name="{{ c.name }}" data-color="{{ c.color }}" data-pk="{{ c.pk }}" hidden></li>
-              {% if forloop.last %}<div id="initial-count" hidden>{{ forloop.counter }}</div>{% endif %}
-            {% endfor %}
-          </div><hr>
+          <div class="row">
+            <div class="col-sm-3"><div class="form-label">Categories</div></div>
+            <div id="categories" class="form-group col-sm-8">
+              {% for c in categories %}
+                <li data-name="{{ c.name }}" data-color="{{ c.color }}" data-pk="{{ c.pk }}" hidden></li>
+                {% if forloop.last %}<div id="initial-count" hidden>{{ forloop.counter }}</div>{% endif %}
+              {% endfor %}
+
+            </div><hr>
           <!-- Buttons -->
           <div class="row">
             <div class="col-xs-1"></div>
             <div class="col-xs-5">
-              {% block morebuttons %}<button id="category-add" class="btn btn-sm btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Category</button>{% endblock %}
             </div>
             <div class="col-xs-6 text-right">
               <a class="btn btn-sm btn-default" href="{% block cancel_button_target_url %}{% url 'base:index' %}{% endblock %}">Cancel</a>
-              <button id="{% block submit_button_id %}submit-category-list-form{% endblock %}" class="btn btn-sm btn-custom" type="button">{% block submit_button_text %}Save{% endblock %}</button>
+              <button id="{% block submit_button_id %}submit-merge-category-form{% endblock %}" class="btn btn-sm btn-custom" type="button">{% block submit_button_text %}Merge{% endblock %}</button>
             </div>
           </div>
         </form>
       </div>
+
   </div>
 
   <!-- Color Choices -->
@@ -54,10 +71,15 @@
 
 {% block templates %}
   <template id="old-category-template">
-    <div class="input-group-wrapper">
-      <input type="hidden" name="category-{% templatetag openvariable %} index {% templatetag closevariable %}" value="{% templatetag openvariable %} pk {% templatetag closevariable %}">
+
       <div class="row">
-        <div class="col-xs-1">
+        <div class="col-sm-1 text-right">
+          <input id="category-{% templatetag openvariable %} pk {% templatetag closevariable %}" type="checkbox" value="{% templatetag openvariable %} pk {% templatetag closevariable %}">
+        </div>
+        <div class="col-sm-8">
+          <span class="icon-container" style="color:{% templatetag openvariable %} color {% templatetag closevariable %};"><span class="glyphicon glyphicon-tag"></span></span><label style="font-weight:normal;"for="category-{% templatetag openvariable %} pk{% templatetag closevariable %}" class="category-label">{% templatetag openvariable %} name {% templatetag closevariable %}</label>
+        </div>
+        <!-- <div class="col-xs-1">
         </div>
         <div class="col-xs-11">
           <div class="input-group">
@@ -65,16 +87,11 @@
               name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
               value="{% templatetag openvariable %} name {% templatetag closevariable %}"
               placeholder="Category Name" maxlength="30" required>
-            <span class="input-group-btn"><input required type="color" class="form-control btn btn-default color-input" maxlength="7"
-              list="datalist-color-choices"
-              name="category-{% templatetag openvariable %} index {% templatetag closevariable %}"
-              value="{% templatetag openvariable %} color {% templatetag closevariable %}"
-              data-old-value="{% templatetag openvariable %} color {% templatetag closevariable %}">
+            <span style="width: 34px; height: 34px; background-color:{% templatetag openvariable %} color {% templatetag closevariable %};">
             </span>
           </div>
-        </div>
+        </div> -->
       </div>
-    </div>
   </template>
   <template id="new-category-template">
     <div class="input-group-wrapper">
@@ -101,4 +118,4 @@
   </template>
 {% endblock %}
 
-{% block script %}<script src="{% static 'categories/js/category_list.js' %}"></script>{% endblock %}
+{% block script %}<script src="{% static 'categories/js/category_merge.js' %}"></script>{% endblock %}

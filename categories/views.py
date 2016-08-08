@@ -31,4 +31,6 @@ def category_merge(request):
     new_color = request.GET.get('new_color')
     if categories:
         Category.merge(categories=categories, new_name=new_name, new_color=new_color)
-    return redirect('categories:list')
+        return redirect('categories:list')
+    categories = Category.objects.all()
+    return render(request, 'categories/category_merge.html', {'categories': categories})

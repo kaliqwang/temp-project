@@ -124,7 +124,7 @@
           </a></li> -->
           <li><a href="{% url 'categories:list' %}" class="{% block sidebar_category_list %}{% endblock %}">
             <span class="icon-container"><span class="glyphicon glyphicon-tags"></span></span>
-            <span class="display-name">Tags</span>
+            <span class="display-name">New Tag</span>
           </a></li>
         </ul>
         <ul id="sidebar-admin-advanced">
@@ -140,6 +140,10 @@
           <li><a href="{% url 'base:generator' %}">
             <span class="icon-container"><span class="glyphicon glyphicon-wrench"></span></span>
             <span class="display-name">Generator</span>
+          </a></li>
+          <li><a href="{% url 'categories:merge' %}" class="{% block sidebar_category_merge %}{% endblock %}">
+            <span class="icon-container"><span class="glyphicon glyphicon-tags"></span></span>
+            <span class="display-name">Merge Tags</span>
           </a></li>
         </ul>
         {% endif %}

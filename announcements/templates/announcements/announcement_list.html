@@ -81,11 +81,11 @@
   <!-- Announcement Item Template -->
   <template id="announcement-item-template">
     <!-- <div class="col-xl-4 col-xxl-3" style="float:both"> -->
-      <div id="announcement-{% templatetag openvariable %} pk {% templatetag closevariable %}" class="announcement-wrapper container-white" style="border: 1px solid {% templatetag openvariable %} categoryColor {% templatetag closevariable %}; border-top-width: 2px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;" data-category-pk="{% templatetag openvariable %} categoryPK {% templatetag closevariable %}">
+      <div id="announcement-{% templatetag openvariable %} pk {% templatetag closevariable %}" class="announcement-wrapper container-white" style="border: 0px solid {% templatetag openvariable %} categoryColor {% templatetag closevariable %}; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 5px; border-right-width: px; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;" data-category-pk="{% templatetag openvariable %} categoryPK {% templatetag closevariable %}">
         <!-- Announcement Title -->
         <!-- <div class="title"><h4><a href="{% templatetag openvariable %} absoluteURL {% templatetag closevariable %}"><div>{% templatetag openvariable %} title {% templatetag closevariable %}</div></a></h4></div> -->
         <!-- Announcement Signature -->
-        <div class="signature">
+        <div class="signature" style="border-bottom: 0px solid {% templatetag openvariable %} categoryColor {% templatetag closevariable %};">
 
           <span><a style="font-size: 16px; font-weight: 500" href="{% templatetag openvariable %} absoluteURL {% templatetag closevariable %}"><div>{% templatetag openvariable %} title {% templatetag closevariable %}</div></a></span> &bull;
           <span>{% templatetag openvariable %} categoryName {% templatetag closevariable %}</span>
