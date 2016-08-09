@@ -1,6 +1,7 @@
 from models import *
 from forms import *
 from categories.models import *
+from push_notifications.models import APNSDevice
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -25,6 +26,8 @@ def event_create(request):
     form = EventForm(request.POST or None)
     if form.is_valid():
         form.save()
+        devices = APNSDevice.objects.all()
+        devices.send_message("New Event!");
         return redirect('events:list')
     return render(request, 'events/event_create.html', {'form': form})
 

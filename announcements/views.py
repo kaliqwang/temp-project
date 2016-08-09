@@ -1,6 +1,7 @@
 from models import *
 from forms import *
 from categories.models import *
+from push_notifications.models import APNSDevice
 
 import json
 import requests
@@ -44,7 +45,8 @@ def announcement_create(request):
         for youtube_video in youtube_videos:
             video = YouTubeVideo(youtube_video=youtube_video, announcement=a)
             video.save()
-
+        devices = APNSDevice.objects.all()
+        devices.send_message("New Announcement!");
         return redirect('announcements:list')
     return render(request, 'announcements/announcement_create.html', {'form': form})
 

@@ -1,7 +1,8 @@
 $(document).ready(function() {
 
     var count = 0;
-
+    var i = count;
+    var $categoryMergeForm = $('#category-merge-form');
     var $categories = $('#categories');
     var $colors = $('#datalist-color-choices');
     var target = "?";
@@ -12,25 +13,35 @@ $(document).ready(function() {
     });
 
     // Pre-process templates
+    var $confirmMergeTemplate = $('#confirm-merge-template').html();
     var $oldCategoryTemplate = $('#old-category-template').html();
     var $newCategoryTemplate = $('#new-category-template').html();
+    Mustache.parse($confirmMergeTemplate);
     Mustache.parse($oldCategoryTemplate);
     Mustache.parse($newCategoryTemplate);
 
-    // Render all currently existing categories
-    $categories.children('li').each(function(i){
-        var cName = $(this).data('name');
-        var cColor = $(this).data('color');
-        var cPK = $(this).data('pk');
-        $categories.append(Mustache.render($oldCategoryTemplate, {
-            index: i,
-            name: cName,
-            color: cColor,
-            pk: cPK,
-        }));
-        removeColor(cColor);
-        count++;
-    });
+    var CategoryListHTML = '';
+
+    // On page load
+    function renderExistingCategories() {
+      $.ajax({
+        type: 'GET',
+        url: '/api/categories/?page=1',
+        success: function(data) {
+          jQuery.each(data.results, function(i, c) {
+            CategoryListHTML += Mustache.render($oldCategoryTemplate, {
+                name: c.name,
+                color: c.color,
+                pk: c.pk,
+            });
+
+          });
+          $categories.html(CategoryListHTML);
+          CategoryListHTML='';
+        }
+      });
+    }
+    renderExistingCategories();
 
     // Helper functions
     function addColor(c) {
@@ -41,27 +52,53 @@ $(document).ready(function() {
         $colors.children('option:contains("' + c + '")').remove();
         colors.splice(colors.indexOf(c), 1);
     }
+    function renderConfirmMergeTemplate() {
+      $categoryMergeForm.html(Mustache.render($confirmMergeTemplate, {
+        newName: $('#category-new-name').val(),
+        newColor: $('#category-new-color').val(),
+      }));
+    }
 
-    var i = count;
 
+
+    $('#continue-category-merge').click(function(e){
+      e.preventDefault();
+      // Selects the categories the user selected
+      var $selectedCategories = $categories.find('input[type="checkbox"]:checked');
+      if ($selectedCategories.length > 1 && $('#category-new-name').val()) {
+        $selectedCategories.each(function() {
+          CategoryListHTML += Mustache.render($newCategoryTemplate, {
+            name: $(this).data('name'),
+            color: $(this).data('color'),
+            pk: $(this).val(),
+          });
+        });
+        // Changes template of entire page
+        renderConfirmMergeTemplate();
+        // Inserts the categories selected onto page
+        $('#selected-categories').html(CategoryListHTML);
+        // Show Merge button and hide Continue button
+        $(this).next().removeClass('hide');
+        $(this).hide();
+      } else {
+        console.log("Please fill out form completely");
+      }
+    });
     // Merge categories
     $('#submit-merge-category-form').click(function(e){
       e.preventDefault();
-      var $newName = $('#category-new-name').val().split(' ').join('%20');
-      var $newColor = $('#category-new-color').val();
-      var $mergeCategories = $categories.find('input[type="checkbox"]');
+      var $newName = $('#category-new-name').html().split(' ').join('%20');
+      var $newColor = $('#category-new-color').data('color');
+      var $selectedCategories = $('#selected-categories').children();
 
-      $mergeCategories.each(function() {
-        if ($(this).prop('checked')){
-          console.log($(this).val());
-            target = target + "category=" + $(this).val() + "&";
-        }
-
+      $selectedCategories.each(function() {
+        target = target + "category=" + $(this).data('pk') + "&";
       });
-      target = target + 'new_name=' + $newName + '&new_color=%23' + $newColor
-      console.log(target);
+      target = target + 'new_name=' + $newName + '&new_color=' + encodeURIComponent($newColor);
       window.location.href = 'http://127.0.0.1:8000/categories/merge/' + target;
-    });
+    })
+
+
     // Manage color list
     $categories.on('click', '.remove_field', function(e){
         e.preventDefault();

@@ -4,6 +4,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from push_notifications.api.rest_framework import APNSDeviceAuthorizedViewSet
 
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -22,6 +23,7 @@ urlpatterns += [
     url(r'^events/', include('events.urls')),
     url(r'^polls/', include('polls.urls')),
     url(r'^', include('base.urls')),
+    url(r'^device/apns/?$', APNSDeviceAuthorizedViewSet.as_view({'post': 'create'}), name='create_apns_device'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -1,7 +1,7 @@
 from models import *
 
 from django.shortcuts import render, redirect
-
+from django.http import HttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
 
 @staff_member_required()
@@ -32,5 +32,6 @@ def category_merge(request):
     if categories:
         Category.merge(categories=categories, new_name=new_name, new_color=new_color)
         return redirect('categories:list')
+
     categories = Category.objects.all()
     return render(request, 'categories/category_merge.html', {'categories': categories})

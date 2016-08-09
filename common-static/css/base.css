@@ -140,9 +140,6 @@ ul {list-style:none; margin:0px; padding:0px}
     width: 100%;
     /*NOTE: Logout button becomes unaccessible; add to sidebar?*/
   }
-  .container-white {
-    width:100%;
-  }
   .announcement-paginator {
     width:100%;
   }
@@ -161,6 +158,9 @@ ul {list-style:none; margin:0px; padding:0px}
 }
 @media (min-width: 514px) {
   .announcement-paginator {width: 514px}
+  #event-list {
+    width: 514px;
+  }
 }
 @media (min-width: 400px)  (max-width: 514px) {
   #masthead {
@@ -200,9 +200,9 @@ ul {list-style:none; margin:0px; padding:0px}
 }
  /*Second level (2 columns)*/
 @media (min-width: 1200px) {
-  .container {
+  /*.container {
     width: 1040px;
-  }
+  }*/
 
 }
 @media (min-width: 1200px) and (max-width: 1600px) {
@@ -218,9 +218,9 @@ ul {list-style:none; margin:0px; padding:0px}
 
 /* Third level (3 columns) */
 @media (min-width: 1600px) {
-  .container {
+  /*.container {
     width: 1560px;
-  }
+  }*/
   .col-xl-3 {
     width: 25%;
   }
@@ -241,9 +241,9 @@ ul {list-style:none; margin:0px; padding:0px}
 
 /* Fourth level (4 columns) */
 @media (min-width: 2120px) {
-  .container {
+  /*.container {
     width: 2080px;
-  }
+  }*/
   .col-xxl-3 {
     width: 25%;
   }

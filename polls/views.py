@@ -1,6 +1,7 @@
 from models import *
 from forms import *
 from categories.models import *
+from push_notifications.models import APNSDevice
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -31,6 +32,8 @@ def poll_create(request):
         for choice in choices:
             c = Choice(content=choice, poll=p)
             c.save()
+        devices = APNSDevice.objects.all()
+        devices.send_message("New Poll!");
         return redirect('polls:list')
     return render(request, 'polls/poll_create.html', {'form': form})
 
