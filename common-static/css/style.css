@@ -308,7 +308,7 @@ form:not(#login-form) {
 
 /**************************** category_list *****************************/
 
-#category-new-color, #categories input[type="color"] {
+#category-new-color-input, #categories input[type="color"] {
     width: 100px;
     border-radius: 0px 4px 4px 0px;
 }

@@ -3,6 +3,10 @@ $(document).ready(function() {
     var count = 0;
     var i = count;
     var $categoryMergeForm = $('#category-merge-form');
+    var $categoryMergeSetForm = $('#category-merge-set-form');
+    var $categoryMergeConfirmForm = '';
+    var $backButton = '';
+    var $submitButton = '';
     var $categories = $('#categories');
     var $colors = $('#datalist-color-choices');
     var target = "?";
@@ -34,7 +38,6 @@ $(document).ready(function() {
                 color: c.color,
                 pk: c.pk,
             });
-
           });
           $categories.html(CategoryListHTML);
           CategoryListHTML='';
@@ -43,29 +46,17 @@ $(document).ready(function() {
     }
     renderExistingCategories();
 
-    // Helper functions
-    function addColor(c) {
-        $colors.append('<option>' + c + '</option>');
-        colors.push(c);
-    }
-    function removeColor(c) {
-        $colors.children('option:contains("' + c + '")').remove();
-        colors.splice(colors.indexOf(c), 1);
-    }
-    function renderConfirmMergeTemplate() {
-      $categoryMergeForm.html(Mustache.render($confirmMergeTemplate, {
-        newName: $('#category-new-name').val(),
-        newColor: $('#category-new-color').val(),
-      }));
-    }
-
-
+    // Event Handlers
+    $categoryMergeForm.on('click', '#back-category-merge-form', function() {
+      $categoryMergeConfirmForm.hide();
+      $categoryMergeSetForm.show();
+    })
 
     $('#continue-category-merge').click(function(e){
       e.preventDefault();
       // Selects the categories the user selected
       var $selectedCategories = $categories.find('input[type="checkbox"]:checked');
-      if ($selectedCategories.length > 1 && $('#category-new-name').val()) {
+      if ($selectedCategories.length > 1 && $('#category-new-name-input').val()) {
         $selectedCategories.each(function() {
           CategoryListHTML += Mustache.render($newCategoryTemplate, {
             name: $(this).data('name'),
@@ -73,19 +64,28 @@ $(document).ready(function() {
             pk: $(this).val(),
           });
         });
-        // Changes template of entire page
-        renderConfirmMergeTemplate();
+        if (!$categoryMergeConfirmForm) {
+          console.log("confirm form doesn't exist");
+          // Inserts the confirm template onto page
+          renderConfirmMergeTemplate();
+        } else {
+          console.log("confirm form exists!");
+          $categoryMergeSetForm.hide();
+          $categoryMergeConfirmForm.html(Mustache.render($confirmMergeTemplate, {
+            newName: $('#category-new-name-input').val(),
+            newColor: $('#category-new-color-input').val(),
+          }));
+        }
         // Inserts the categories selected onto page
         $('#selected-categories').html(CategoryListHTML);
-        // Show Merge button and hide Continue button
-        $(this).next().removeClass('hide');
-        $(this).hide();
+        $categoryMergeConfirmForm.show();
+        CategoryListHTML='';
       } else {
         console.log("Please fill out form completely");
       }
     });
     // Merge categories
-    $('#submit-merge-category-form').click(function(e){
+    $categoryMergeForm.on('click', '#submit-category-merge-form', function(e) {
       e.preventDefault();
       var $newName = $('#category-new-name').html().split(' ').join('%20');
       var $newColor = $('#category-new-color').data('color');
@@ -95,21 +95,17 @@ $(document).ready(function() {
         target = target + "category=" + $(this).data('pk') + "&";
       });
       target = target + 'new_name=' + $newName + '&new_color=' + encodeURIComponent($newColor);
+      console.log(target);
       window.location.href = 'http://127.0.0.1:8000/categories/merge/' + target;
-    })
-
-
-    // Manage color list
-    $categories.on('click', '.remove_field', function(e){
-        e.preventDefault();
-        addColor($(this).parent().siblings().find('div > span > input[type="color"]').val());
-        $(this).closest('.input-group-wrapper').remove();
-        count--;
-    }).on('change', 'input[type="color"]', function(e){
-        e.preventDefault();
-        addColor($(this).data('old-value'));
-        removeColor($(this).val());
-        $(this).data('old-value', $(this).val());
     });
 
+    // Helper functions
+    function renderConfirmMergeTemplate() {
+      $categoryMergeForm.append(Mustache.render($confirmMergeTemplate, {
+        newName: $('#category-new-name-input').val(),
+        newColor: $('#category-new-color-input').val(),
+      }));
+      $categoryMergeSetForm.hide();
+      $categoryMergeConfirmForm = $('#category-merge-confirm-form');
+    }
 });
