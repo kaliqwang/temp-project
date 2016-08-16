@@ -79,6 +79,7 @@ def login(request):
         auth_login(request, user)
         if target_url:
             return redirect(target_url)
+        redirect('base:index')
     return render(request, 'accounts/login.html')
 
 @login_required
