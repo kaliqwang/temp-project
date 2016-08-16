@@ -1,0 +1,352 @@
+/************************************ All *************************************/
+body {
+
+}
+h4 {
+    margin: 0px;
+}
+li {
+  list-style:none;
+}
+.btn-custom:hover, .btn-custom:focus, .btn-custom:active, .btn-custom:active:focus {
+    color: #fff;
+    background-color: #126db3;
+    border-color: #126db3;
+    outline: none;
+}
+.btn-custom {
+    color: #fff;
+    background-color: #0778c8;
+    border-color: #0778c8;
+    outline: none;
+
+}
+.badge {
+    color: #0778c8;
+    background-color: #fff;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.inline-block {
+    display: inline-block;
+    vertical-align: top;
+    padding: 6px 8px;
+}
+
+.label {
+    font-weight: normal;
+}
+
+.no-underline:hover {
+    text-decoration: none;
+}
+
+.fixed-element {
+    position: fixed;
+}
+
+.form-label {
+    font-weight: bold;
+    padding: 6px 0px;
+    text-align: right;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    padding: 2px;
+    display: inline-block;
+    vertical-align: middle;
+}
+#announcement-sidebar .dot {
+    margin: 0px 10px;
+}
+#poll-sidebar .dot {
+    margin: 0px 10px;
+}
+
+/* Links - No Underline */
+a:hover, a:focus {
+    outline: none;
+    color: inherit;
+}
+
+/*********************************** Forms ************************************/
+
+form:not(#login-form) {
+    padding: 20px;
+}
+#login-form-footer {text-align:right}
+
+/******************************* Announcements ********************************/
+
+/* announcement_list / announcement_detail */
+@media (min-width: 514px) {
+  #announcement-list {
+      width: 514px;
+      margin: 0px auto;
+  }
+}
+
+.announcement-wrapper {
+    /*border: 1px solid #e8e8e8;*/
+    padding: 15px 15px 4px 15px;
+    margin-bottom: 15px;
+}
+.announcement-wrapper.selected {
+    padding-left: 55px;
+    padding-right: 55px;
+    margin-left: -40px;
+    margin-right: -40px;
+}
+.announcement-wrapper .show-more {
+    color: #888;
+    border-top: 1px solid #e8e8e8;
+    padding-top: 4px;
+}
+.announcement-wrapper .show-more:hover {
+    color: #444;
+    cursor: pointer;
+}
+.announcement-wrapper .content,.image-list,.video {
+    margin-bottom: 10px;
+}
+.announcement-wrapper a {
+    color: #444;
+}
+.announcement-wrapper a:hover {
+    color: #1e18cc;
+    text-decoration: underline;
+}
+.announcement-wrapper .signature, #announcement-sidebar .signature {
+  font-size:13px;
+  color: #888;
+  margin-bottom:10px;
+}
+.start-hidden {
+    display: none;
+}
+.announcement-wrapper .title {
+  margin-bottom:5px;
+}
+.video {
+    max-width: 480px;
+}
+
+/* announcement_create / announcement_update */
+#image-files-filenames {
+    /*padding: 0px 0px 0px 30px;*/
+}
+
+.youtube-video-preview-wrapper {
+    padding-top: 10px;
+}
+.youtube-video-thumbnail img {
+    width: 100%;
+    height: auto;
+}
+.youtube-video-details {
+    padding-right: 10px;
+}
+.youtube-video-details .title {
+    font-weight: 500;
+}
+.youtube-video-details .author {
+    font-size: .9em;
+}
+
+/* images */
+.image-list {
+    margin-right: -1px;
+    line-height: 0px;
+}
+.image-list.form {
+    padding: 0px 32px;
+}
+.image-list .image {
+    display: inline-block;
+    padding-right: 1px;
+    padding-bottom: 1px;
+    vertical-align: middle;
+}
+.image-list .image:hover {
+    opacity: 0.8;
+}
+.image-list .image-thumbnail {
+    width: 127px;
+    height: 127px;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/*********************************** Events ***********************************/
+
+/* event_list / event_detail */
+#event-list-container {
+  width:514px;
+  margin: 0px auto;
+}
+#event-list {
+    padding: 15px 30px;
+    color: #444;
+}
+#event-list .month-header {
+    color: inherit;
+    border-bottom: 2px solid;
+    border-color: inherit;
+    padding-top: 15px;
+}
+#event-list .month-header:hover {
+    color: #1e18cc;
+    border-color: #1e18cc;
+    cursor: pointer;
+}
+#event-list .date-header {
+    padding-top: 20px;
+}
+#event-list .event-wrapper {
+    white-space: nowrap;
+    overflow: hidden;
+}
+#event-list ul {
+    padding-left: 40px;
+}
+#event-list li a {
+    color: inherit;
+}
+#event-list a:hover {
+    text-decoration: underline;
+}
+#event-info-wrapper {
+    position: fixed;
+    /*top: 105px;*/
+    width: 300px;
+    margin-left: -301px;
+}
+#event-info ul {
+    padding: 0px;
+    padding: 15px 20px;
+}
+#event-info ul li {
+    padding: 5px;
+}
+#event-info-footer {
+    padding: 10px;
+}
+#event-info-wrapper hr {
+    margin: 0px -10px;
+}
+#event-info-dismiss {
+    padding: 5px 10px;
+}
+
+/*********************************** Polls ************************************/
+
+/* poll_list */
+.poll-wrapper {
+    padding: 15px 15px 5px 15px;
+    margin-bottom: 15px;
+}
+.poll-wrapper.selected {
+    padding-left: 55px;
+    padding-right: 55px;
+    margin-left: -40px;
+    margin-right: -40px;
+}
+.poll-wrapper .choice-container, .poll-wrapper .poll-buttons, .poll-wrapper .signature {
+    margin-bottom: 10px;
+}
+/*.poll-wrapper .choice-container {
+    border-bottom: 1px solid #e8e8e8;
+}*/
+.poll-wrapper .content {
+    margin-bottom: 5px;
+}
+.poll-wrapper .signature {
+    font-size:13px;
+    color: #888;
+}
+.poll-wrapper label {
+    font-weight: normal;
+}
+.poll-wrapper label:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.poll-wrapper .my-progress-bar {
+    border: 1px solid #e8e8e8;
+    overflow: hidden;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    padding: 0px 10px;
+    position: relative;
+}
+
+.poll-wrapper .my-progress-bar-fill {
+    background-color: #d2d4f9;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+}
+.poll-wrapper .choice-result-content {
+    position: absolute;
+}
+
+.poll-wrapper .choice-vote-count {
+    height: 30px;
+    line-height: 30px;
+}
+
+/**************************** category_list *****************************/
+
+#category-new-color, #categories input[type="color"] {
+    width: 100px;
+    border-radius: 0px 4px 4px 0px;
+}
+#categories .input-group-wrapper {
+    padding-bottom: 10px;
+}
+
+#categories .input-group-wrapper .remove_field {
+    padding: 6px 0px;
+}
+
+/*************************** student_register ***************************/
+
+.register-form .row-compact {
+    padding: 4px 0px;
+}
+
+/*************************** generator ***************************/
+
+#generator-container {
+    text-align: center;
+}
+#generator {
+    display: inline-block;
+    width: 500px;
+    margin: auto;
+    padding: 20px;
+}
+.generator-section {
+    padding: 10px;
+}
+.generator-section .glyphicon {
+    display: none;
+}
+.generator-section button, {
+    display: inline-block;
+}
+.generator-section-header {
+    display: inline-block;
+    padding: 0px 10px;
+}

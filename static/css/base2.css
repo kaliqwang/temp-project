@@ -1,0 +1,348 @@
+/********************************* General ************************************/
+
+body {
+    font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+    background-color:#f1f1f1; /* Background color */
+    padding-top:90px; /* Clear masthead (main page) */
+}
+/* Page positioning (show sidebar) */
+/*body.show-sidebar #masthead-bottom,
+body.show-sidebar #main-page,
+body.show-sidebar #site-footer {margin-left:230px}*/
+/* Fixed elements */
+#masthead, #sidebar-container {position:fixed; z-index:99}
+/* Inline block elements */
+#masthead li, #toggle-sidebar, #sidebar-filter-feedback, a {display:inline-block}
+/* Remove default styling */
+a, a:hover, a:focus {color:inherit; text-decoration:none; outline:none}
+button:focus {outline: none}
+ul {list-style:none; margin:0px; padding:0px}
+/* Foreground color */
+#masthead,
+#sidebar-container,
+#site-footer,
+.container-white {background-color:#fff}
+/* Text color */
+#masthead, #sidebar-container, #site-footer {color:#888}
+/* Glyphicon positioning */
+.icon-container {display:inline-block; height:16px; line-height:16px; padding: 0px 12px; width: 38px; vertical-align:middle}
+
+/***************************** Section 1: Navbar ******************************/
+
+#masthead {top:0px; left:0px; right:0px; -webkit-user-select: none}
+#masthead-top, #masthead-bottom {border-bottom:1px solid #e8e8e8}
+/* Top Navbar */
+#masthead-top {height:50px; padding:10px 30px 9px} /* Spacing */
+#masthead-top-left {float:left; height:30px; line-height: 30px; position: relative; background-color: yellow} /* Left (logo) */
+#masthead-top-left #toggle-sidebar {max-height: 30px; position: absolute; top:0px;} /* Toggle sidebar */
+#masthead-top-left #site-logo {max-height: 30px; position: absolute; top:0px; left: 38px} /* Site logo */
+#masthead-top-left #site-logo img {position: absolute; top:0px;} /* Site logo */
+#masthead-top-right {padding-left:199px; text-align:right} /* Right (links) */
+#masthead-top-right a {line-height: 30px}
+#toggle-sidebar {line-height:30px; margin-left:-6px; color:#bbb}
+#masthead:hover #toggle-sidebar {color:#888}
+/* Bottom Navbar */
+#masthead-bottom {height:40px; text-align:center; overflow:hidden;} /* Spacing */
+#masthead-bottom a {height:40px; line-height:40px; margin:0px 15px}
+#masthead-bottom a:hover, #masthead-bottom a.selected {border-bottom:3px solid #1e18cc} /* Border (selected items) */
+#masthead-bottom a.selected {color:#444; font-weight:500} /* Font (selected items) */
+
+/***************************** Section 2: Sidebar *****************************/
+
+/* Sidebar Container (sidebar positioner, scrollbar/border overlay) */
+#sidebar-container {
+    top:50px; left:0px; bottom:0px; /* Positioning */
+    width: 230px; height:auto; /* Sizing */
+    border-right:1px solid #e8e8e8; display:none;
+} body.show-sidebar #sidebar-container {display:block}
+/* Custom Scrollbar */
+#sidebar-container ::-webkit-scrollbar {width:9px; height:9px}
+#sidebar-container ::-webkit-scrollbar-thumb {background:transparent}
+#sidebar-container:hover ::-webkit-scrollbar-thumb {background:#ccc}
+/* Sidebar */
+#sidebar {width:230px; height:100%; padding: 13px 22px; overflow:overlay}
+/* Sidebar links */
+#sidebar li a {height:28px; line-height: 28px; width:100%}
+#sidebar li a:hover {background-color:#444; color:#fff}
+#sidebar li a.selected {background-color:#1e18cc; color: #fff; font-weight:500}
+#sidebar .display-name {height:20px; line-height:20px; width: 140px}
+/* Sidebar sections */
+#sidebar .sidebar-divider {margin:8px 0px}
+#sidebar .sidebar-header {padding:4px 0px; width:auto}
+#sidebar .sidebar-header a:hover {text-decoration:underline}
+/* Sidebar Filter Button */
+#sidebar-filter-show-more {padding-left:41px}
+#sidebar-filter-hover-button, #sidebar-filter-apply {float:right; text-align:center; visibility:hidden}
+#sidebar-filter:hover #sidebar-filter-hover-button,
+#sidebar-filter:hover #sidebar-filter-apply {visibility:visible}
+/* Sidebar Feedback */
+#sidebar-filter-apply, #sidebar-filter-feedback {display:none; padding:0px 3px}
+#sidebar-filter-feedback {float:right; text-align:center}
+#sidebar-filter-feedback .icon-container {padding:0px}
+
+/**************************** Announcement Sidebar ****************************/
+
+/* Sidebar Container (sidebar positioner, scrollbar/border overlay) */
+#announcement-sidebar-container {
+    position:fixed; z-index:99;
+    top:90px; right: 0px; bottom:0px; /* Positioning */
+    width: 230px; height:auto; /* Sizing */
+    background-color:white;
+    border-left:1px solid #e8e8e8;
+}
+ /*Custom Scrollbar */
+ #announcement-sidebar-container ::-webkit-scrollbar {width:9px; height:9px}
+ #announcement-sidebar-container ::-webkit-scrollbar-thumb {background:transparent}
+ #announcement-sidebar-container:hover ::-webkit-scrollbar-thumb {background:#ccc}
+ /* announcement-sidebar */
+ #announcement-sidebar {width:230px; height:100%; padding: 13px 22px; overflow:overlay}
+ /* announcement-sidebar links */
+ #announcement-sidebar li a {height:28px; line-height: 28px; width:100%}
+ #announcement-sidebar li a:hover {background-color:#444; color:#fff}
+ #announcement-sidebar li a.read {opacity: .4}
+ #announcement-sidebar li a.selected {background-color:#444; color: #fff; font-weight:500}
+ #announcement-sidebar .display-name {height:20px; line-height:20px; width: 150px; display: inline-block; vertical-align: middle; overflow:hidden}
+ /* announcement-sidebar sections */
+ #announcement-sidebar .sidebar-divider {margin:8px 0px}
+ #announcement-sidebar .sidebar-header {padding:4px 0px; width:auto; color:#888}
+ #announcement-sidebar .sidebar-header a:hover {text-decoration:underline}
+/**************************** Section 3: Main Page ****************************/
+
+#main-page-content {margin-top:8px}
+
+/*************************** Section 4: Site Footer ***************************/
+
+#site-footer {height:100px; margin-top:40px; border-top:1px solid #e8e8e8}
+
+/***************************** Bootstrap Override *****************************/
+
+.visible-lg-block, .visible-xl-block, .visible-xxl-block {
+  display: none!important;
+}
+
+.container {
+  width: 514px;
+}
+
+/*NOTE: Sidebar now overlaps at all levels*/
+/*TODO: for each level, customize when the sidebar overlaps vs when there are margins*/
+/*@media (max-width: 1800px) {
+  body.show-sidebar #masthead-bottom,
+  body.show-sidebar #main-page,
+  body.show-sidebar #site-footer {margin-left:0px}
+}*/
+@media (max-width: 514px) { /* 400px is current width of app bar links */
+  #masthead { /* Below 400px do something special with appbar? maybe turn it into vertical drop down menu? */
+    width: 100%;
+    /*NOTE: Logout button becomes unaccessible; add to sidebar?*/
+  }
+  .container { /* Below 400px do something special with appbar? maybe turn it into vertical drop down menu? */
+    width: 100%;
+    /*NOTE: Logout button becomes unaccessible; add to sidebar?*/
+  }
+  .announcement-paginator {
+    width:100%;
+  }
+  #announcement-list {
+    width: 100%;
+  }
+  #event-list {
+    width: 100%;
+  }
+  #poll-list {
+    width: 100%;
+  }
+  .poll-paginator {
+    width: 100%;
+  }
+}
+@media (min-width: 514px) {
+  .announcement-paginator {width: 514px}
+  #event-list {
+    width: 514px;
+  }
+}
+@media (min-width: 400px)  (max-width: 514px) {
+  #masthead {
+    width: 100%;
+  }
+  .container {
+    width: 100%;
+  }
+}
+@media (min-width: 514px) {
+  .container {
+    width: 514px;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .form-label {
+    text-align: left!important;
+  }
+
+}
+
+/* First level (1 column)*/
+@media (min-width: 520px) and (max-width: 790px) {
+  body.show-sidebar #masthead-bottom,
+  body.show-sidebar #main-page,
+  body.show-sidebar #site-footer {margin-left:0px}
+}
+@media (max-width: 1000px){
+  #announcement-sidebar-container {
+    display:none;
+  }
+  #poll-sidebar-container {
+    display:none;
+  }
+}
+ /*Second level (2 columns)*/
+@media (min-width: 1200px) {
+
+
+}
+@media (min-width: 1200px) and (max-width: 1600px) {
+  .visible-lg-block {
+    display: block!important;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1310px) {
+  body.show-sidebar #masthead-bottom,
+  body.show-sidebar #main-page,
+  body.show-sidebar #site-footer {margin-left:0px}
+}
+
+/* Third level (3 columns) */
+@media (min-width: 1600px) {
+  .container {
+    width: 1560px;
+  }
+  .col-xl-3 {
+    width: 25%;
+  }
+  .col-xl-4 {
+    width: 33.33333333%;
+  }
+}
+@media (min-width: 1600) and (max-width: 2120px) {
+  .visible-xl-block {
+    display: block!important;
+  }
+}
+@media (min-width: 1600px) and (max-width: 1830px) {
+  body.show-sidebar #masthead-bottom,
+  body.show-sidebar #main-page,
+  body.show-sidebar #site-footer {margin-left:0px}
+}
+
+/* Fourth level (4 columns) */
+@media (min-width: 2120px) {
+  .container {
+    width: 2080px;
+  }
+  .col-xxl-3 {
+    width: 25%;
+  }
+  .col-xxl-4 {
+    width: 33.33333333%;
+  }
+  .visible-xxl-block {
+    display: block!important;
+  }
+}
+@media (min-width: 2120px) and (max-width: 2350px) {
+  body.show-sidebar #masthead-bottom,
+  body.show-sidebar #main-page,
+  body.show-sidebar #site-footer {margin-left:0px}
+}
+
+.container {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+.container-fluid {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+.row {
+  margin-right: -5px;
+  margin-left: -5px;
+}
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+/*Custom column sizes*/
+.col-xl-3, .col-xl-4, .col-xl-6, .col-xl-8, {
+  padding-right: 5px;
+  padding-left: 5px;
+  float: left;
+  min-height: 1px;
+  position: relative;
+
+}
+
+/****************************** Temporary Fixes *******************************/
+
+#main-page-content {min-height:1440px}
+#site-copyright {line-height:100px}
+
+.filter-applied {opacity: .4}
+.filter-applied .display-name {text-decoration: line-through}
+
+/********************************* Paginator **********************************/
+
+#paginator-standard, #paginator-simple, #info-bar-top {min-height: 40px; line-height:40px; margin: 15px auto; clear:both}
+
+
+
+.paginator-link {height: 40px; line-height: 40px;padding: 0px 15px; color: #888}
+.paginator-link:hover {background-color:#444; color:#fff}
+.paginator-link.selected {background-color:#1e18cc; color: #fff; font-weight:500}
+
+#info-bar-top {color:#888; display:none}
+#info-bar-top li {display:inline-block}
+#info-bar-top-dismiss {height:40px; line-height:40px; padding:0px 15px; vertical-align:middle}
+
+/*.paginator-link:hover, .paginator-link.selected {border-bottom:3px solid #1e18cc}
+.paginator-link.selected {color:#444; font-weight:500}*/
+
+/********************************* Poll List **********************************/
+
+@media (min-width: 514px) {
+  #poll-list {
+      width: 514px;
+      margin: 0px auto;
+  }
+  .poll-paginator {width: 514px}
+  .event-paginator {width: 514px;}
+}
+
+
+/* Sidebar Container (sidebar positioner, scrollbar/border overlay) */
+#poll-sidebar-container {
+    position:fixed; z-index:99;
+    top:90px; right: 0px; bottom:0px; /* Positioning */
+    width: 230px; height:auto; /* Sizing */
+    background-color:white;
+    border-left:1px solid #e8e8e8;
+}
+ /*Custom Scrollbar */
+ #poll-sidebar-container ::-webkit-scrollbar {width:9px; height:9px}
+ #poll-sidebar-container ::-webkit-scrollbar-thumb {background:transparent}
+ #poll-sidebar-container:hover ::-webkit-scrollbar-thumb {background:#ccc}
+ /* poll-sidebar */
+ #poll-sidebar {width:230px; height:100%; padding: 13px 22px; overflow:overlay}
+ /* poll-sidebar links */
+ #poll-sidebar li a {height:28px; line-height: 28px; width:100%}
+ #poll-sidebar li a:hover {background-color:#444; color:#fff}
+ #poll-sidebar li a.read {opacity: .4}
+ #poll-sidebar li a.selected {background-color:#444; color: #fff; font-weight:500}
+ #poll-sidebar .display-name {height:20px; line-height:20px; width: 150px; display: inline-block; vertical-align: middle; overflow:hidden}
+ /* poll-sidebar sections */
+ #poll-sidebar .sidebar-divider {margin:8px 0px}
+ #poll-sidebar .sidebar-header {padding:4px 0px; width:auto; color:#888}
+ #poll-sidebar .sidebar-header a:hover {text-decoration:underline}

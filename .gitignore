@@ -1,4 +1,5 @@
 settings.py
-*.pyc
-*.sqlite3
+media/*
 migrations/*
+*.sqlite3
+*.pyc
