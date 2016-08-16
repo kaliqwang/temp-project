@@ -1,5 +1,5 @@
 from .models import *
-from forms import *
+from .forms import *
 from categories.models import *
 from push_notifications.models import APNSDevice
 

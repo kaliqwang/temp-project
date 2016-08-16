@@ -1,5 +1,5 @@
 from .models import *
-from forms import *
+from .forms import *
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect

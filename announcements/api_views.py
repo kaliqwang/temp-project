@@ -2,7 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import pagination
 
 from .models import *
-from serializers import *
+from .serializers import *
 
 class AnnouncementPaginator(pagination.PageNumberPagination):
     page_size = 36

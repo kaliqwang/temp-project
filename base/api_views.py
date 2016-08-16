@@ -1,7 +1,7 @@
 # from rest_framework.viewsets import ModelViewSet
 #
 # from .models import *
-# from serializers import *
+# from .serializers import *
 #
 # class SubjectViewSet(ModelViewSet):
 #     queryset = Subject.objects.all()
