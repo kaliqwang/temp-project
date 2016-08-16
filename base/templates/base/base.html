@@ -36,7 +36,6 @@
         <div id="masthead-top-right">
           {% if user.is_authenticated %}
             <ul>
-              <h2>The CHS Loop</h2>
               <li><a href="{% url 'accounts:logout' %}">Log out</a></li>
             </ul>
           {% else %}
