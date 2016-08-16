@@ -1,7 +1,7 @@
 from django import forms
 
 from .models import *
-from ..categories.models import *
+from categories.models import *
 from base.forms import category_form_field
 
 class PollForm(forms.ModelForm):

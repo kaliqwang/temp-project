@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from .models import *
-from ..accounts.models import *
-from ..categories.models import *
+from accounts.models import *
+from categories.models import *
 
 from django.conf import settings
 from django.utils.formats import dateformat

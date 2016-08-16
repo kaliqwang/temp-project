@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import *
-from ..categories.models import *
+from categories.models import *
 from django.contrib.auth.models import User
 
 from categories.serializers import *
