@@ -8,7 +8,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
-from categories.models import *
+from ..categories.models import *
 
 from base.models import GetOrNoneManager, mobile_validator, student_id_validator, first_names, last_names
 

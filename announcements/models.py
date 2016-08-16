@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import os
 import json
 import requests
-from urlparse import urlparse
 from numpy import random
 
 import pytz
@@ -28,8 +27,8 @@ from django.core.files.base import ContentFile
 
 from django.conf import settings
 
-from categories.models import *
-from accounts.models import *
+from ..categories.models import *
+from ..accounts.models import *
 
 from base.models import GetOrNoneManager, youtube_validator, lorem_random, random_videos
 

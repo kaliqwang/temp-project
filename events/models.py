@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
-from categories.models import *
+from ..categories.models import *
 
 from base.models import GetOrNoneManager, youtube_validator, lorem_random
 

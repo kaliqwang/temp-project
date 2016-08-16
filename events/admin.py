@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import *
+from .models import *
 
 class EventAdmin(admin.ModelAdmin):
     list_select_related = True

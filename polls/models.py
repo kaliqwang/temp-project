@@ -10,8 +10,8 @@ from django.db import models
 
 from django.core.urlresolvers import reverse
 
-from categories.models import *
-from accounts.models import *
+from ..categories.models import *
+from ..accounts.models import *
 
 from base.models import GetOrNoneManager, lorem_random
 

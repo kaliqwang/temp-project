@@ -1,6 +1,6 @@
-from models import *
+from .models import *
 from forms import *
-from categories.models import *
+from ..categories.models import *
 from push_notifications.models import APNSDevice
 
 from django.http import HttpResponse

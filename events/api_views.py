@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import pagination
 
-from models import *
+from .models import *
 from serializers import *
 
 class EventPaginator(pagination.PageNumberPagination):
