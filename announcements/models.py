@@ -104,25 +104,25 @@ class Announcement(models.Model):
         generated_count = 0
         for i in range(0, count):
             # Random title
-            title = lorem_random[rand_1[i]] + ' '
-            title_length = rand_2[i]
+            title = lorem_random[rand_1.item(i)] + ' '
+            title_length = rand_2.item(i)
             title_content = random.randint(200, size=title_length)
             for t in range(0, title_length):
                 title += lorem_random[title_content[t]] + ' '
             # Random author
-            author = user_profiles[rand_3[i]]
+            author = user_profiles[rand_3.item(i)]
             # Random date_created
-            days = (rand_4[i] * 5) / (60 * 24)
-            minutes = (rand_4[i] * 5) % (60 * 24)
+            days = (rand_4.item(i) * 5) / (60 * 24)
+            minutes = (rand_4.item(i) * 5) % (60 * 24)
             date_created = datetime_base + timedelta(days=days, minutes=minutes)
             # Random content
-            content = lorem_random[rand_5[i]] + ' '
-            content_length = rand_6[i]
+            content = lorem_random[rand_5.item(i)] + ' '
+            content_length = rand_6.item(i)
             content_rand = random.randint(200, size=content_length)
             for c in range(0, content_length):
                 content += lorem_random[content_rand[c]] + ' '
             # Random category
-            category = categories[rand_7[i]]
+            category = categories[rand_7.item(i)]
             # Create Object
             a = announcement_manager.create(
                 title=title,
@@ -132,14 +132,14 @@ class Announcement(models.Model):
                 category=category,
             )
             # Random Images
-            image_count = int(pow(rand_8[i], 5) * 8)
+            image_count = int(pow(rand_8.item(i), 5) * 8)
             for x in range(0, image_count):
                 image_manager.create(
                     announcement=a,
                     image_link="https://unsplash.it/200/300/?random"
                 )
             # Random Videos
-            video_count = int(pow(rand_9[i], 5) * 3)
+            video_count = int(pow(rand_9.item(i), 5) * 3)
             video_content = random.randint(20, size=video_count)
             for y in range(0, video_count):
                 video_manager.create(
@@ -216,7 +216,7 @@ class ImageLink(models.Model):
     @classmethod
     def create_image_set(cls):
         for i in range(0, len(random_images)):
-            i = ImageLink(image_link=random_images[i])
+            i = ImageLink(image_link=random_images.item(i))
             i.save()
 
 @receiver(post_delete, sender=ImageFile)

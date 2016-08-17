@@ -90,36 +90,36 @@ class Event(models.Model):
         generated_count = 0
         for i in range(0, count):
             # Random name
-            name = lorem_random[rand_1[i]] + ' '
-            name_length = rand_2[i]
+            name = lorem_random[rand_1.item(i)] + ' '
+            name_length = rand_2.item(i)
             name_rand = random.randint(200, size=name_length)
             for n in range(0, name_length):
                 name += lorem_random[name_rand[n]] + ' '
             # Random datetime start/end
-            days = (rand_3[i] * 5) / (60 * 24)
-            minutes = (rand_3[i] * 5) % (60 * 24)
+            days = (rand_3.item(i) * 5) / (60 * 24)
+            minutes = (rand_3.item(i) * 5) % (60 * 24)
             datetime_start = datetime_base + timedelta(days=days, minutes=minutes)
             date_start = datetime_start.date()
             time_start = datetime_start.time()
-            days = (rand_4[i] * 5) / (60 * 24)
-            minutes = (rand_4[i] * 5) % (60 * 24)
+            days = (rand_4.item(i) * 5) / (60 * 24)
+            minutes = (rand_4.item(i) * 5) % (60 * 24)
             datetime_end = datetime_start + timedelta(days=days, minutes=minutes)
             date_end = datetime_end.date()
             time_end = datetime_end.time()
             # Random Location
-            location = lorem_random[rand_5[i]] + ' '
-            location_length = rand_6[i]
+            location = lorem_random[rand_5.item(i)] + ' '
+            location_length = rand_6.item(i)
             location_rand = random.randint(200, size=location_length)
             for l in range (0, location_length):
                 location += lorem_random[location_rand[l]] + ' '
             # Random Details
-            details = lorem_random[rand_7[i]] + ' '
-            details_length = rand_8[i]
+            details = lorem_random[rand_7.item(i)] + ' '
+            details_length = rand_8.item(i)
             details_rand = random.randint(200, size=details_length)
             for d in range(0, details_length):
                 details += lorem_random[details_rand[d]] + ' '
             # Random category
-            category = categories[rand_9[i]]
+            category = categories[rand_9.item(i)]
             # Create Object
             e = event_manager.create(
                 name=name,

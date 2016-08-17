@@ -109,27 +109,27 @@ class Poll(models.Model):
         generated_count = 0
         for i in range(0, count):
             # Random Content
-            content = lorem_random[rand_1[i]] + ' '
-            content_length = rand_2[i]
+            content = lorem_random[rand_1.item(i)] + ' '
+            content_length = rand_2.item(i)
             content_rand = random.randint(200, size=content_length)
             for c in range(0, content_length):
                 content += lorem_random[content_rand[c]] + ' '
             content += '?'
             # Random Author
-            author = user_profiles[rand_3[i]]
+            author = user_profiles[rand_3.item(i)]
             # Random Category
-            category = categories[rand_4[i]]
+            category = categories[rand_4.item(i)]
             # Random Status
             is_open = True
-            if rand_6[i] == 2:
+            if rand_6.item(i) == 2:
                 is_open = False
             # Create Object
             p = poll_manager.create(content=content, author=author, category=category, is_open=is_open)
             # Random Choices
-            choice_count = rand_5[i]
+            choice_count = rand_5.item(i)
             for x in range(0, choice_count):
-                choice_content = lorem_random[rand_1[i]] + ' '
-                choice_length = rand_2[i]
+                choice_content = lorem_random[rand_1.item(i)] + ' '
+                choice_length = rand_2.item(i)
                 choice_rand = random.randint(200, size=choice_length)
                 for y in range(0, choice_length):
                     choice_content += lorem_random[choice_rand[y]] + ' '
@@ -149,7 +149,7 @@ class Poll(models.Model):
         vote_counter = 0
         for i in range(0, voter_count):
             voter = user_profiles[i]
-            choice = choices[rand_votes[i]]
+            choice = choices[rand_votes.item(i)]
             v = vote_manager.create(poll=self, choice=choice, voter=voter)
             print('Generated Vote %d (Userprofile %d, Choice %d)' % (v.pk, voter.pk, choice.pk))
             vote_counter += 1

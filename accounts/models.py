@@ -62,10 +62,10 @@ class StudentProfile(models.Model):
         user_pk = User.objects.latest('pk').pk + 1
         generated_count = 0
         for i in range(0, count):
-            first_name = first_names[rand_1[i]]
-            last_name = last_names[rand_2[i]]
-            student_id = rand_3[i]
-            grade_level = rand_4[i]
+            first_name = first_names[rand_1.item(i)]
+            last_name = last_names[rand_2.item(i)]
+            student_id = rand_3.item(i)
+            grade_level = rand_4.item(i)
             user = User.objects.create_user(
                 username=user_pk,
                 password=user_pk,

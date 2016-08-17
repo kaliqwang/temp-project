@@ -1,5 +1,6 @@
 *.pyc
 *.sqlite3
+centennial$default
 settings.py
 migrations
 media
