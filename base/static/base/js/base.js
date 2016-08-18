@@ -22,6 +22,7 @@ $(document).ready(function() {
 
     // Retrieve sidebar status
     // TODO: do sidebar differently? No margin push? simply .show() .hide() sidebar?
+
     if (localStorage.sidebarStatus == 0) {
         $('body').removeClass('show-sidebar');
     }
@@ -35,6 +36,16 @@ $(document).ready(function() {
             $('body').removeClass('show-sidebar');
             localStorage.sidebarStatus = 0;
         }
+    });
+    $('#toggle-right-sidebar').on('click', function(e){e.preventDefault();
+      $('#poll-sidebar-container').fadeToggle();
+      // Have to check if announcement sidebar is open/closed window.width, and fade state
+      if ($(window).width() < 551 && $('#announcement-sidebar-container').css('display') == "none" && $('#overlay-back').css('display') == "none") {
+        $('#overlay-back').fadeIn(500);
+      } else {
+        $('#overlay-back').fadeOut(500);
+      }
+      $('#announcement-sidebar-container').fadeToggle();
     });
 
     // Activate tooltips

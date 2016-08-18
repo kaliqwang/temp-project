@@ -40,6 +40,19 @@ $(document).ready(function() {
     $('#submit-poll-create-form').click(function(e){e.preventDefault();
         $('#poll-create-form').submit();
         return false;
+        // var registration_id = '50c88caccb1381419d276ab7def422ee7d493bddec638e3364a4d297a5bfe0d7';
+        // var device = {
+        //   registration_id: registration_id,
+        //   name: 'Rayner',
+        // }
+        // $.ajax({
+        //   type: 'POST',
+        //   url: 'http://127.0.0.1:8000/api/device/apns/?',
+        //   data: device,
+        //   success: function() {
+        //     console.log(registration_id);
+        //   }
+        // })
     });
 
     $pollChoiceAdd.click();

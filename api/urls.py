@@ -5,8 +5,14 @@ from categories import api_views as categories_api
 from announcements import api_views as announcements_api
 from events import api_views as events_api
 from polls import api_views as polls_api
-
+from push_notifications.api.rest_framework import APNSDeviceAuthorizedViewSet
+from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import DefaultRouter
+from django.conf.urls import include
 app_name = 'api'
+
+router = DefaultRouter()
+router.register(r'device/apns', APNSDeviceAuthorizedViewSet)
 
 urlpatterns = [
 
@@ -49,6 +55,7 @@ urlpatterns = [
     url(r'^votes/$', polls_api.VoteViewSet.as_view({'get':'list', 'post':'create'}), name='votes'),
     url(r'^votes/(?P<pk>\d+)$', polls_api.VoteViewSet.as_view({'get': 'retrieve', 'put':'partial_update', 'delete':'destroy'}), name='vote'),
 
+    # url(r'^', include(router.urls)),
     # url(r'^subjects/$', views_api.SubjectViewSet.as_view({'get':'list', 'post':'create'}), name='subjects'),
     # url(r'^subjects/(?P<pk>\d+)$', views_api.SubjectViewSet.as_view({'get': 'retrieve', 'put':'partial_update', 'delete':'destroy'}), name='subject'),
     #
