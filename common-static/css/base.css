@@ -38,7 +38,7 @@ ul {list-style:none; margin:0px; padding:0px}
     filter     : alpha(opacity=60);
     z-index    : 5;
     display    : none;
-} 
+}
 /***************************** Section 1: Navbar ******************************/
 
 #masthead {top:0px; left:0px; right:0px; -webkit-user-select: none}
@@ -157,12 +157,14 @@ ul {list-style:none; margin:0px; padding:0px}
   }
   #announcement-list {
     width: 100%;
+    margin-left:5px;
   }
   #event-list {
     width: 100%;
   }
   #poll-list {
     width: 100%;
+    margin-left:5px;
   }
   .poll-paginator {
     width: 100%;

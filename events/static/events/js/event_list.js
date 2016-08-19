@@ -173,9 +173,13 @@ $(document).ready(function() {
             var dateStart = e.date_start;
             var isMultiDay = e.is_multi_day;
             var dateStartData = e.date_start_data;
-            var timeStartData = e.time_start_data.split('.').join('');
+            if (e.time_start_data) {
+              var timeStartData = e.time_start_data.split('.').join('');
+            }
             var dateEndData = e.date_end_data;
-            var timeEndData = e.time_end_data.split('.').join('');
+            if (e.time_end_data) {
+              var timeEndData = e.time_end_data.split('.').join('');
+            }
             var location = e.location;
             var details = e.details;
             var categoryData = e.category_data;

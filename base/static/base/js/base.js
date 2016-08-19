@@ -32,20 +32,24 @@ $(document).ready(function() {
         if (localStorage.sidebarStatus == 0) {
             $('body').addClass('show-sidebar');
             localStorage.sidebarStatus = 1;
+            if ($(window).width() < 551) {
+              $('#overlay-back').show();
+            }
         } else {
             $('body').removeClass('show-sidebar');
             localStorage.sidebarStatus = 0;
+            $('#overlay-back').hide();
         }
     });
     $('#toggle-right-sidebar').on('click', function(e){e.preventDefault();
-      $('#poll-sidebar-container').fadeToggle();
+      $('#poll-sidebar-container').toggle();
       // Have to check if announcement sidebar is open/closed window.width, and fade state
       if ($(window).width() < 551 && $('#announcement-sidebar-container').css('display') == "none" && $('#overlay-back').css('display') == "none") {
-        $('#overlay-back').fadeIn(500);
+        $('#overlay-back').show();
       } else {
-        $('#overlay-back').fadeOut(500);
+        $('#overlay-back').hide();
       }
-      $('#announcement-sidebar-container').fadeToggle();
+      $('#announcement-sidebar-container').toggle();
     });
 
     // Activate tooltips
