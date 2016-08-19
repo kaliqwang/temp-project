@@ -42,14 +42,19 @@ $(document).ready(function() {
         }
     });
     $('#toggle-right-sidebar').on('click', function(e){e.preventDefault();
-      $('#poll-sidebar-container').toggle();
-      // Have to check if announcement sidebar is open/closed window.width, and fade state
-      if ($(window).width() < 551 && $('#announcement-sidebar-container').css('display') == "none" && $('#overlay-back').css('display') == "none") {
+
+      // Have to check if announcement sidebar is open/closed window.width, and overlay state
+      if ($(window).width() < 551 && $('#poll-sidebar-container').css('display') == "none" && $('#overlay-back').css('display') == "none") {
         $('#overlay-back').show();
+      } else if ($(window).width() < 551 && $('#announcement-sidebar-container').css('display') == "none" && $('#overlay-back').css('display') == "none") {
+              $('#overlay-back').show();
       } else {
         $('#overlay-back').hide();
       }
+
+
       $('#announcement-sidebar-container').toggle();
+      $('#poll-sidebar-container').toggle();
     });
 
     // Activate tooltips

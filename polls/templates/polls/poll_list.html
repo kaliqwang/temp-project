@@ -8,6 +8,10 @@
 
 {% block masthead_polls %}selected{% endblock %}
 
+{% block masthead_bottom_right %}
+   <button><span id="toggle-right-sidebar" class="icon-container"><span class="glyphicon glyphicon-option-vertical"></span></span></button>
+{% endblock %}
+
 {% block sidebar_polls %}selected{% endblock %}
 
 {% block paginator_top %}
@@ -97,10 +101,10 @@
 	<!-- Choice Option Template -->
 	<template id="choice-option-template">
     <div class="choice-option-wrapper row">
-      <div class="col-sm-1 text-right">
+      <div class="col-xs-1 text-right">
         <input id="choice-{% templatetag openvariable %} choicePK {% templatetag closevariable %}" type="radio" name="poll-{% templatetag openvariable %} pollPK {% templatetag closevariable %}" value="{% templatetag openvariable %} choicePK {% templatetag closevariable %}">
       </div>
-      <div class="col-sm-11">
+      <div class="col-xs-11">
         <label for="choice-{% templatetag openvariable %} choicePK {% templatetag closevariable %}" class="poll-choice-label">{% templatetag openvariable %} choiceContent {% templatetag closevariable %}</label>
       </div>
     </div>
