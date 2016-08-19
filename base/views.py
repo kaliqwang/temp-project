@@ -11,5 +11,5 @@ def index(request):
 
 @staff_member_required
 def generator(request):
-    categories_count = Category.objects.all().count()
+    categories_count = Category.objects.count()
     return render(request, 'base/generator.html', {'categories_count': categories_count})
