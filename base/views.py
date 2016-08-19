@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+from categories.models import *
+
 from django.shortcuts import render
 
 from django.contrib.admin.views.decorators import staff_member_required
@@ -9,4 +11,5 @@ def index(request):
 
 @staff_member_required
 def generator(request):
-    return render(request, 'base/generator.html')
+    categories_count = Category.objects.all().count()
+    return render(request, 'base/generator.html', {'categories_count': categories_count})

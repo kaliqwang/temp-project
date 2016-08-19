@@ -67,7 +67,6 @@ class Event(models.Model):
 
     @classmethod
     def generate_random_objects(cls, count):
-        Event.objects.all().delete()
         event_manager = Event.objects
         # Names
         rand_1 = random.randint(100, size=count) # first word
