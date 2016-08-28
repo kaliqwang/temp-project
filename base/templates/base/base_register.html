@@ -22,7 +22,7 @@
           <div class="has-feedback {% if userForm.username.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.username.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
             {{ userForm.username }}
             {% if userForm.username.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{% endif %}
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@
           <div class="has-feedback {% if userForm.password.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.password.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
             {{ userForm.password }}
             {% if userForm.password.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{% endif %}
           </div>
         </div>
       </div>
@@ -42,7 +42,7 @@
           <div class="has-feedback {% if userForm.first_name.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.first_name.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
             {{ userForm.first_name }}
             {% if userForm.first_name.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{% endif %}
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@
           <div class="has-feedback {% if userForm.last_name.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.last_name.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
             {{ userForm.last_name }}
             {% if userForm.last_name.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{% endif %}
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@
           <div class="has-feedback {% if userProfileForm.mobile.errors %}has-error{% elif userProfileForm.is_bound %}has-success{% endif %}" title="{{ userProfileForm.mobile.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
             {{ userProfileForm.mobile }}
             {% if userProfileForm.mobile.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-            {% elif userProfileForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+            {% elif userProfileForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{% endif %}
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
           <div class="has-feedback {% if userForm.email.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.email.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
             {{ userForm.email }}
             {% if userForm.email.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+            {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{% endif %}
           </div>
         </div>
       </div>

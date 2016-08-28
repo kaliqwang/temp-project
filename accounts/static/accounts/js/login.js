@@ -4,3 +4,10 @@ $(document).ready(function() {
         $('#login-modal').modal('show');
     }
 });
+
+$('#login-modal').keypress(function(e) {
+    if (e.which == 13) {
+        $('#login-form').submit();
+        return false;
+    }
+});

@@ -24,28 +24,27 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container-white">
-    <div class="announcement-wrapper">
+  <div id="announcement-{{ announcement.pk }}" class="announcement-wrapper container-white" style="border-left: 5px solid {{ announcement.category.color|default:'#222222' }}" data-category-pk="{{ announcement.category.pk }}">
+    <div class="signature">
       <!-- Announcement Title -->
-      <div class="title"><h4><a href="{% url 'announcements:list' %}"><div>{{ announcement.title }}</div></a></h4></div>
+      <span><a style="font-size: 16px; font-weight: 500" href="{% url 'announcements:list' %}"><div>{{ announcement.title }}</div></a></span> &bull;
       <!-- Announcement Signature -->
-      <div class="signature">
-        <span class="fa fa-clock-o"></span>
-        <span class="datetime">{{ announcement.date_created|date:'F j' }}, {{ announcement.date_created|time:'P' }}</span>
-        | Tags: <span class="label" style="background-color:{{ announcement.category.color|default:'#222222' }}">{{ announcement.category|default_if_none:'Everyone' }}</span>
-      </div>
-      <!-- Announcement Content -->
-      <div class="content">{{ announcement.content }}</div>
+      <span>{{ announcement.category|default_if_none:'General' }}</span>
+      <span class="date-created" style="float:right; margin:3px 0px;">{{ announcement.date_created|date:'M j' }}</span>
+        <!-- <span class="time-created">{% templatetag openvariable %} timeCreated {% templatetag closevariable %}</span> -->
+    </div>
+    <!-- Announcement Content -->
+    <div class="content">{{ announcement.content }}</div>
+    <!-- Announcement Media -->
+    <div class="announcement-media">
       <!-- Announcement Images -->
       <div class="image-list">
         {% for image in announcement.image_files.all %}<div class="image"><a href="{{ image.image_file.url }}" target="_blank" title="Click to open in new tab"><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}{% for image in announcement.image_links.all %}<div class="image"><a href="{{ image.image_link }}" target="_blank" title="Click to open in new tab"><img src="{{ image.image_file_thumbnail.url }}"></a></div>{% endfor %}
       </div>
       <!-- Announcement Videos -->
-      <div class="row">
+      <div class="video-list">
         {% for video in announcement.youtube_videos.all %}
-          <div class="col-xs-6">
-            <div class="embed-responsive embed-responsive-16by9 video"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.youtube_video }}" allowfullscreen></iframe></div>
-          </div>
+          <div class="embed-responsive embed-responsive-16by9 video"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.youtube_video }}" allowfullscreen></iframe></div>
         {% endfor %}
       </div>
     </div>

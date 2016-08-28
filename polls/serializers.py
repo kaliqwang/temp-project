@@ -43,7 +43,7 @@ class PollSerializer(serializers.HyperlinkedModelSerializer):
     	return obj.get_absolute_url()
 
     def get_date_open_data(self, obj):
-        return dateformat.format(obj.date_open, settings.LONG_DATE_FORMAT)
+        return dateformat.format(obj.date_open, settings.SHORT_DATE_FORMAT)
 
     def get_time_open_data(self, obj):
         return dateformat.format(obj.date_open, settings.TIME_FORMAT)

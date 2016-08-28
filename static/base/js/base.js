@@ -22,6 +22,7 @@ $(document).ready(function() {
 
     // Retrieve sidebar status
     // TODO: do sidebar differently? No margin push? simply .show() .hide() sidebar?
+
     if (localStorage.sidebarStatus == 0) {
         $('body').removeClass('show-sidebar');
     }
@@ -31,10 +32,29 @@ $(document).ready(function() {
         if (localStorage.sidebarStatus == 0) {
             $('body').addClass('show-sidebar');
             localStorage.sidebarStatus = 1;
+            if ($(window).width() < 551) {
+              $('#overlay-back').show();
+            }
         } else {
             $('body').removeClass('show-sidebar');
             localStorage.sidebarStatus = 0;
+            $('#overlay-back').hide();
         }
+    });
+    $('#toggle-right-sidebar').on('click', function(e){e.preventDefault();
+
+      // Have to check if announcement sidebar is open/closed window.width, and overlay state
+      if ($(window).width() < 551 && $('#poll-sidebar-container').css('display') == "none" && $('#overlay-back').css('display') == "none") {
+        $('#overlay-back').show();
+      } else if ($(window).width() < 551 && $('#announcement-sidebar-container').css('display') == "none" && $('#overlay-back').css('display') == "none") {
+              $('#overlay-back').show();
+      } else {
+        $('#overlay-back').hide();
+      }
+
+
+      $('#announcement-sidebar-container').toggle();
+      $('#poll-sidebar-container').toggle();
     });
 
     // Activate tooltips
@@ -220,4 +240,8 @@ $(document).ready(function() {
         return false;
     });
 
+    function shadeColor(color, percent) {
+        var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+        return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+    }
 });

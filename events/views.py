@@ -11,10 +11,10 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 @login_required
 def event_list(request):
-    hidden = request.user.profile.categories_hidden_announcements.values_list('pk', flat=True)
-    categories_hidden_announcements = Category.objects.filter(pk__in=hidden)
+    hidden = request.user.profile.categories_hidden_events.values_list('pk', flat=True)
+    categories_hidden_events = Category.objects.filter(pk__in=hidden)
     categories_shown = Category.objects.exclude(pk__in=hidden)
-    return render(request, 'events/event_list.html', {'categories_shown': categories_shown, 'categories_hidden_announcements': categories_hidden_announcements})
+    return render(request, 'events/event_list.html', {'categories_shown': categories_shown, 'categories_hidden_events': categories_hidden_events})
 
 @login_required
 def event_detail(request, pk):
@@ -25,9 +25,14 @@ def event_detail(request, pk):
 def event_create(request):
     form = EventForm(request.POST or None)
     if form.is_valid():
-        form.save()
+        e = form.save(commit=False)
+        e.author = request.user.profile
+        e.save()
+
+        # TODO: Push Notifications
         devices = APNSDevice.objects.all()
         devices.send_message("New Event!");
+
         return redirect('events:list')
     return render(request, 'events/event_create.html', {'form': form})
 
@@ -50,10 +55,11 @@ def event_delete(request, pk):
     return redirect('events:list')
 
 @staff_member_required
-def generator(request, count):
+def generator(request):
     if request.method == 'POST':
-        generated_count = Event.generate_random_objects(int(count))
-        if (generated_count == int(count)):
+        count = int(request.GET.get('count'))
+        generated_count = Event.generate_random_objects(count)
+        if (generated_count == count):
             return HttpResponse('Success: %d events were generated' % generated_count)
         else:
             return HttpResponse('Error: %d events were generated' % generated_count)

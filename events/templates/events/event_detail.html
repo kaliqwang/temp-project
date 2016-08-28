@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block content %}
-  <div id="event-info-wrapper" class="container-white">
+  <div id="event-detail" class="container-white">
     <div id="event-info"></div><hr>
     <div id="event-info-footer" class="text-right"><a href="{% url 'events:list' %}" class="btn btn-sm btn-default">Back to Calendar</a></div>
   </div>
@@ -32,7 +32,7 @@
     <li data-name="{{ event.name }}" data-date-start="{{ event.date_start|date:'M j' }}" data-time-start="{{ event.time_start|default_if_none:'' }}"
       data-date-end="{{ event.date_end|date:'M j' }}" data-time-end="{{ event.time_end|default_if_none:'' }}"
       data-is-multi-day="{{ event.is_multi_day }}" data-location="{{ event.location|default:'TBA' }}" data-details="{{ event.details|default:'TBA' }}">
-      <span class="label" style="background-color:{{ event.category.color|default:'#222222' }}">{{ event.category|default_if_none:'Everyone' }}</span>
+      <span class="label" style="background-color:{{ event.category.color|default:'#222222' }}">{{ event.category|default_if_none:'General' }}</span>
     </li>
   </ul>
 {% endblock %}

@@ -11,7 +11,7 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ('name', 'category', 'location', 'date_start', 'time_start', 'date_end', 'time_end', 'category', 'details')
         widgets = {
-            'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Add a short, clear name'}),
+            'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Add a short, clear name', 'autofocus':'autofocus'}),
             'location': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Include a place or address'}),
             'date_start': forms.TextInput(attrs={'class':'form-control date start', 'placeholder':'mm/dd/yyyy'}),
             'time_start': forms.TextInput(attrs={'class':'form-control time start'}),

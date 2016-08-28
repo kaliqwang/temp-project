@@ -11,6 +11,6 @@ class AnnouncementForm(forms.ModelForm):
         model = Announcement
         fields = ('title', 'category', 'content')
         widgets = {
-            'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Add a short, clear title', 'required':'required'}),
-            'content': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Put the body of your announcement here', 'rows':'4', 'required':'required'}),
+            'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Add a short, clear title', 'required':'required', 'autofocus':'autofocus'}),
+            'content': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Announcement body goes here', 'rows':'4', 'required':'required'}),
         }

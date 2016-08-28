@@ -83,14 +83,18 @@ $(document).ready(function() {
     var $infoBarTopDismiss = $('#info-bar-top-dismiss');
     // Sidebar filter
     var $sidebarFilter = $('#sidebar-filter');
+    var $sidebarFilterOptions = $sidebarFilter.find('.sidebar-filter-option');
     var $sidebarFilterApply = $('#sidebar-filter-apply');
+    var $sidebarFilterReset = $('#sidebar-filter-reset');
     var $sidebarFilterFeedback = $('#sidebar-filter-feedback');
+    var sidebarFilterIsFirstClick = true;
+    var sidebarFilterAppliedCount = $sidebarFilterOptions.filter('.filter-applied').length;
     var profilePK = $('#user-profile-pk').text();
     // Page info
     var previousPage = -1;
     var currentPage = 1;
     var pageCount = 1;
-    var pageSize = 36;
+    var pageSize = 10;
     var is_open = true;
     var is_voted = false;
     // Simple paginator (show more)
@@ -113,7 +117,7 @@ $(document).ready(function() {
     // Render poll list
     renderPollListPageNumber(1, true);
     // Initialize top info bar
-    if ($infoBarTopContent.children().length > 0) showInfoBarTop();
+    if ($infoBarTopContent.children().length > 0) $infoBarTop.show();
 
     // Sidebar show more
     $sidebarShowMore.on('click', function(e) {e.preventDefault();
@@ -194,7 +198,7 @@ $(document).ready(function() {
                             categoryColor = p.category_data.color;
                             categoryPK = p.category_data.pk;
                         } else {
-                            categoryName = 'Everyone';
+                            categoryName = 'General';
                             categoryColor = '#222';
                             categoryPK = '-1';
                         }
@@ -296,78 +300,93 @@ $(document).ready(function() {
         }
     }
 
-    /****************************** Top Info Bar ******************************/
-
-    // Dismiss top info bar
-    $infoBarTopDismiss.on('click', function() {hideInfoBarTop()});
-    // Show top info bar
-    function showInfoBarTop() {
-        $infoBarTop.show();
-    }
-    // Hide top info bar
-    function hideInfoBarTop() {
-        $infoBarTop.hide();
-    }
-
     /***************************** Sidebar Filter *****************************/
 
-    // Add / remove filters
-    $sidebarFilter.on('click', '.sidebar-filter-option', function(e) {e.preventDefault();
-        if ($(this).hasClass('filter-applied')) {$(this).removeClass('filter-applied')}
-        else {$(this).addClass('filter-applied')}
+    if (sidebarFilterAppliedCount > 0) {
+        $sidebarFilterReset.show();
+    }
+
+    // Add/remove tags in filter
+    $sidebarFilterOptions.on('click', function(e){e.preventDefault();
+        if (sidebarFilterIsFirstClick && sidebarFilterAppliedCount == 0) {
+            sidebarFilterIsFirstClick = false;
+            $sidebarFilterOptions.not($(this)).addClass('filter-applied');
+        } else {
+            if ($(this).hasClass('filter-applied')) {
+                $(this).removeClass('filter-applied');
+            } else {
+                $(this).addClass('filter-applied');
+            }
+        }
+        $sidebarFilterReset.hide();
         $sidebarFilterApply.show();
     });
-    // Update filters
-    $sidebarFilterApply.on('click', function(e) {e.preventDefault();
-        updateFilters();
+
+    // Apply/save filter settings
+    $sidebarFilterApply.on('click', function(e){e.preventDefault();
+        applyFilters();
     });
+
+    // Clear/save filter settings
+    $sidebarFilterReset.on('click', function(e){e.preventDefault();
+        resetFilters();
+    });
+
+    // Dismiss top info bar
+    $infoBarTopDismiss.on('click', function() {$infoBarTop.hide()});
+
     // TODO: Could this be optimized to only add/remove the most recently clicked category rather than check the whole list every time? Would that be secure / sync-safe?
-    function updateFilters() {
-        var $categoriesHiddenAnnouncements = $sidebarFilter.find('a.filter-applied');
-        var categoriesHidden = [];
-        $categoriesHiddenAnnouncements.each(function() {
-            categoriesHidden.push($(this).data('pk'));
+    function applyFilters() {
+        var target = '/api/user_profiles/' + profilePK;
+        var categoriesHiddenPolls = [];
+        var $categoriesHiddenPolls = $sidebarFilter.find('a.filter-applied');
+        var infoBarTopContentHTML = '';
+        $categoriesHiddenPolls.each(function(){
+            categoriesHiddenPolls.push($(this).data('pk'));
+            infoBarTopContentHTML += '<li><a href="#" data-pk="' + $(this).data('pk') + '" title="' + $(this).children('.display-name').text() + '" data-toggle="tooltip" data-placement="top" data-trigger="hover">' +
+            '<span class="icon-container" style="color:' + $(this).children('.icon-container').css('color') + '"><span class="glyphicon glyphicon-tag"></span></span>' +
+            '<!-- <span class="display-name">{{ category.name }}</span> -->' +
+            '</a></li>'
         });
-        var target = '/api/user_profiles/' + profilePK
-        console.log('Updating filters...')
+        var data = JSON.stringify({categories_hidden_polls: categoriesHiddenPolls});
+        console.log('Applying filters...')
         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
         console.log('Sending PUT request to ' + target);
-        ajaxStart = performance.now(); // Timestamp
+        var ajaxStart = performance.now();
         $.ajax({
             type: 'PUT',
             url: target,
-            data: JSON.stringify({categories_hidden_announcements: categoriesHidden}),
+            data: data,
             contentType: 'application/json',
             success: function(data){
-                functionStart = performance.now(); // Timestamp
+                var functionStart = performance.now();
                 console.log('Success Callback:\t' + (functionStart - ajaxEnd) + ' milliseconds');
                 console.log('');
-                var infoBarTopContentHTML = '';
-                jQuery.each(data.categories_hidden_announcements_data, function(i, c) {
-                    infoBarTopContentHTML += Mustache.render($infoBarTopTemplate, {
-                        pk: c.pk,
-                        categoryName: c.name,
-                        categoryColor: c.color,
-                    });
-                    if (i == 0) {console.log('Hidden:\t\t\t\t' + c.name)}
-                    else {console.log('\t\t\t\t\t' + c.name)}
-                });
+                $sidebarFilterApply.hide();
+                $sidebarFilterFeedback.show().delay(200).fadeOut(800);
+                $sidebarFilterReset.show();
                 if (infoBarTopContentHTML != '') {
                     $infoBarTopContent.html(infoBarTopContentHTML);
-                    $infoBarTopContent.find('a').tooltip({
-                        animation: false,
-                        placement: 'top',
-                    });
-                    showInfoBarTop();
+                    $infoBarTopContent.find('a').tooltip();
+                    $infoBarTop.show();
                     $infoBarTop.css('background-color', '#dff0d8');
                     $infoBarTop.delay(200).animate({'background-color': '#fff'}, 800);
                 } else {
-                    hideInfoBarTop();
+                    $infoBarTop.hide();
+                }
+                var categories = data.categories_hidden_polls_data;
+                if (categories.length == 0) {
                     console.log('None hidden');
                 }
-                $sidebarFilterApply.hide();
-                $sidebarFilterFeedback.show().delay(200).fadeOut(800);
-                functionEnd = performance.now(); // Timestamp
+                for (var i = 0, len = categories.length; i < len; i++) {
+                    var c = categories[i];
+                    if (i == 0) {
+                        console.log('Hidden:\t\t\t\t' + c.name);
+                    } else {
+                        console.log('\t\t\t\t\t' + c.name);
+                    }
+                }
+                var functionEnd = performance.now();
                 console.log('');
                 console.log('Total:\t\t\t\t' + (functionEnd - ajaxStart) + ' milliseconds');
                 console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
@@ -377,9 +396,51 @@ $(document).ready(function() {
                 console.log('Error');
                 console.log('No changes were made');
                 console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-            },
+            }
         });
-        ajaxEnd = performance.now(); // Timestamp
+        var ajaxEnd = performance.now();
+        console.log('');
+        console.log('Server responded:\t' + (ajaxEnd - ajaxStart) + ' milliseconds');
+    }
+    function resetFilters() {
+        var target = '/api/user_profiles/' + profilePK;
+        var infoBarTopContentHTML = '';
+        var data = {
+            categories_hidden_polls: [],
+        };
+        console.log('Clearing filters...')
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+        console.log('Sending PUT request to ' + target);
+        var ajaxStart = performance.now();
+        $.ajax({
+            type: 'PUT',
+            url: target,
+            data: data,
+            contentType: 'application/json',
+            success: function(data){
+                var functionStart = performance.now();
+                console.log('Success Callback:\t' + (functionStart - ajaxEnd) + ' milliseconds');
+                console.log('');
+                $sidebarFilterReset.hide();
+                $sidebarFilterFeedback.show().delay(200).fadeOut(800);
+                $sidebarFilterOptions.removeClass('filter-applied');
+                sidebarFilterIsFirstClick = true;
+                sidebarFilterAppliedCount = 0;
+                $infoBarTop.hide();
+                console.log('None hidden');
+                var functionEnd = performance.now();
+                console.log('');
+                console.log('Total:\t\t\t\t' + (functionEnd - ajaxStart) + ' milliseconds');
+                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+                renderPollListPageNumber(1, true);
+            },
+            error: function() {
+                console.log('Error');
+                console.log('No changes were made');
+                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+            }
+        });
+        var ajaxEnd = performance.now();
         console.log('');
         console.log('Server responded:\t' + (ajaxEnd - ajaxStart) + ' milliseconds');
     }
@@ -394,6 +455,37 @@ $(document).ready(function() {
             renderPollListTarget($(this).data('target'), false);
         }
     });
+
+    // TODO: New code: automatic show more on scroll
+
+    // TODO: Check if list is long enough to even scroll:
+    if ($(document).height() > $(window).height()) {
+        // If it is, apply the automatic show more on scroll to bottom handler:
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() == $(document).height()) {
+                if (currentPage < pageCount) {
+                    previousPage = currentPage;
+                    currentPage++;
+                    renderPollListTarget($paginatorShowMore.data('target'), false);
+                }
+             }
+        });
+    }
+
+    var $pollSidebarContainer = $('#poll-sidebar-container');
+    // TODO: Check if list is long enough to even scroll:
+    // if ($pollSidebar[0].scrollHeight > $pollSidebarContainer.height()) {
+        $pollSidebar.scroll(function() {
+            if($pollSidebar.scrollTop() + $pollSidebarContainer.height() == $pollSidebar[0].scrollHeight) {
+                var newPage = $paginatorPageNumbers.data('current-page') + 1;
+                if (newPage <= pageCount) {
+                    $paginatorPageNumbers.data('current-page', newPage);
+                }
+                renderPollListTarget($paginatorShowMore.data('target'), false);
+             }
+        });
+    // }
+
     // Standard paginator (page numbers)
     $paginatorFirst.on('click', function(e) {e.preventDefault();
           previousPage = currentPage;
@@ -436,7 +528,7 @@ $(document).ready(function() {
 
         var state = $(this).data('state');
 
-      	var $target = $(this).parent().siblings('.choice-container');
+      	var $target = $(this).closest('.row').siblings('.choice-container');
         var $choiceSelected = $target.find('input:checked');
 		    var pk = $target.parent().data('pk');
 

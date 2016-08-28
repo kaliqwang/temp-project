@@ -177,7 +177,7 @@
           <div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button><h4 class="modal-title">Log in</h4></div>
           <div class="modal-body">
             <form id="login-form" action="{{ request.get_full_path }}" method="post">{% csrf_token %}
-              <input type="text" class="form-control" name="username" placeholder="Username"><br>
+              <input type="text" class="form-control" name="username" placeholder="Username" autofocus><br>
               <input type="password" class="form-control" name="password" placeholder="Password"><br>
             </form>
             <div id="login-form-footer">

@@ -24,46 +24,35 @@
 {% endblock %}
 
 {% block content %}
-  <div id="poll-{{ poll.pk }}" class="poll-wrapper container-white"
-    data-votes="{{ poll.votes.count }}"
-    data-author="{{ poll.author.pk }}"
-    data-date-open="{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}"
-    data-date-close="{{ poll.date_close|date:'F j' }}, {{ poll.date_close|time:'P' }}"
-    data-is-open="{{ poll.is_open }}"
-    data-category="{{ poll.category.pk }}">
-    <!-- How to pass python dict context variable containing vote count for each choice and total? -->
-
+  <div id="poll-{{ poll.pk }}"class="poll-wrapper container-white" data-pk="{{ poll.pk }}" style="border-left: 5px solid {{ poll.category.color|default:'#222222' }}">
     <!-- Poll Content -->
-    <div class="content" style="border-bottom:2px solid {{ poll.category.color|default:'#222222' }}; padding: 10px 0;"><a href="{{ poll.get_absolute_url }}"><h4>{{ poll.content }}</h4></a></div>
-    <!-- Poll Signature -->
-    <div class="signature">
-      <span class="fa fa-clock-o"></span>
-      <span class="datetime">{{ poll.date_open|date:'F j' }}, {{ poll.date_open|time:'P' }}</span>
-      | Tags: <span class="label" style="background-color:{{ poll.category.color|default:'#222222' }}">{{ poll.category|default_if_none:'Everyone' }}</span>
-    </div>
+    <div class="content"><h4><a href="{% url 'polls:list' %}" style="font-size:16px; font-weight:500"><div>{{ poll.content }}</div></a></h4></div>
     <!-- Poll Choices -->
-    <div class="poll-choices">
+    <div class="choice-container">
       {% for choice in poll.choices.all %}
-        <div class="row choice-wrapper">
-          <div class="col-xs-2 text-right">
+        <div class="choice-option-wrapper row">
+          <div class="col-xs-1 text-right">
             <input id="choice-{{ choice.pk }}" type="radio" name="poll-{{ poll.pk }}" value="{{ choice.pk }}">
           </div>
-          <div class="col-xs-10">
+          <div class="col-xs-11">
             <label for="choice-{{ choice.pk }}" class="poll-choice-label">{{ choice.content }}</label>
           </div>
         </div>
       {% endfor %}
     </div>
-    <!-- Buttons -->
-    <div class="row poll-bottom">
-      <div class="col-xs-5">
-        <input id="poll-{{ poll.pk }}-anonymous" type="checkbox" class="left-block" name="anonymous-submit" value="True">
-        <label for="poll-{{ poll.pk }}-anonymous">Vote anonymously</label>
+    <div class="row">
+      <div class="col-xs-6">
+        <!-- Poll Signature -->
+        <div class="signature">
+          <span>{{ poll.category|default_if_none:'General' }}</span> &bull;
+          <span class="date-open">{{ poll.date_open|date:'M j' }}</span>
+        </div>
       </div>
-      <div class="col-xs-5 col-xs-offset-2">
-        <button type="button" class="btn btn-default btn-sm show-results">Show Results</button>
-        <button type="button" class="btn btn-custom btn-sm submit-poll">Submit</button>
-        <button type="button" class="btn btn-default btn-sm submit-poll hidden">Change Vote</button>
+      <div class="col-xs-6">
+        <!-- Buttons -->
+        <div class="poll-buttons text-right">
+          <button type="button" class="btn btn-custom btn-sm poll-vote">Vote</button>
+        </div>
       </div>
     </div>
   </div>

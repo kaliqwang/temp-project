@@ -85,9 +85,9 @@ form:not(#login-form) {
 /******************************* Announcements ********************************/
 
 /* announcement_list / announcement_detail */
-@media (min-width: 514px) {
+@media (min-width: 515px) {
   #announcement-list {
-      width: 514px;
+      width: 515px;
       margin: 0px auto;
   }
 }
@@ -131,10 +131,10 @@ form:not(#login-form) {
     display: none;
 }
 .announcement-wrapper .title {
-  margin-bottom:5px;
+    margin-bottom:5px;
 }
-.video {
-    max-width: 480px;
+.youtube-video-preview-wrapper a:hover {
+    text-decoration:underline;
 }
 
 /* announcement_create / announcement_update */
@@ -187,24 +187,21 @@ form:not(#login-form) {
 /*********************************** Events ***********************************/
 
 /* event_list / event_detail */
-#event-list-container {
-  width:514px;
-  margin: 0px auto;
+@media (min-width: 515px) {
+    #event-list {
+        width: 515px;
+        margin: 0px auto;
+    }
 }
 #event-list {
-    padding: 15px 30px;
+    padding: 20px;
     color: #444;
 }
 #event-list .month-header {
     color: inherit;
     border-bottom: 2px solid;
     border-color: inherit;
-    padding-top: 15px;
-}
-#event-list .month-header:hover {
-    color: #1e18cc;
-    border-color: #1e18cc;
-    cursor: pointer;
+    padding: 5px 0px;
 }
 #event-list .date-header {
     padding-top: 20px;
@@ -230,13 +227,13 @@ form:not(#login-form) {
 }
 #event-info ul {
     padding: 0px;
-    padding: 15px 20px;
+    padding: 15px;
 }
 #event-info ul li {
     padding: 5px;
 }
 #event-info-footer {
-    padding: 10px;
+    padding: 15px;
 }
 #event-info-wrapper hr {
     margin: 0px -10px;
@@ -244,13 +241,22 @@ form:not(#login-form) {
 #event-info-dismiss {
     padding: 5px 10px;
 }
+#event-detail hr {
+    margin: 0px;
+}
 
 /*********************************** Polls ************************************/
 
 /* poll_list */
+@media (min-width: 515px) {
+    #poll-list {
+        width: 515px;
+        margin: 0px auto;
+    }
+}
 .poll-wrapper {
     padding: 15px 15px 5px 15px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 .poll-wrapper.selected {
     padding-left: 55px;
@@ -258,18 +264,21 @@ form:not(#login-form) {
     margin-left: -40px;
     margin-right: -40px;
 }
-.poll-wrapper .choice-container, .poll-wrapper .poll-buttons, .poll-wrapper .signature {
+.poll-wrapper .choice-container, .poll-wrapper .poll-buttons, .poll-wrapper .content {
     margin-bottom: 10px;
+}
+.poll-wrapper a:hover {
+    color: #1e18cc;
+    text-decoration: underline;
 }
 /*.poll-wrapper .choice-container {
     border-bottom: 1px solid #e8e8e8;
 }*/
-.poll-wrapper .content {
-    margin-bottom: 5px;
-}
 .poll-wrapper .signature {
     font-size:13px;
+    margin: 6px 0px;
     color: #888;
+    vertical-align: middle;
 }
 .poll-wrapper label {
     font-weight: normal;
@@ -327,26 +336,13 @@ form:not(#login-form) {
 }
 
 /*************************** generator ***************************/
-
-#generator-container {
+#generator {
+    padding: 15px;
     text-align: center;
 }
-#generator {
-    display: inline-block;
-    width: 500px;
-    margin: auto;
-    padding: 20px;
+#generator .generator-header {
+    margin-top: 10px;
 }
-.generator-section {
-    padding: 10px;
-}
-.generator-section .glyphicon {
+#generator .glyphicon {
     display: none;
-}
-.generator-section button, {
-    display: inline-block;
-}
-.generator-section-header {
-    display: inline-block;
-    padding: 0px 10px;
 }

@@ -25,7 +25,7 @@
       <div class="has-feedback {% if teacherProfileForm.room.errors %}has-error{% elif teacherProfileForm.is_bound %}has-success{% endif %}" title="{{ teacherProfileForm.room.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
         {{ teacherProfileForm.room }}
         {% if teacherProfileForm.room.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-        {% elif teacherProfileForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback">{% endif %}
+        {% elif teacherProfileForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{% endif %}
       </div>
     </div>
   </div>

@@ -51,7 +51,7 @@ $(document).ready(function() {
     var $announcementItems = $('.announcement-wrapper');
     var $itemsCollapse = $('.start-hidden');
 
-    var pageSize = 40;
+    var pageSize = 20;
     var pageCount = 1;
     var $paginatorSimple = $('#paginator-simple');
     var $paginatorShowMore = $('#paginator-show-more');
@@ -65,12 +65,16 @@ $(document).ready(function() {
     var $paginatorPageNumbers = $('#paginator-page-numbers');
 
     var $sidebarFilter = $('#sidebar-filter');
+    var $sidebarFilterOptions = $sidebarFilter.find('.sidebar-filter-option');
     var $sidebarFilterApply = $('#sidebar-filter-apply');
+    var $sidebarFilterReset = $('#sidebar-filter-reset');
     var $sidebarFilterFeedback = $('#sidebar-filter-feedback');
+    var sidebarFilterIsFirstClick = true;
+    var sidebarFilterAppliedCount = $sidebarFilterOptions.filter('.filter-applied').length;
 
-    var $InfoBarTop = $('#info-bar-top');
-    var $InfoBarTopContent = $('#info-bar-top-content');
-    var $InfoBarTopDismiss = $('#info-bar-top-dismiss');
+    var $infoBarTop = $('#info-bar-top');
+    var $infoBarTopContent = $('#info-bar-top-content');
+    var $infoBarTopDismiss = $('#info-bar-top-dismiss');
 
     var $showMoreAll = $('#show-more-all');
 
@@ -79,8 +83,8 @@ $(document).ready(function() {
     /****************************** On Page Load ******************************/
 
     renderAnnouncementListPageNumber();
-    if ($InfoBarTopContent.children().length > 0) {
-        $InfoBarTop.show();
+    if ($infoBarTopContent.children().length > 0) {
+        $infoBarTop.show();
     }
 
     /***************************** Event Handlers *****************************/
@@ -147,6 +151,37 @@ $(document).ready(function() {
         }
         renderAnnouncementListTarget($paginatorShowMore.data('target'), false);
     });
+
+    // TODO: New code: automatic show more on scroll
+
+    // TODO: Check if list is long enough to even scroll:
+    if ($(document).height() > $(window).height()) {
+        // If it is, apply the automatic show more on scroll to bottom handler:
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() == $(document).height()) {
+                var newPage = $paginatorPageNumbers.data('current-page') + 1;
+                if (newPage <= pageCount) {
+                    $paginatorPageNumbers.data('current-page', newPage);
+                }
+                renderAnnouncementListTarget($paginatorShowMore.data('target'), false);
+             }
+        });
+    }
+
+    var $announcementSidebarContainer = $('#announcement-sidebar-container');
+    // TODO: Check if list is long enough to even scroll:
+    // if ($announcementSidebar[0].scrollHeight > $announcementSidebarContainer.height()) {
+        $announcementSidebar.scroll(function() {
+            if($announcementSidebar.scrollTop() + $announcementSidebarContainer.height() == $announcementSidebar[0].scrollHeight) {
+                var newPage = $paginatorPageNumbers.data('current-page') + 1;
+                if (newPage <= pageCount) {
+                    $paginatorPageNumbers.data('current-page', newPage);
+                }
+                renderAnnouncementListTarget($paginatorShowMore.data('target'), false);
+             }
+        });
+    // }
+
     $paginatorPrevious.on('click', function(e){e.preventDefault();
         if ($(this).data('target')) {
             var newPage = $paginatorPageNumbers.data('current-page') - 1;
@@ -171,26 +206,6 @@ $(document).ready(function() {
         renderAnnouncementListPageNumber($(this).data('target'));
     });
 
-    // Add/remove tags in filter
-    $sidebarFilter.on('click', 'li > a', function(e){e.preventDefault();
-        if ($(this).hasClass('filter-applied')) {
-            $(this).removeClass('filter-applied');
-        } else {
-            $(this).addClass('filter-applied');
-        }
-        $sidebarFilterApply.show();
-    });
-
-    // Apply/save filter settings
-    $sidebarFilterApply.on('click', function(e){e.preventDefault();
-        applyFilters();
-    });
-
-    // Dismiss info box top
-    $InfoBarTopDismiss.on('click', function(e){e.preventDefault();
-        $InfoBarTop.hide();
-    });
-
     // Show-more (single announcement)
     $announcementList.on('click', '.show-more', function(){
         console.log('Show more (announcement)...');
@@ -199,6 +214,15 @@ $(document).ready(function() {
         var $media = $(this).siblings('.announcement-media')
         var $itemsCollapseLocal = $media.find('.start-hidden');
         var $videoList = $media.find('.video-list');
+        if ($(this).data('state') != 1) {
+            $(this).data('state', 1);
+            $itemsCollapseLocal.show();
+            $(this).text('Show Less');
+        } else {
+            $(this).data('state', 0);
+            $itemsCollapseLocal.hide();
+            $(this).text('Show More');
+        }
         if ($videoList.data('loaded') != 1) {
             var videoListHTML = '';
             $videoList.children('li').each(function(){
@@ -208,15 +232,6 @@ $(document).ready(function() {
             });
             $videoList.append(videoListHTML);
             $videoList.data('loaded', 1);
-        }
-        if ($(this).data('state') != 1) {
-            $(this).data('state', 1);
-            $itemsCollapseLocal.slideDown(200);
-            $(this).text('Show Less');
-        } else {
-            $(this).data('state', 0);
-            $itemsCollapseLocal.slideUp(200);
-            $(this).text('Show More');
         }
         var functionEnd = performance.now();
         console.log('Time: ' + (functionEnd - functionStart) + ' milliseconds');
@@ -228,7 +243,6 @@ $(document).ready(function() {
         console.log('Show more (all announcements)...');
         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
         var functionStart = performance.now();
-        loadVideos();
         if ($(this).data('state') != 1) {
             $(this).data('state', 1);
             $itemsCollapse.show();
@@ -244,6 +258,7 @@ $(document).ready(function() {
             $(this).find('.glyphicon').addClass('glyphicon-resize-full');
             $('.show-more').text('Show More');
         }
+        loadVideos();
         var functionEnd = performance.now();
         console.log('Total:\t\t\t\t' + (functionEnd - functionStart) + ' milliseconds');
         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
@@ -319,7 +334,7 @@ $(document).ready(function() {
                             categoryColor = a.category_data.color;
                             categoryPK = a.category_data.pk;
                         } else {
-                            categoryName = 'Everyone';
+                            categoryName = 'General';
                             categoryColor = '#222';
                             categoryPK = '-1';
                         }
@@ -473,15 +488,52 @@ $(document).ready(function() {
         });
     }
 
+    /***************************** Sidebar Filter *****************************/
+
+    if (sidebarFilterAppliedCount > 0) {
+        $sidebarFilterReset.show();
+    }
+
+    // Add/remove tags in filter
+    $sidebarFilterOptions.on('click', function(e){e.preventDefault();
+        if (sidebarFilterIsFirstClick && sidebarFilterAppliedCount == 0) {
+            sidebarFilterIsFirstClick = false;
+            $sidebarFilterOptions.not($(this)).addClass('filter-applied');
+        } else {
+            if ($(this).hasClass('filter-applied')) {
+                $(this).removeClass('filter-applied');
+            } else {
+                $(this).addClass('filter-applied');
+            }
+        }
+        $sidebarFilterReset.hide();
+        $sidebarFilterApply.show();
+    });
+
+    // Apply/save filter settings
+    $sidebarFilterApply.on('click', function(e){e.preventDefault();
+        applyFilters();
+    });
+
+    // Clear/save filter settings
+    $sidebarFilterReset.on('click', function(e){e.preventDefault();
+        resetFilters();
+    });
+
+    // Dismiss info box top
+    $infoBarTopDismiss.on('click', function(e){e.preventDefault();
+        $infoBarTop.hide();
+    });
+
     // TODO: Could this be optimized to only add/remove the most recently clicked category rather than check the whole list every time? Would that be secure / sync-safe?
     function applyFilters() {
         var target = '/api/user_profiles/' + profilePK;
         var categoriesHiddenAnnouncements = [];
         var $categoriesHiddenAnnouncements = $sidebarFilter.find('a.filter-applied');
-        var InfoBarTopContentHTML = '';
+        var infoBarTopContentHTML = '';
         $categoriesHiddenAnnouncements.each(function(){
             categoriesHiddenAnnouncements.push($(this).data('pk'));
-            InfoBarTopContentHTML += '<li><a href="#" data-pk="' + $(this).data('pk') + '" title="' + $(this).children('.display-name').text() + '" data-toggle="tooltip" data-placement="top" data-trigger="hover">' +
+            infoBarTopContentHTML += '<li><a href="#" data-pk="' + $(this).data('pk') + '" title="' + $(this).children('.display-name').text() + '" data-toggle="tooltip" data-placement="top" data-trigger="hover">' +
             '<span class="icon-container" style="color:' + $(this).children('.icon-container').css('color') + '"><span class="glyphicon glyphicon-tag"></span></span>' +
             '<!-- <span class="display-name">{{ category.name }}</span> -->' +
             '</a></li>'
@@ -502,18 +554,19 @@ $(document).ready(function() {
                 console.log('');
                 $sidebarFilterApply.hide();
                 $sidebarFilterFeedback.show().delay(200).fadeOut(800);
-                if (InfoBarTopContentHTML != '') {
-                    $InfoBarTopContent.html(InfoBarTopContentHTML);
-                    $InfoBarTopContent.find('a').tooltip();
-                    $InfoBarTop.show();
-                    $InfoBarTop.css('background-color', '#dff0d8');
-                    $InfoBarTop.delay(200).animate({'background-color': '#fff'}, 800);
+                $sidebarFilterReset.show();
+                if (infoBarTopContentHTML != '') {
+                    $infoBarTopContent.html(infoBarTopContentHTML);
+                    $infoBarTopContent.find('a').tooltip();
+                    $infoBarTop.show();
+                    $infoBarTop.css('background-color', '#dff0d8');
+                    $infoBarTop.delay(200).animate({'background-color': '#fff'}, 800);
                 } else {
-                    $InfoBarTop.hide();
+                    $infoBarTop.hide();
                 }
                 var categories = data.categories_hidden_announcements_data;
                 if (categories.length == 0) {
-                    console.log('None hidden')
+                    console.log('None hidden');
                 }
                 for (var i = 0, len = categories.length; i < len; i++) {
                     var c = categories[i];
@@ -523,6 +576,48 @@ $(document).ready(function() {
                         console.log('\t\t\t\t\t' + c.name);
                     }
                 }
+                var functionEnd = performance.now();
+                console.log('');
+                console.log('Total:\t\t\t\t' + (functionEnd - ajaxStart) + ' milliseconds');
+                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+                renderAnnouncementListPageNumber();
+            },
+            error: function() {
+                console.log('Error');
+                console.log('No changes were made');
+                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+            }
+        });
+        var ajaxEnd = performance.now();
+        console.log('');
+        console.log('Server responded:\t' + (ajaxEnd - ajaxStart) + ' milliseconds');
+    }
+    function resetFilters() {
+        var target = '/api/user_profiles/' + profilePK;
+        var infoBarTopContentHTML = '';
+        var data = {
+            categories_hidden_announcements: [],
+        };
+        console.log('Clearing filters...')
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+        console.log('Sending PUT request to ' + target);
+        var ajaxStart = performance.now();
+        $.ajax({
+            type: 'PUT',
+            url: target,
+            data: data,
+            contentType: 'application/json',
+            success: function(data){
+                var functionStart = performance.now();
+                console.log('Success Callback:\t' + (functionStart - ajaxEnd) + ' milliseconds');
+                console.log('');
+                $sidebarFilterReset.hide();
+                $sidebarFilterFeedback.show().delay(200).fadeOut(800);
+                $sidebarFilterOptions.removeClass('filter-applied');
+                sidebarFilterIsFirstClick = true;
+                sidebarFilterAppliedCount = 0;
+                $infoBarTop.hide();
+                console.log('None hidden');
                 var functionEnd = performance.now();
                 console.log('');
                 console.log('Total:\t\t\t\t' + (functionEnd - ajaxStart) + ' milliseconds');

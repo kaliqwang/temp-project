@@ -11,13 +11,14 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 @login_required
 def poll_list(request):
-    hidden = request.user.profile.categories_hidden_announcements.values_list('pk', flat=True)
-    categories_hidden_announcements = Category.objects.filter(pk__in=hidden)
+    hidden = request.user.profile.categories_hidden_polls.values_list('pk', flat=True)
+    categories_hidden_polls = Category.objects.filter(pk__in=hidden)
     categories_shown = Category.objects.exclude(pk__in=hidden)
-    return render(request, 'polls/poll_list.html', {'categories_shown': categories_shown, 'categories_hidden_announcements': categories_hidden_announcements})
+    return render(request, 'polls/poll_list.html', {'categories_shown': categories_shown, 'categories_hidden_polls': categories_hidden_polls})
 
 @login_required
 def poll_detail(request, pk):
+    # TODO: display poll detail based on status (new, voted, closed)
     poll = Poll.objects.get(pk=pk)
     return render(request, 'polls/poll_detail.html', {'poll': poll})
 
@@ -28,12 +29,16 @@ def poll_create(request):
         p = form.save(commit=False)
         p.author = request.user.profile
         p.save()
+
         choices = request.POST.getlist('choice[]')
         for choice in choices:
             c = Choice(content=choice, poll=p)
             c.save()
+
+        # TODO: Push Notifications
         devices = APNSDevice.objects.all()
         devices.send_message("New Poll!");
+
         return redirect('polls:list')
     return render(request, 'polls/poll_create.html', {'form': form})
 
@@ -88,11 +93,12 @@ def get_vote_count(request, choice_pk):
     return HttpResponse(-1)
 
 @staff_member_required
-def generator(request, count):
+def generator(request):
     if request.method == 'POST':
+        count = int(request.GET.get('count'))
         add_votes = (request.GET.get('add_votes') == 'true')
-        generated_count = Poll.generate_random_objects(int(count), add_votes=add_votes)
-        if (generated_count == int(count)):
+        generated_count = Poll.generate_random_objects(count, add_votes=add_votes)
+        if (generated_count == count):
             if add_votes:
                 return HttpResponse('Success: %d polls were generated with votes' % generated_count)
             else:

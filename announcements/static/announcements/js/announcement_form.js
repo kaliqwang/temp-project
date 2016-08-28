@@ -116,9 +116,15 @@ $(document).ready(function() {
 
     $youTubeVideosAdd.on('change', function(){
         var videoID = $(this).val().split('v=')[1];
+        if (!videoID) {
+            videoID = e.originalEvent.clipboardData.getData('text').split('youtu.be/')[1];
+        }
         addYouTubeVideo(videoID, $youTubeVideosPreview);
     }).on('paste', function(e){
         var videoID = e.originalEvent.clipboardData.getData('text').split('v=')[1];
+        if (!videoID) {
+            videoID = e.originalEvent.clipboardData.getData('text').split('youtu.be/')[1];
+        }
         addYouTubeVideo(videoID, $youTubeVideosPreview);
     });
 

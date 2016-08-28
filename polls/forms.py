@@ -11,5 +11,5 @@ class PollForm(forms.ModelForm):
         model = Poll
         fields = ('content', 'category')
         widgets = {
-            'content': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What is your favorite ice cream flavor?', 'required':'required'}),
+            'content': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What is your favorite ice cream flavor?', 'required':'required', 'autofocus':'autofocus'}),
         }

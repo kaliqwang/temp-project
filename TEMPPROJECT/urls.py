@@ -30,5 +30,4 @@ urlpatterns += [
     #url(r'^', include(router.urls)),
     url(r'^device/apns/?$', APNSDeviceAuthorizedViewSet.as_view({'post': 'create'}), name='create_apns_device'),
 ]
-
 urlpatterns = format_suffix_patterns(urlpatterns)

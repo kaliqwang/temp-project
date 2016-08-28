@@ -84,12 +84,11 @@ ul {list-style:none; margin:0px; padding:0px}
 #sidebar .sidebar-header a:hover {text-decoration:underline}
 /* Sidebar Filter Button */
 #sidebar-filter-show-more {padding-left:41px}
-#sidebar-filter-hover-button, #sidebar-filter-apply {float:right; text-align:center; visibility:hidden}
-#sidebar-filter:hover #sidebar-filter-hover-button,
-#sidebar-filter:hover #sidebar-filter-apply {visibility:visible}
+#sidebar-filter-apply, #sidebar-filter-reset {float:right; text-align:center; visibility:hidden}
+#sidebar-filter:hover #sidebar-filter-apply, #sidebar-filter:hover #sidebar-filter-reset {visibility:visible}
 /* Sidebar Feedback */
-#sidebar-filter-apply, #sidebar-filter-feedback {display:none; padding:0px 3px}
-#sidebar-filter-feedback {float:right; text-align:center}
+#sidebar-filter-feedback {display:inline-block; text-align:center; margin-left:36px}
+#sidebar-filter-apply, #sidebar-filter-reset, #sidebar-filter-feedback {display:none; padding:0px 3px}
 #sidebar-filter-feedback .icon-container {padding:0px}
 
 /**************************** Announcement Sidebar ****************************/
@@ -120,11 +119,11 @@ ul {list-style:none; margin:0px; padding:0px}
  #announcement-sidebar .sidebar-header a:hover {text-decoration:underline}
 /**************************** Section 3: Main Page ****************************/
 
-#main-page-content {margin-top:8px}
+#main-page-content {margin-top:15px}
 
 /*************************** Section 4: Site Footer ***************************/
 
-#site-footer {height:100px; margin-top:40px; border-top:1px solid #e8e8e8}
+#site-footer {position:relative; bottom: 0px; height:100px; margin-top:40px; border-top:1px solid #e8e8e8}
 
 /***************************** Bootstrap Override *****************************/
 
@@ -133,7 +132,7 @@ ul {list-style:none; margin:0px; padding:0px}
 }
 
 .container {
-  width: 514px;
+  width: 515px;
 }
 
 /*NOTE: Sidebar now overlaps at all levels*/
@@ -143,7 +142,7 @@ ul {list-style:none; margin:0px; padding:0px}
   body.show-sidebar #main-page,
   body.show-sidebar #site-footer {margin-left:0px}
 }*/
-@media (max-width: 514px) { /* 400px is current width of app bar links */
+@media (max-width: 515px) { /* 400px is current width of app bar links */
   #masthead { /* Below 400px do something special with appbar? maybe turn it into vertical drop down menu? */
     width: 100%;
     /*NOTE: Logout button becomes unaccessible; add to sidebar?*/
@@ -169,13 +168,13 @@ ul {list-style:none; margin:0px; padding:0px}
     width: 100%;
   }
 }
-@media (min-width: 514px) {
-  .announcement-paginator {width: 514px}
+@media (min-width: 515px) {
+  .announcement-paginator {width: 515px}
   #event-list {
-    width: 514px;
+    width: 515px;
   }
 }
-@media (min-width: 400px)  (max-width: 514px) {
+@media (min-width: 400px)  (max-width: 515px) {
   #masthead {
     width: 100%;
   }
@@ -183,9 +182,9 @@ ul {list-style:none; margin:0px; padding:0px}
     width: 100%;
   }
 }
-@media (min-width: 514px) {
+@media (min-width: 515px) {
   .container {
-    width: 514px;
+    width: 515px;
   }
 
 }
@@ -198,7 +197,7 @@ ul {list-style:none; margin:0px; padding:0px}
 }
 
 /* First level (1 column)*/
-@media (min-width: 520px) and (max-width: 790px) {
+@media (min-width: 515px) and (max-width: 790px) {
   body.show-sidebar #masthead-bottom,
   body.show-sidebar #main-page,
   body.show-sidebar #site-footer {margin-left:0px}
@@ -310,15 +309,16 @@ ul {list-style:none; margin:0px; padding:0px}
 
 /********************************* Paginator **********************************/
 
-#paginator-standard, #paginator-simple, #info-bar-top {min-height: 40px; line-height:40px; margin: 15px auto; clear:both}
+#paginator-month, #paginator-standard, #paginator-simple, #info-bar-top {min-height: 40px; line-height:40px; margin-bottom:15px; color:#888}
 
+.paginator-month-link {padding:0px 2px}
+.paginator-month-link:hover {text-decoration:underline}
 
-
-.paginator-link {height: 40px; line-height: 40px;padding: 0px 15px; color: #888}
+.paginator-link {height:40px; line-height:40px; padding:0px 15px}
 .paginator-link:hover {background-color:#444; color:#fff}
 .paginator-link.selected {background-color:#1e18cc; color: #fff; font-weight:500}
 
-#info-bar-top {color:#888; display:none}
+#info-bar-top {display:none}
 #info-bar-top li {display:inline-block}
 #info-bar-top-dismiss {height:40px; line-height:40px; padding:0px 15px; vertical-align:middle}
 
@@ -327,13 +327,13 @@ ul {list-style:none; margin:0px; padding:0px}
 
 /********************************* Poll List **********************************/
 
-@media (min-width: 514px) {
+@media (min-width: 515px) {
   #poll-list {
-      width: 514px;
+      width: 515px;
       margin: 0px auto;
   }
-  .poll-paginator {width: 514px}
-  .event-paginator {width: 514px;}
+  .poll-paginator {width: 515px}
+  .event-paginator {width: 515px;}
 }
 
 

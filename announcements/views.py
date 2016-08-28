@@ -45,8 +45,11 @@ def announcement_create(request):
         for youtube_video in youtube_videos:
             video = YouTubeVideo(youtube_video=youtube_video, announcement=a)
             video.save()
+
+        # TODO: Push Notifications
         devices = APNSDevice.objects.all()
         devices.send_message("New Announcement!");
+
         return redirect('announcements:list')
     return render(request, 'announcements/announcement_create.html', {'form': form})
 
@@ -106,10 +109,11 @@ def ytdata(request, video_id):
         raise Http404()
 
 @staff_member_required
-def generator(request, count):
+def generator(request):
     if request.method == 'POST':
-        generated_count = Announcement.generate_random_objects(int(count))
-        if (generated_count == int(count)):
+        count = int(request.GET.get('count'))
+        generated_count = Announcement.generate_random_objects(count)
+        if (generated_count == count):
             return HttpResponse('Success: %d announcements were generated' % generated_count)
         else:
             return HttpResponse('Error: %d announcements were generated' % generated_count)

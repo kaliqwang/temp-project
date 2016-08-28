@@ -7,118 +7,78 @@
 {% block sidebar_generator %}selected{% endblock %}
 
 {% block content %}
-  <div id="generator-container">
-    <div id="generator" class="container-white">
-      {% if categories_count > 0 %}
-        <div id="generator-announcement"class="generator-section">
-          <div class="row">
-            <div class="col-sm-4 text-right">
-              <h5 class="generator-section-header">Announcements: </h5>
-            </div>
-            <div class="col-sm-8 text-center">
-              <button id="a_1" class="btn btn-custom" class="btn btn-custom" title="~ 400 ms" >1
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="a_10" class="btn btn-custom" title="~ 4 sec" >10
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="a_100" class="btn btn-custom" title="~ 40 sec" >100
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok">
-                </button>&nbsp;
-              <button id="a_1000" class="btn btn-custom" title="~ 400 sec (guess)" >1000
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
+  <div id="generator" class="container-white">
+    {% if categories_count > 0 %}
+      <h3 class="generator-header">Random Generator</h3>
+      <h5>(Some items will take longer to generate than others.)</h5><hr>
+      <div id="generator-announcement">
+        <div class="row">
+          <div class="col-sm-6"><h5 class="generator-section-header">Announcements ({{ announcements_count }} total):</h5></div>
+          <div class="col-sm-3">
+            <div class="form-group has-feedback">
+              <input type="text" class="form-control" name="generator-announcement-count" placeholder="(1 - 999)" maxlength="3">
+              <span class="glyphicon form-control-feedback"></span>
             </div>
           </div>
+          <div class="col-sm-3"><button id="submit-generator-announcement" class="btn btn-custom">Generate</button></div>
         </div>
-        <div id="generator-event" class="generator-section">
-          <div class="row">
-            <div class="col-sm-4 text-right">
-              <h5 class="generator-section-header">Events: </h5>
-            </div>
-            <div class="col-sm-8 text-center">
-              <button id="e_1" class="btn btn-custom" title="20 ms" >1
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="e_10" class="btn btn-custom" title="70 ms" >10
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="e_100" class="btn btn-custom" title="700 ms" >100
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="e_1000" class="btn btn-custom" title="7 sec" >1000
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
+      </div>
+      <div id="generator-event">
+        <div class="row">
+          <div class="col-sm-6"><h5 class="generator-section-header">Events ({{ events_count }} total):</h5></div>
+          <div class="col-sm-3">
+            <div class="form-group has-feedback">
+              <input type="text" class="form-control" name="generator-event-count" placeholder="(1 - 999)" maxlength="3">
+              <span class="glyphicon form-control-feedback"></span>
             </div>
           </div>
+          <div class="col-sm-3"><button id="submit-generator-event" class="btn btn-custom">Generate</button></div>
         </div>
-        <div id="generator-poll" class="generator-section">
-          <div class="row">
-            <div class="col-sm-4 text-right">
-              <h5 class="generator-section-header">Polls (no votes): </h5>
-            </div>
-            <div class="col-sm-8 text-center">
-              <button id="p_1" class="btn btn-custom" title="40 ms">1
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="p_10" class="btn btn-custom" title="300 ms">10
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="p_100" class="btn btn-custom" title="3 sec">100
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="p_1000" class="btn btn-custom" title="30 sec">1000
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
+      </div>
+      <div id="generator-poll-without-votes">
+        <div class="row">
+          <div class="col-sm-6"><h5 class="generator-section-header">Polls (w/o votes) ({{ polls_without_votes_count }} total):</h5></div>
+          <div class="col-sm-3">
+            <div class="form-group has-feedback">
+              <input type="text" class="form-control" name="generator-poll-without-votes-count" placeholder="(1 - 999)" maxlength="3">
+              <span class="glyphicon form-control-feedback"></span>
             </div>
           </div>
-        </div>
-        <div id="generator-poll-voted" class="generator-section">
-          <div class="row">
-            <div class="col-sm-4 text-right">
-              <h5 class="generator-section-header">Polls (w/ votes): </h5>
-            </div>
-            <div class="col-sm-8 text-center">
-              <button id="p_v_1" class="btn btn-custom" title="750 ms">1
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="p_v_10" class="btn btn-custom" title="7.5 sec">10
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="p_v_100" class="btn btn-custom" title="75 sec">100
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="p_v_1000" class="btn btn-custom" title="750 sec (guess)">1000
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-            </div>
+          <div class="col-sm-3">
+            <button id="submit-generator-poll-without-votes" class="btn btn-custom">Generate</button>
           </div>
         </div>
-        <div id="generator-student" class="generator-section">
-          <div class="row">
-            <div class="col-sm-4 text-right">
-              <h5 class="generator-section-header">Students: </h5>
-            </div>
-            <div class="col-sm-8 text-center">
-              <button id="s_1" class="btn btn-custom" title="50 ms">1
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="s_10" class="btn btn-custom" title="400 ms">10
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="s_100" class="btn btn-custom" title="4 sec">100
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
-              <button id="s_1000" class="btn btn-custom" title="40 sec">1000
-                <span class="glyphicon glyphicon-refresh"></span><span class="glyphicon glyphicon-ok"></span>
-              </button>&nbsp;
+      </div>
+      <div id="generator-poll-with-votes">
+        <div class="row">
+          <div class="col-sm-6"><h5 class="generator-section-header">Polls (w/ votes) ({{ polls_with_votes_count }} total):</h5></div>
+          <div class="col-sm-3">
+            <div class="form-group has-feedback">
+              <input type="text" class="form-control" name="generator-poll-with-votes-count" placeholder="(1 - 999)" maxlength="3">
+              <span class="glyphicon form-control-feedback"></span>
             </div>
           </div>
+          <div class="col-sm-3"><button id="submit-generator-poll-with-votes" class="btn btn-custom">Generate</button></div>
         </div>
-      {% else %}
-        <h4>Please generate some categories first.</h4>
+      </div>
+      <div id="generator-student-profiles">
+        <div class="row">
+          <div class="col-sm-6"><h5 class="generator-section-header">Students ({{ student_profiles_count }} total):</h5></div>
+          <div class="col-sm-3">
+            <div class="form-group has-feedback">
+              <input type="text" class="form-control" name="generator-student-profile-count" placeholder="(1 - 999)" maxlength="3">
+              <span class="glyphicon form-control-feedback"></span>
+            </div>
+          </div>
+          <div class="col-sm-3"><button id="submit-generator-student-profile" class="btn btn-custom">Generate</button></div>
+        </div>
+      </div>
+    {% else %}
+      {% if not user.profile %}
+        <button id="submit-generator-admin-profile" class="btn btn-custom">Generate UserProfile for Admin</button>
       {% endif %}
-    </div>
+      <button id="submit-generator-category" class="btn btn-custom">Generate Categories</button>
+    {% endif %}
   </div>
 {% endblock %}
 

@@ -22,14 +22,19 @@ class UserProfile(models.Model):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
 
-    categories_hidden_announcements = models.ManyToManyField(Category, blank=True)
-    # related_name="user_profiles_categories_hidden_announcements",
-    # categories_hidden_events = models.ManyToManyField('Category', related_name="user_profiles_categories_hidden_events", blank=True)
+    categories_hidden_announcements = models.ManyToManyField(Category, related_name="user_profiles_with_category_hidden_for_announcements", blank=True)
+    categories_hidden_events = models.ManyToManyField(Category, related_name="user_profiles_with_category_hidden_for_events", blank=True)
+    categories_hidden_polls = models.ManyToManyField(Category, related_name="user_profiles_with_category_hidden_for_polls", blank=True)
 
     objects = GetOrNoneManager()
 
     def __str__(self):
         return self.user.get_full_name()
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.pk = self.user.pk
+        super(UserProfile, self).save(*args, **kwargs)
 
 class StudentProfile(models.Model):
     FRESHMAN = 0
@@ -51,6 +56,11 @@ class StudentProfile(models.Model):
 
     def __str__(self):
         return '%s - student profile' % self.user_profile
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.pk = self.user_profile.user.pk
+        super(StudentProfile, self).save(*args, **kwargs)
 
     @classmethod
     def generate_random_objects(cls, count):
@@ -95,3 +105,8 @@ class TeacherProfile(models.Model):
 
     def __str__(self):
         return '%s - teacher profile' % self.user_profile
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.pk = self.user_profile.user.pk
+        super(TeacherProfile, self).save(*args, **kwargs)

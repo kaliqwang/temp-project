@@ -71,6 +71,8 @@ def teacher_register(request):
     return render(request, 'accounts/register_teacher.html', {'userForm': userForm, 'userProfileForm': userProfileForm, 'teacherProfileForm': teacherProfileForm})
 
 def login(request):
+    if request.user.is_authenticated():
+        return redirect('base:index')
     username = request.POST.get('username')
     password = request.POST.get('password')
     target_url = request.GET.get('next')
@@ -79,7 +81,7 @@ def login(request):
         auth_login(request, user)
         if target_url:
             return redirect(target_url)
-        redirect('base:index')
+        return redirect('base:index')
     return render(request, 'accounts/login.html')
 
 @login_required
@@ -88,12 +90,13 @@ def logout(request):
     return redirect('base:index')
 
 @staff_member_required
-def generator(request, model, count):
+def generator(request, model):
     if request.method == 'POST':
+        count = int(request.GET.get('count'))
         generated_count = 0
         if model == 'student_profiles':
-            generated_count = StudentProfile.generate_random_objects(int(count))
-        if (generated_count == int(count)):
+            generated_count = StudentProfile.generate_random_objects(count)
+        if (generated_count == count):
             return HttpResponse('Success: %d %s were generated' % (generated_count, model))
         else:
             return HttpResponse('Error: %d %s were generated' % (generated_count, model))

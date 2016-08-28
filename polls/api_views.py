@@ -5,7 +5,7 @@ from .models import *
 from .serializers import *
 
 class PollPaginator(pagination.PageNumberPagination):
-    page_size = 36
+    page_size = 10
 
 class PollViewSet(ModelViewSet):
     queryset = Poll.objects.none()
@@ -14,7 +14,7 @@ class PollViewSet(ModelViewSet):
 
     def get_queryset(self):
         user_profile = self.request.user.profile
-        polls = Poll.objects.exclude(category_id__in=user_profile.categories_hidden_announcements.values_list('pk'))
+        polls = Poll.objects.exclude(category_id__in=user_profile.categories_hidden_polls.values_list('pk'))
         polls_voted_id_list = self.request.user.profile.votes.values('poll_id')
 
         is_open = self.request.GET.get('is_open', None)

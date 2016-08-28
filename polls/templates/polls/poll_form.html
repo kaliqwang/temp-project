@@ -9,13 +9,13 @@
   <form id="{% block form_id %}{% endblock %}" action="{% block form_url %}{% endblock %}" enctype="multipart/form-data" method="post">{% csrf_token %}
     <!-- Poll Content -->
     <div class="row row-compact">
-      <div class="col-sm-1 col-compact"><div class="form-label">Title</div></div>
-      <div class="col-sm-11 col-compact"><div class="{% if form.content.errors %}has-error{% endif %}">{{ form.content }}</div></div>
+      <div class="col-xs-2"><div class="form-label">Title</div></div>
+      <div class="col-xs-10"><div class="{% if form.content.errors %}has-error{% endif %}">{{ form.content }}</div></div>
     </div><br>
     <!-- Poll Choices -->
     <div class="row row-compact">
-      <div class="col-sm-1 col-compact"><div class="form-label">Choices</div></div>
-      <div class="col-sm-11 col-compact">
+      <div class="col-xs-2"><div class="form-label">Choices</div></div>
+      <div class="col-xs-10">
         <div id="poll-choices-existing" data-poll-pk="{{ poll.pk }}" data-choice-count="{{ poll.choices.count }}">
           {% for choice in poll.choices.all %}
           <li data-content="{{ choice.content }}" data-choice-pk="{{ choice.pk }}"></li>
@@ -26,16 +26,16 @@
     </div><br>
     <!-- Poll Category -->
     <div class="row row-compact">
-      <div class="col-sm-1 col-compact"><div class="form-label">Category</div></div>
-      <div class="col-sm-11 col-compact"><div class="{% if form.category.errors %}has-error{% endif %}">{{ form.category }}</div><hr></div>
+      <div class="col-xs-2"><div class="form-label">Category</div></div>
+      <div class="col-xs-10"><div class="{% if form.category.errors %}has-error{% endif %}">{{ form.category }}</div><hr></div>
     </div>
     <!-- Buttons -->
     <div class="row">
-      <div class="col-sm-1"></div>
-      <div class="col-sm-5">
+      <div class="col-xs-2"></div>
+      <div class="col-xs-4">
         {% block morebuttons %}<button id="poll-choice-add" class="btn btn-sm btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-plus"></span> Choice</button>{% endblock %}
       </div>
-      <div class="col-sm-6 text-right">
+      <div class="col-xs-6 text-right">
         <a class="btn btn-sm btn-default" href="{% block cancel-button-target-url %}{% url 'polls:list' %}{% endblock %}">Cancel</a>
         <button id="{% block submit_button_id %}{% endblock %}" class="btn btn-sm btn-custom" type="button">{% block submit-button-text %}Publish{% endblock %}</button>
       </div>

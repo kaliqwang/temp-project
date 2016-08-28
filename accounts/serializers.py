@@ -25,10 +25,14 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     categories_hidden_announcements = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, allow_null=True)
     categories_hidden_announcements_data = CategorySerializer(source='categories_hidden_announcements', many=True)
+    categories_hidden_events = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, allow_null=True)
+    categories_hidden_events_data = CategorySerializer(source='categories_hidden_events', many=True)
+    categories_hidden_polls = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, allow_null=True)
+    categories_hidden_polls_data = CategorySerializer(source='categories_hidden_polls', many=True)
 
     class Meta:
         model = UserProfile
-        fields = ('pk', 'user', 'mobile', 'is_student', 'is_teacher', 'categories_hidden_announcements', 'categories_hidden_announcements_data')
+        fields = ('pk', 'user', 'mobile', 'is_student', 'is_teacher', 'categories_hidden_announcements', 'categories_hidden_announcements_data', 'categories_hidden_events', 'categories_hidden_events_data', 'categories_hidden_polls', 'categories_hidden_polls_data')
 
 # TODO: Override the create() method in StudentProfileViewSet so that you can nest UserProfileSerializer in StudentProfileSerializer, and create them all simultaneously by posting to student_profiles
 class StudentProfileSerializer(serializers.HyperlinkedModelSerializer):

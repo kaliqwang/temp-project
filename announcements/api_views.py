@@ -5,7 +5,7 @@ from .models import *
 from .serializers import *
 
 class AnnouncementPaginator(pagination.PageNumberPagination):
-    page_size = 36
+    page_size = 20
 
 class AnnouncementViewSet(ModelViewSet):
     queryset = Announcement.objects.none()

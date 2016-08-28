@@ -78,7 +78,6 @@ class Announcement(models.Model):
         announcement_manager = Announcement.objects
         image_manager = ImageLink.objects
         video_manager = YouTubeVideo.objects
-        #
         user_profiles = UserProfile.objects.all()
         user_profiles_count = user_profiles.count()
         # Titles
