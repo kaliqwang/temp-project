@@ -402,9 +402,9 @@ $(document).ready(function() {
         console.log('');
         console.log('Server responded:\t' + (ajaxEnd - ajaxStart) + ' milliseconds');
     }
+    // TODO: Why is resetFilters resetting filters for every model?
     function resetFilters() {
         var target = '/api/user_profiles/' + profilePK;
-        var infoBarTopContentHTML = '';
         var data = {
             categories_hidden_polls: [],
         };

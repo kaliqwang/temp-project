@@ -78,20 +78,16 @@ a:hover, a:focus {
 /*********************************** Forms ************************************/
 
 form:not(#login-form) {
-    padding: 20px;
+    padding: 15px;
+}
+form hr {
+    margin: 15px 0px;
 }
 #login-form-footer {text-align:right}
 
 /******************************* Announcements ********************************/
 
 /* announcement_list / announcement_detail */
-@media (min-width: 515px) {
-  #announcement-list {
-      width: 515px;
-      margin: 0px auto;
-  }
-}
-
 .announcement-wrapper {
     /*border: 1px solid #e8e8e8;*/
     padding: 15px 15px 4px 15px;
@@ -187,12 +183,6 @@ form:not(#login-form) {
 /*********************************** Events ***********************************/
 
 /* event_list / event_detail */
-@media (min-width: 515px) {
-    #event-list {
-        width: 515px;
-        margin: 0px auto;
-    }
-}
 #event-list {
     padding: 20px;
     color: #444;
@@ -248,12 +238,6 @@ form:not(#login-form) {
 /*********************************** Polls ************************************/
 
 /* poll_list */
-@media (min-width: 515px) {
-    #poll-list {
-        width: 515px;
-        margin: 0px auto;
-    }
-}
 .poll-wrapper {
     padding: 15px 15px 5px 15px;
     margin-bottom: 10px;
@@ -331,8 +315,8 @@ form:not(#login-form) {
 
 /*************************** student_register ***************************/
 
-.register-form .row-compact {
-    padding: 4px 0px;
+.register-form-row {
+    margin: 15px 0px;
 }
 
 /*************************** generator ***************************/

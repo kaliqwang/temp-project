@@ -17,3 +17,16 @@
 {% block register_form_url %}{% url 'accounts:register-parent' %}{% endblock %}
 {% block submit_button_id %}submit-parent-register-form{% endblock %}
 {% block submit_button_text %}Create Parent Account{% endblock %}
+
+{% block register_form_extra_fields %}
+  <div class="row register-form-row">
+    <div class="col-xs-3"><div class="form-label">Email</div></div>
+    <div class="col-xs-9">
+      <div class="has-feedback {% if userForm.email.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.email.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
+        {{ userForm.email }}
+        {% if userForm.email.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+        {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

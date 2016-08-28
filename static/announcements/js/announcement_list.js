@@ -592,9 +592,9 @@ $(document).ready(function() {
         console.log('');
         console.log('Server responded:\t' + (ajaxEnd - ajaxStart) + ' milliseconds');
     }
+    // TODO: Why is resetFilters resetting filters for every model?
     function resetFilters() {
         var target = '/api/user_profiles/' + profilePK;
-        var infoBarTopContentHTML = '';
         var data = {
             categories_hidden_announcements: [],
         };
@@ -618,6 +618,15 @@ $(document).ready(function() {
                 sidebarFilterAppliedCount = 0;
                 $infoBarTop.hide();
                 console.log('None hidden');
+                jQuery.each(data.categories_hidden_announcements, function(i, c) {
+                    console.log('Hidden (announcements): ' + c.name);
+                });
+                jQuery.each(data.categories_hidden_events, function(i, c) {
+                    console.log('Hidden (events): ' + c.name);
+                });
+                jQuery.each(data.categories_hidden_polls, function(i, c) {
+                    console.log('Hidden (polls): ' + c.name);
+                });
                 var functionEnd = performance.now();
                 console.log('');
                 console.log('Total:\t\t\t\t' + (functionEnd - ajaxStart) + ' milliseconds');

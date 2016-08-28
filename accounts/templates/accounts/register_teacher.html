@@ -19,9 +19,19 @@
 {% block submit_button_text %}Create Teacher Account{% endblock %}
 
 {% block register_form_extra_fields %}
-  <div class="row">
-    <div class="col-xs-2"><div class="form-label">Room Number</div></div>
-    <div class="col-xs-10">
+  <div class="row register-form-row">
+    <div class="col-xs-3"><div class="form-label">School Email</div></div>
+    <div class="col-xs-9">
+      <div class="has-feedback {% if userForm.email.errors %}has-error{% elif userForm.is_bound %}has-success{% endif %}" title="{{ userForm.email.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
+        {{ userForm.email }}
+        {% if userForm.email.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+        {% elif userForm.is_bound %}<span class="glyphicon glyphicon-ok form-control-feedback"></span>{% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="row register-form-row">
+    <div class="col-xs-3"><div class="form-label">Room Number</div></div>
+    <div class="col-xs-9">
       <div class="has-feedback {% if teacherProfileForm.room.errors %}has-error{% elif teacherProfileForm.is_bound %}has-success{% endif %}" title="{{ teacherProfileForm.room.errors.as_text }}" data-toggle="tooltip" data-placement="right" data-trigger="focus">
         {{ teacherProfileForm.room }}
         {% if teacherProfileForm.room.errors %}<span class="glyphicon glyphicon-remove form-control-feedback"></span>

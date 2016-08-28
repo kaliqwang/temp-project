@@ -132,7 +132,7 @@ ul {list-style:none; margin:0px; padding:0px}
 }
 
 .container {
-  width: 515px;
+  width: 525px;
 }
 
 /*NOTE: Sidebar now overlaps at all levels*/
@@ -142,7 +142,7 @@ ul {list-style:none; margin:0px; padding:0px}
   body.show-sidebar #main-page,
   body.show-sidebar #site-footer {margin-left:0px}
 }*/
-@media (max-width: 515px) { /* 400px is current width of app bar links */
+@media (max-width: 525px) { /* 400px is current width of app bar links */
   #masthead { /* Below 400px do something special with appbar? maybe turn it into vertical drop down menu? */
     width: 100%;
     /*NOTE: Logout button becomes unaccessible; add to sidebar?*/
@@ -150,9 +150,6 @@ ul {list-style:none; margin:0px; padding:0px}
   .container { /* Below 400px do something special with appbar? maybe turn it into vertical drop down menu? */
     width: 100%;
     /*NOTE: Logout button becomes unaccessible; add to sidebar?*/
-  }
-  .announcement-paginator {
-    width:100%;
   }
   #announcement-list {
     width: 100%;
@@ -168,36 +165,14 @@ ul {list-style:none; margin:0px; padding:0px}
     width: 100%;
   }
 }
-@media (min-width: 515px) {
-  .announcement-paginator {width: 515px}
-  #event-list {
-    width: 515px;
-  }
-}
-@media (min-width: 400px)  (max-width: 515px) {
-  #masthead {
-    width: 100%;
-  }
+@media (min-width: 525px) {
   .container {
-    width: 100%;
+    width: 525px;
   }
-}
-@media (min-width: 515px) {
-  .container {
-    width: 515px;
-  }
-
-}
-
-@media (max-width: 768px) {
-  /*.form-label {
-    text-align: left!important;
-  }*/
-
 }
 
 /* First level (1 column)*/
-@media (min-width: 515px) and (max-width: 790px) {
+@media (min-width: 525px) and (max-width: 790px) {
   body.show-sidebar #masthead-bottom,
   body.show-sidebar #main-page,
   body.show-sidebar #site-footer {margin-left:0px}
@@ -326,16 +301,6 @@ ul {list-style:none; margin:0px; padding:0px}
 .paginator-link.selected {color:#444; font-weight:500}*/
 
 /********************************* Poll List **********************************/
-
-@media (min-width: 515px) {
-  #poll-list {
-      width: 515px;
-      margin: 0px auto;
-  }
-  .poll-paginator {width: 515px}
-  .event-paginator {width: 515px;}
-}
-
 
 /* Sidebar Container (sidebar positioner, scrollbar/border overlay) */
 #poll-sidebar-container {
