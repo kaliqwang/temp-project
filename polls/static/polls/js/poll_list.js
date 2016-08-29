@@ -405,8 +405,8 @@ $(document).ready(function() {
     // TODO: Why is resetFilters resetting filters for every model?
     function resetFilters() {
         var target = '/api/user_profiles/' + profilePK;
-        var categoriesHiddenAnnouncements = [];
-        var data = JSON.stringify({categories_hidden_announcements: categoriesHiddenAnnouncements});
+        var categoriesHiddenPolls = [];
+        var data = JSON.stringify({categories_hidden_polls: categoriesHiddenPolls});
         console.log('Clearing filters...')
         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
         console.log('Sending PUT request to ' + target);
