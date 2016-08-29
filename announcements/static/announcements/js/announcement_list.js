@@ -549,6 +549,7 @@ $(document).ready(function() {
             data: data,
             contentType: 'application/json',
             success: function(data){
+                console.log(categoriesHiddenAnnouncements);
                 var functionStart = performance.now();
                 console.log('Success Callback:\t' + (functionStart - ajaxEnd) + ' milliseconds');
                 console.log('');
@@ -595,9 +596,11 @@ $(document).ready(function() {
     // TODO: Why is resetFilters resetting filters for every model?
     function resetFilters() {
         var target = '/api/user_profiles/' + profilePK;
-        var data = {
-            categories_hidden_announcements: [],
-        };
+        // var data = {
+        //     categories_hidden_announcements: [],
+        // };
+        var categoriesHiddenAnnouncements = [];
+        var data = JSON.stringify({categories_hidden_announcements: categoriesHiddenAnnouncements});
         console.log('Clearing filters...')
         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
         console.log('Sending PUT request to ' + target);
