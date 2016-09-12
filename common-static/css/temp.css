@@ -1,0 +1,22 @@
+@media (max-width: 525px) {
+    /* on event page, #paginator-standard magically gets display:block? */
+    
+    body #paginator-standard {
+    display:none !important;
+    }
+    body #sidebar-container, body #sidebar {
+        width:100%;
+    }
+    body #announcement-sidebar-container, body #announcement-sidebar {
+        width:100%;
+    }
+    body .container {
+        padding: 0px ;
+    }
+    body .announcement-wrapper {
+        margin-bottom: 1px;
+    }
+    body #main-page-content {
+        min-height: 0px;
+    }
+}

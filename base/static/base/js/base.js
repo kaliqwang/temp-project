@@ -32,25 +32,33 @@ $(document).ready(function() {
         if (localStorage.sidebarStatus == 0) {
             $('body').addClass('show-sidebar');
             localStorage.sidebarStatus = 1;
-            if ($(window).width() < 551) {
-              $('#overlay-back').show();
-            }
+            // if ($(window).width() < 551) {
+            //   $('#overlay-back').show();
+            // }
         } else {
             $('body').removeClass('show-sidebar');
             localStorage.sidebarStatus = 0;
-            $('#overlay-back').hide();
+            // $('#overlay-back').hide();
         }
     });
     $('#toggle-right-sidebar').on('click', function(e){e.preventDefault();
 
-      // Have to check if announcement sidebar is open/closed window.width, and overlay state
-      if ($(window).width() < 551 && $('#poll-sidebar-container').css('display') == "none" && $('#overlay-back').css('display') == "none") {
-        $('#overlay-back').show();
-      } else if ($(window).width() < 551 && $('#announcement-sidebar-container').css('display') == "none" && $('#overlay-back').css('display') == "none") {
-              $('#overlay-back').show();
-      } else {
-        $('#overlay-back').hide();
-      }
+    //   // Have to check if announcement sidebar is open/closed window.width, and overlay state
+    //   if ($(window).width() < 551 && $('#poll-sidebar-container').css('display') == "none") {
+    //     $('#overlay-back').show();
+    //     if (localStorage.sidebarStatus == 1) {
+    //         $('body').removeClass('show-sidebar');
+    //         localStorage.sidebarStatus = 0;
+    //     }
+    //   } else if ($(window).width() < 551 && $('#announcement-sidebar-container').css('display') == "none") {
+    //           $('#overlay-back').show();
+    //           if (localStorage.sidebarStatus == 1) {
+    //               $('body').removeClass('show-sidebar');
+    //               localStorage.sidebarStatus = 0;
+    //           }
+    //   } else {
+    //     $('#overlay-back').hide();
+    //   }
 
 
       $('#announcement-sidebar-container').toggle();
